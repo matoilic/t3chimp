@@ -1,0 +1,6 @@
+ # Include Showroom default styles
+
+page.includeCSS {
+	file100 = EXT:hacoshowroom/Resources/Public/Stylesheets/hacoshowroom.css
+	file100.media = screen
+}

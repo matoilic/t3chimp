@@ -1,0 +1,35 @@
+<T3DataStructure>
+    <meta>
+		<langDisable>1</langDisable>
+	</meta>
+    <sheets>
+        <main>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>Sektion</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <settings.section>
+                        <TCEforms>
+                            <label>LLL:EXT:hacoshowroom/Resources/Language/locallang.xml:flexForm.section</label>
+                            <config>
+                                <type>select</type>
+                                <items>
+                                    <numIndex index="0" type="array">
+                                        <numIndex index="0">Alle</numIndex>
+                                        <numIndex index="1">0</numIndex>
+                                    </numIndex>
+
+                                </items>
+                                <itemsProcFunc>Tx_Hacoshowroom_Domain_Repository_SectionRepository->getFlexFormValues</itemsProcFunc>
+                                <maxitems>1</maxitems>
+								<size>1</size>
+                            </config>
+                        </TCEforms>
+                    </settings.section>
+                </el>
+            </ROOT>
+        </main>
+    </sheets>
+</T3DataStructure>

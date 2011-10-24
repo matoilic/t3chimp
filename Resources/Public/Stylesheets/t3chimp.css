@@ -1,0 +1,200 @@
+p, h1, table {
+	margin-bottom: 0.8em;
+}
+
+h2 {
+	color: #6f6f6f;
+	font-size: 1.2em;
+	font-weight: bold;
+	margin-bottom: 0.8em;
+	text-transform: uppercase;
+}
+
+hr {
+	background-color: #6f6f6f;
+	border: 0;
+	height: 1px;
+	overflow: hidden;
+}
+
+#filter label {
+	cursor: pointer;
+    display: inline-block;
+    margin-bottom: 8px;
+    max-width: 100px;
+    overflow: hidden;
+	vertical-align: text-top;
+    word-wrap: break-word;
+
+    *line-height: 150%;
+    *vertical-align: 20%;
+}
+
+#filter label:hover {
+	color: #e8301a;
+}
+
+#filter > ul > li > label {
+	font-weight: bold;
+}
+
+#filter ul ul {
+	margin-left: 25px;
+}
+
+#sections li {
+	padding-left: 16px;
+}
+
+#itemList > div {
+	display: inline-block;
+	margin: 0 0 8px 10px;
+    vertical-align: top;
+	width: 157px;
+
+    *display: block;
+    *float: left;
+}
+
+#itemList .figure {
+	height: 157px;
+	text-align: center;
+	vertical-align: middle;
+	width: 157px;
+}
+
+#itemList .figure img {
+    display: inline-block;
+    background: url('../Images/spinner.gif') no-repeat center center;
+    min-height: 40px;
+    min-width: 40px;
+}
+
+#itemList .figure.empty {
+	background: transparent url('../Images/figure-bg.gif') repeat;
+}
+
+#itemList .figure.empty a {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+}
+
+#itemList .name {
+	margin-top: 5px;
+
+    *height: 4.5em;
+    *overflow: hidden;
+}
+
+#itemList .name.withRecipes,
+.recipeLegend {
+    background: url('../Images/book.png') no-repeat top left;
+	padding-left: 20px;
+}
+
+#productDetail th {
+	padding-right: 8px !important;
+}
+
+#productDetail img {
+	float: right;
+}
+
+#pagination, #result {
+	height: 2em;
+	margin-bottom: 0.5em;
+}
+
+#result.recipes,
+#pagination.recipes {
+    margin-top: 40px;
+}
+
+#pagination {
+	float: right;
+	text-align: right;
+	width: 50%;
+}
+
+#pagination span {
+	border: 1px solid #000;
+	display: inline-block;
+	min-width: 15px;
+	padding: 0 3px;
+	text-align: center;
+}
+
+#pagination .current,
+#pagination span:hover {
+	background-color: #eee;
+	cursor: pointer;
+}
+
+#pagination .current {
+	font-weight: bold;
+}
+
+#result {
+	float: left;
+	padding-left: 13px;
+}
+
+#showAll:hover, #showPaged:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+#productDetail .recipes a {
+    color: #000;
+}
+
+#productDetail .recipes a:hover {
+    color: #e8301a;
+}
+
+#recipe, #productDetail {
+    margin-top: 40px;
+}
+
+#recipe tr:last-child td {
+    border: 0;
+}
+
+#content_right {
+    margin-top: 0px;
+}
+
+.toggle {
+	background-repeat: no-repeat;
+	cursor: pointer;
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+}
+
+.open .toggle {
+	background-image: url('../Images/arrow-open.gif');
+}
+
+.closed .toggle {
+	background-image: url('../Images/arrow-closed.gif');
+}
+
+.closed.empty .toggle {
+	cursor: default;
+	visibility: hidden;
+}
+
+.closed ul {
+	display: none;
+}
+
+.loading {
+	background: transparent url('../Images/spinner.gif') no-repeat 0 0;
+	padding-left: 18px;
+}
+
+.recipeLegend {
+    margin: 10px 0 10px 13px;
+}

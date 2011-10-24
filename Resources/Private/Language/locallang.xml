@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for the hacoshowroom extension</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="loadingProducts">Daten werden geladen</label>
+            <label index="recipes">Rezepte</label>
+            <label index="matchingRecipes">Passende Rezepte</label>
+            <label index="usedProducts">Verwendete Produkte</label>
+            <label index="sections">Sektionen</label>
+            <label index="categories">Kategorien</label>
+            <label index="recipesAvailable">Rezepte verfügbar</label>
+            <label index="perPage">pro Seite</label>
+            <label index="found">gefunden</label>
+            <label index="showAll">Alle anzeigen</label>
+            <label index="textGrossist">Erhältlich bei</label>
+		</languageKey>
+
+		<languageKey index="en" type="array">
+			<label index="loadingProducts">Loading data</label>
+            <label index="recipes">Recipes</label>
+            <label index="matchingRecipes">Matching recipes</label>
+            <label index="usedProducts">Used products</label>
+            <label index="sections">Sections</label>
+            <label index="categories">Categories</label>
+            <label index="recipesAvailable">Recipes available</label>
+            <label index="perPage">per page</label>
+            <label index="found">found</label>
+            <label index="showAll">show all</label>
+            <label index="textGrossist">Available at</label>
+		</languageKey>
+
+		<languageKey index="fr" type="array">
+			<label index="loadingProducts">Chargement des donnéees</label>
+            <label index="recipes">Recettes</label>
+            <label index="matchingRecipes">Recettes correspondant</label>
+            <label index="usedProducts">Produits utilisés</label>
+            <label index="sections">Sections</label>
+            <label index="categories">Catégories</label>
+            <label index="recipesAvailable">Recettes disponibles</label>
+            <label index="perPage">par page</label>
+            <label index="perPage">pro Seite</label>
+            <label index="found">trouvés</label>
+            <label index="showAll">montre tous</label>
+            <label index="textGrossist">Disponible à</label>
+		</languageKey>
+	</data>
+</T3locallang>
