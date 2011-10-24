@@ -6,11 +6,11 @@
         <main>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>Sektion</sheetTitle>
+                    <sheetTitle>List</sheetTitle>
                 </TCEforms>
                 <type>array</type>
                 <el>
-                    <settings.section>
+                    <settings.subscriptionList>
                         <TCEforms>
                             <label>LLL:EXT:t3chimp/Resources/Language/locallang.xml:flexForm.list</label>
                             <config>
@@ -21,7 +21,7 @@
 								<size>1</size>
                             </config>
                         </TCEforms>
-                    </settings.section>
+                    </settings.subscriptionList>
                 </el>
             </ROOT>
         </main>

@@ -1,6 +1,6 @@
- # Include Showroom default styles
+ # Include T3Chimp default styles
 
 page.includeCSS {
-	file100 = EXT:hacoshowroom/Resources/Public/Stylesheets/hacoshowroom.css
+	file100 = EXT:t3chimp/Resources/Public/Stylesheets/t3chimp.css
 	file100.media = screen
 }

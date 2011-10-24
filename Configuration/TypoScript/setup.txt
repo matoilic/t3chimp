@@ -1,48 +1,29 @@
-[userFunc = tx_hacoshowroom_debug()]
-page.includeJSFooter.file1 = EXT:hacoshowroom/Resources/Public/JavaScripts/jquery.treeview.js
-page.includeJSFooter.file2 = EXT:hacoshowroom/Resources/Public/JavaScripts/jquery.cookie.js
-page.includeJSFooter.file3 = EXT:hacoshowroom/Resources/Public/JavaScripts/jquery.json.js
-page.includeJSFooter.file4 = EXT:hacoshowroom/Resources/Public/JavaScripts/handlebars.js
-page.includeJSFooter.file5 = EXT:hacoshowroom/Resources/Public/JavaScripts/hacoshowroom.js
+[userFunc = tx_t3chimp_debug()]
+page.includeJSFooter.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.js
 [else]
-page.includeJSFooter.file1 = EXT:hacoshowroom/Resources/Public/JavaScripts/jquery.treeview.min.js
-page.includeJSFooter.file2 = EXT:hacoshowroom/Resources/Public/JavaScripts/jquery.cookie.min.js
-page.includeJSFooter.file3 = EXT:hacoshowroom/Resources/Public/JavaScripts/jquery.json.min.js
-page.includeJSFooter.file4 = EXT:hacoshowroom/Resources/Public/JavaScripts/handlebars.min.js
-page.includeJSFooter.file5 = EXT:hacoshowroom/Resources/Public/JavaScripts/hacoshowroom.min.js
+page.includeJSFooter.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.min.js
 [end]
 
-plugin.tx_hacoshowroom {
+plugin.tx_t3chimp {
 	settings {
-		notificationMail {
-			fromEmail = {$plugin.tx_hacoshowroom.notificationMail.fromEmail}
-			fromName = {$plugin.tx_hacoshowroom.notificationMail.fromName}
-			subjectSuccess = {$plugin.tx_hacoshowroom.notificationMail.subjectSuccess}
-			subjectFailure = {$plugin.tx_hacoshowroom.notificationMail.subjectFailure}
-		    recipient = {$plugin.tx_hacoshowroom.notificationMail.recipient}
-		}
 
-		productsPerPage = {$plugin.tx_hacoshowroom.productsPerPage}
-		recipesPerPage = {$plugin.tx_hacoshowroom.recipesPerPage}
-		env = {$plugin.tx_hacoshowroom.env}
-		decodeUTF8 = {$plugin.tx_hacoshowroom.decodeUTF8}
 	}
 	persistence { }
 	view {
-	    templateRootPath = {$plugin.tx_hacoshowroom.view.templateRootPath}
-		partialRootPath = {$plugin.tx_hacoshowroom.view.partialRootPath}
-		layoutRootPath = {$plugin.tx_hacoshowroom.view.layoutRootPath}
+	    templateRootPath = {$plugin.tx_t3chimp.view.templateRootPath}
+		partialRootPath = {$plugin.tx_t3chimp.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_t3chimp.view.layoutRootPath}
 		defaultPid = auto
 	}
 }
 
-module.tx_hacoshowroom {
-	settings < plugin.tx_hacoshowroom.settings
-	persistence < plugin.tx_hacoshowroom.persistence
-	view < plugin.tx_hacoshowroom.view
+module.tx_t3chimp {
+	settings < plugin.tx_t3chimp.settings
+	persistence < plugin.tx_t3chimp.persistence
+	view < plugin.tx_t3chimp.view
 	view {
-		templateRootPath = {$module.tx_hacoshowroom.view.templateRootPath}
-		partialRootPath = {$module.tx_hacoshowroom.view.partialRootPath}
-		layoutRootPath = {$module.tx_hacoshowroom.view.layoutRootPath}
+		templateRootPath = {$module.tx_t3chimp.view.templateRootPath}
+		partialRootPath = {$module.tx_t3chimp.view.partialRootPath}
+		layoutRootPath = {$module.tx_t3chimp.view.layoutRootPath}
 	}
 }

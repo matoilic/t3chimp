@@ -1,5 +1,5 @@
 <?php
-    abstract class Tx_Controller_BaseController extends Tx_Extbase_MVC_Controller_ActionController {
+    abstract class Tx_T3chimp_Controller_BaseController extends Tx_Extbase_MVC_Controller_ActionController {
         protected $currentLanguageId = 0;
         const EXTKEY = 't3chimp';
         protected $isLoggedIn = false;
