@@ -1,26 +1,5 @@
-# cat=plugin.tx_hacoshowroom//; type=string; label= the sender address that should be used when sending the import notification email
-notificationMail.fromEmail = noreply@bsmediavision.ch
+# cat=plugin.tx_t3chimp//; type=string; label= Mailchimp API key
+apiKey = Your API Key
 
-# cat=plugin.tx_hacoshowroom//; type=string; label= the sender name that should be used when sending the import notification email
-notificationMail.fromName = Haco Importer
-
-# cat=plugin.tx_hacoshowroom//; type=string; label= the subject that should be used when sending the import success notification email
-notificationMail.subjectSuccess = Haco import successfull
-
-# cat=plugin.tx_hacoshowroom//; type=string; label= the subject that should be used when sending the import failure notification email
-notificationMail.subjectFailure = Haco import failed
-
-# cat=plugin.tx_hacoshowroom//; type=string; label= the recipient of the import notification email
-notificationMail.recipient = milic@bsmediavision.ch
-
-# cat=plugin.tx_hacoshowroom//; type=int+; label= number of products to show per page
-productsPerPage = 12
-
-# cat=plugin.tx_hacoshowroom//; type=int+; label= number of recipes to show per page
-recipesPerPage = 20
-
-# cat=plugin.tx_hacoshowroom//; type=boolean; label= debug
+# cat=plugin.tx_t3chimp//; type=boolean; label= debug
 debug = 0
-
-# cat=plugin.tx_hacoshowroom//; type=boolean; label= weather or not to apply utf8_decode on imported strings
-decodeUTF8 = 1

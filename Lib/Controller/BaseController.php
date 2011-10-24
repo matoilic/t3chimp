@@ -1,6 +1,7 @@
 <?php
-    abstract class Tx_Hacoshowroom_Controller_BaseController extends Tx_Extbase_MVC_Controller_ActionController {
+    abstract class Tx_Controller_BaseController extends Tx_Extbase_MVC_Controller_ActionController {
         protected $currentLanguageId = 0;
+        const EXTKEY = 't3chimp';
         protected $isLoggedIn = false;
 
         private function cleanSettingKeys($settings) {
@@ -18,22 +19,6 @@
             }
 
             return $cleanedSettings;
-        }
-
-        protected function createProductThumbnail($product) {
-            $imgSetup = array(
-    			'maxW' => 157,
-    			'maxH' => 157
-    		);
-
-            if($product->getHasImage()) {
-                $imageInfo = $this->configurationManager
-                        ->getContentObject()
-                        ->getImgResource('fileadmin/haco/bilder/products/' . $product->getUid() .'.jpg', $imgSetup);
-                return $GLOBALS['TSFE']->absRefPrefix . t3lib_div::rawUrlEncodeFP($imageInfo[3]);
-            }
-
-            return null;
         }
 
         protected function isInUserGroup($group) {
@@ -58,11 +43,10 @@
 
         public function initializeView($view) {
             parent::initializeView($view);
-            $view->assign('canGoBack', !empty($_SERVER['HTTP_REFERER']));
         }
 
         private function mergeSettings() {
-            $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['hacoshowroom']);
+            $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][self::EXTKEY]);
             $global = $this->cleanSettingKeys($global);
             $this->settings = array_merge($this->settings, $global);
         }

@@ -12,17 +12,11 @@
                 <el>
                     <settings.section>
                         <TCEforms>
-                            <label>LLL:EXT:hacoshowroom/Resources/Language/locallang.xml:flexForm.section</label>
+                            <label>LLL:EXT:t3chimp/Resources/Language/locallang.xml:flexForm.list</label>
                             <config>
                                 <type>select</type>
-                                <items>
-                                    <numIndex index="0" type="array">
-                                        <numIndex index="0">Alle</numIndex>
-                                        <numIndex index="1">0</numIndex>
-                                    </numIndex>
-
-                                </items>
-                                <itemsProcFunc>Tx_Hacoshowroom_Domain_Repository_SectionRepository->getFlexFormValues</itemsProcFunc>
+                                <items></items>
+                                <itemsProcFunc>Tx_T3chimp_Domain_Repository_ListRepository->getFlexFormValues</itemsProcFunc>
                                 <maxitems>1</maxitems>
 								<size>1</size>
                             </config>

@@ -38,90 +38,90 @@ require_once(PATH_tslib . 'class.tslib_gifbuilder.php');
  * @author Daniel Lienert <daniel@lienert.cc>
  */
 
-class Tx_Hacoshowroom_AjaxDispatcher {
-     
-     
+class Tx_AjaxDispatcher {
+
+
     /**
      * Array of all request Arguments
      *
      * @var array
      */
     protected $requestArguments = array();
-     
-     
-     
+
+
+
     /**
      * Extbase Object Manager
      * @var Tx_Extbase_Object_ObjectManager
      */
     protected $objectManager;
-     
-     
+
+
     /**
      * @var string
      */
-    protected static $EXTENSION_NAME = 'Hacoshowroom';
-     
-     
+    protected static $EXTENSION_NAME = 'T3chimp';
+
+
     /**
      * @var string
      */
     protected $pluginName;
-     
-     
+
+
     /**
      * @var string
      */
     protected $controllerName;
-     
-     
+
+
     /**
      * @var string
      */
     protected $actionName;
-     
-     
+
+
     /**
      * @var array
      */
     protected $arguments;
-     
-     
-     
+
+
+
     /**
      * Called by ajax.php / eID.php
      * Builds an extbase context and returns the response
      */
     public function dispatch() {
         $this->prepareCallArguments();
-         
+
         $configuration['extensionName'] = self::$EXTENSION_NAME;
         $configuration['pluginName'] = $this->pluginName;
-         
+
         $bootstrap = t3lib_div::makeInstance('Tx_Extbase_Core_Bootstrap');
         $bootstrap->initialize($configuration);
-         
+
         $this->objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
 
         $request = $this->buildRequest();
         $response = $this->objectManager->create('Tx_Extbase_MVC_Web_Response');
-         
+
         $dispatcher =  $this->objectManager->get('Tx_Extbase_MVC_Dispatcher');
         $dispatcher->dispatch($request, $response);
 
         $response->sendHeaders();
         echo $response->getContent();
-         
+
         $this->cleanShutDown();
     }
 
-     
+
     protected function cleanShutDown() {
         $this->objectManager->get('Tx_Extbase_Persistence_Manager')->persistAll();
         $this->objectManager->get('Tx_Extbase_Reflection_Service')->shutdown();
     }
-     
-     
+
+
     /**
      * Build a request object
      *
@@ -134,10 +134,10 @@ class Tx_Hacoshowroom_AjaxDispatcher {
         $request->setControllerName($this->controllerName);
         $request->setControllerActionName($this->actionName);
         $request->setArguments($this->arguments);
-         
+
         return $request;
     }
-     
+
 
     /**
      * Prepare the call arguments
@@ -153,13 +153,13 @@ class Tx_Hacoshowroom_AjaxDispatcher {
         $this->pluginName        = $this->requestArguments['pluginName'];
         $this->controllerName    = $this->requestArguments['controllerName'];
         $this->actionName        = $this->requestArguments['actionName'];
-         
+
         $this->arguments         = $this->requestArguments['arguments'];
         if(!is_array($this->arguments)) $this->arguments = array();
     }
-     
-     
-     
+
+
+
     /**
      * Set the request array from JSON
      *
@@ -171,9 +171,9 @@ class Tx_Hacoshowroom_AjaxDispatcher {
             $this->requestArguments = t3lib_div::array_merge_recursive_overrule($this->requestArguments, $requestArray);
         }
     }
-     
-     
-     
+
+
+
     /**
      * Set the request array from the getPost array
      *
@@ -190,7 +190,7 @@ class Tx_Hacoshowroom_AjaxDispatcher {
 if (TYPO3_MODE == 'FE') {
     //Connect to database
     tslib_eidtools::connectDB();
-     
+
     // Initialize TSFE
     $temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
     $TSFE = new $temp_TSFEclassName($TYPO3_CONF_VARS, $page, 0, true);
@@ -201,8 +201,8 @@ if (TYPO3_MODE == 'FE') {
     $TSFE->initFEuser();
     $TSFE->getConfigArray();
     $GLOBALS['TSFE'] = $TSFE;
-    
-    
+
+
     $dispatcher = t3lib_div::makeInstance('Tx_Hacoshowroom_AjaxDispatcher');
     $dispatcher->dispatch();
 }
