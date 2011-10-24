@@ -3,8 +3,10 @@ if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
 require_once(t3lib_extMgm::extPath($_EXTKEY) . '/Classes/Domain/Repository/ListRepository.php');
 
-$global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
-define('T3CHIMP_API_KEY', $global['apiKey']);
+if(!defined('T3CHIMP_API_KEY')) {
+    $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
+    define('T3CHIMP_API_KEY', $global['apiKey']);
+}
 
 Tx_Extbase_Utility_Extension::registerPlugin($_EXTKEY, 'subscription', 'Newsletter Subscription');
 
