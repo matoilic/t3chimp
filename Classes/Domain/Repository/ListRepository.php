@@ -7,6 +7,10 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
         $this->api = new MCAPI(T3CHIMP_API_KEY);
     }
 
+    public function addSubscriber($listId, $fieldValues) {
+        //TODO
+    }
+
     private function checkApi() {
         if($this->api->errorCode) {
             throw new Exception('Mailchimp error: ' . $this->api->errorMessage . '(' . $this->api->errorCode . ')');
@@ -29,5 +33,9 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
         }
 
         return $config;
+    }
+
+    public function removeSubscriber($listId, $fieldValues) {
+        //TODO
     }
 }

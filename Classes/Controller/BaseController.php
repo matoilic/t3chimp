@@ -51,5 +51,7 @@
             $this->settings = array_merge($this->settings, $global);
         }
 
-
+        protected function translate($key) {
+            return Tx_Extbase_Utility_Localization::translate($key, $this->extensionName);
+        }
     }

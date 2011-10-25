@@ -6,7 +6,10 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="flexForm.list">List</label>
+			<label index="flexForm.list">Liste</label>
+            <label index="form.invalidEmail">Ungültige E-Mail Adresse</label>
+            <label index="form.invalidValue">Ungültiger Wert</label>
+            <label index="form.required">Dies ist ein Pflichtfeld</label>
 		</languageKey>
 	</data>
 </T3locallang>

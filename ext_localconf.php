@@ -15,14 +15,14 @@ Tx_Extbase_Utility_Extension::configurePlugin(
     $_EXTKEY,
     'subscription',
     array(
-        'Subscriptions' => 'index'
+        'Subscriptions' => 'index,process'
     ),
     array(
-        'Subscriptions' => 'index'
+        'Subscriptions' => 'index,process'
     )
 );
 
 function tx_t3chimp_debug() {
-    $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
+    $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
     return $global['debug'];
 }

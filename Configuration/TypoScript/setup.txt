@@ -1,7 +1,7 @@
 [userFunc = tx_t3chimp_debug()]
-page.includeJSFooter.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.js
+page.includeJS.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.js
 [else]
-page.includeJSFooter.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.min.js
+page.includeJS.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.min.js
 [end]
 
 plugin.tx_t3chimp {

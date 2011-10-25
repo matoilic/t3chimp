@@ -1,1 +1,14 @@
-{lists}
+{namespace h = Tx_T3chimp_ViewHelpers}
+
+<f:form action="process" controller="Subscriptions" class="subscription">
+    <f:form.hidden name="cc" id="cc" value="" />
+    <h:MailchimpForm fieldDefinitions="{fieldDefinitions}" />
+    <p>
+        Aktion<br />
+        <f:form.radio name="action" id="action-subscribe" value="subscribe" checked="true" /><label for="action-subscribe">Anmelden</label><br />
+        <f:form.radio name="action" id="action-unsubscribe" value="unsubscribe" /><label for="action-unsubscribe">Abmelden</label>
+    </p>
+    <p>
+        <f:form.submit value="Abschicken" />
+    </p>
+</f:form>
