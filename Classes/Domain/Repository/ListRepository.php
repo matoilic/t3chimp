@@ -8,11 +8,23 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
     }
 
     public function addSubscriber($listId, $fieldValues) {
-        //TODO
+        $mergeVars = array();
+        $email = '';
+
+        foreach($fieldValues as $field) {
+            if($field['tag'] != 'EMAIL') {
+                $mergeVars[$field['tag']] = $field['value'];
+            } else {
+                $email = $field['value'];
+            }
+        }
+
+        $this->api->listSubscribe($listId, $email, $mergeVars, 'html', false, true, true, true);
+        $this->checkApi();
     }
 
-    private function checkApi() {
-        if($this->api->errorCode) {
+    private function checkApi($ignoreCode = null) {
+        if($this->api->errorCode && $this->api->errorCode != $ignoreCode) {
             throw new Exception('Mailchimp error: ' . $this->api->errorMessage . '(' . $this->api->errorCode . ')');
         }
     }
@@ -35,7 +47,8 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
         return $config;
     }
 
-    public function removeSubscriber($listId, $fieldValues) {
-        //TODO
+    public function removeSubscriber($listId, $email) {
+        $this->api->listUnsubscribe($listId, $email);
+        $this->checkApi(215);
     }
 }

@@ -2,6 +2,11 @@
 
 class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controller_BaseController {
     /**
+     * @var int
+     */
+    private $listId;
+
+    /**
      * @var Tx_T3chimp_Domain_Repository_ListRepository
      */
     private $listRepository;
@@ -14,35 +19,48 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
     public function initializeAction() {
         parent::initializeAction();
         $this->listRepository = new Tx_T3chimp_Domain_Repository_ListRepository();
+        $this->listId = $this->settings['subscriptionList'];
     }
 
     public function indexAction() {
         $fields = $this->listRepository->getFieldsFor($this->settings['subscriptionList']);
         $this->view->assign('fieldDefinitions', $fields);
+        $this->view->assign('action', 'subscribe');
     }
 
-    /**
-     * @param string $action either subscribe or unsubscribe
-     * @return void
-     */
-    public function processAction($action) {
+    public function subscribeAction() {
         if(!$this->validateCaptcha()) {
             $this->redirect('index');
             return;
         }
 
-        $listId = $this->settings['subscriptionList'];
-        $fields = $this->listRepository->getFieldsFor($listId);
-        $values = $this->request->getArguments();
+        $fields = $this->listRepository->getFieldsFor($this->listId);
 
-        if($this->validateSubscription($fields, $values)) {
-            if($action == 'unsubscribe') {
-                $this->listRepository->removeSubscriber($listId, $fields);
-            } else {
-                $this->listRepository->addSubscriber($listId, $fields);
-            }
+        if($this->validateSubscription(&$fields, $_POST)) {
+            $this->listRepository->addSubscriber($this->listId, $fields);
         } else {
             $this->view->assign('fieldDefinitions', $fields);
+            $this->view->assign('action', 'subscribe');
+            return $this->view->render('index');
+        }
+    }
+
+    public function unsubscribeAction() {
+        if(!$this->validateCaptcha()) {
+            $this->redirect('index');
+            return;
+        }
+
+        $email = $_POST['EMAIL'];
+
+        if($this->validateEmail($email)) {
+            $this->listRepository->removeSubscriber($this->listId, $email);
+        } else {
+            $this->flashMessageContainer->add($this->translate('form.invalidEmail'));
+            $fields = $this->listRepository->getFieldsFor($this->listId);
+            $this->view->assign('fieldDefinitions', $fields);
+            $this->view->assign('action', 'unsubscribe');
+            return $this->view->render('index');
         }
     }
 
@@ -51,7 +69,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
     }
 
     private function validateEmail($email) {
-        return preg_match("#^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$#i", $email);
+        return preg_match("/^([a-z0-9])([a-z0-9-_.]+)@([a-z0-9])([a-z0-9-_]+\.)+([a-z]{2,4})$/i", $email);
     }
 
     private function validateSubscription($fields, $values) {
@@ -59,7 +77,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
 
         for($i = 0; $i < count($fields); $i++) {
             $field = $fields[$i];
-            $field['value'] = $values[$field['tag']];
+            $field['value'] = trim($values[$field['tag']]);
             $field['errors'] = array();
 
             if($field['value'] == null && $field['req']) {
@@ -68,7 +86,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
             } else if($field['field_type'] == 'email' && !$this->validateEmail($field['value'])) {
                 $field['errors'][] = $this->translate('form.invalidEmail');
                 $hasErrors = $hasErrors || true;
-            } else if($field['field_type'] == 'dropdown' && in_array($field['value'], $field['choices'])) {
+            } else if($field['field_type'] == 'dropdown' && !in_array($field['value'], $field['choices'])) {
                 $field['errors'][] = $this->translate('form.invalidValue');
                 $hasErrors = $hasErrors || true;
             } else {
@@ -78,6 +96,6 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
             $fields[$i] = $field;
         }
 
-        return $hasErrors;
+        return !$hasErrors;
     }
 }

@@ -15,10 +15,10 @@ Tx_Extbase_Utility_Extension::configurePlugin(
     $_EXTKEY,
     'subscription',
     array(
-        'Subscriptions' => 'index,process'
+        'Subscriptions' => 'index,subscribe,unsubscribe'
     ),
     array(
-        'Subscriptions' => 'index,process'
+        'Subscriptions' => 'index,subscribe,unsubscribe'
     )
 );
 

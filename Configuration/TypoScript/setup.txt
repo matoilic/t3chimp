@@ -4,6 +4,8 @@ page.includeJS.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.js
 page.includeJS.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.min.js
 [end]
 
+page.includeJS.file2 = EXT:t3chimp/Resources/Public/JavaScripts/jquery.html5form.min.js
+
 plugin.tx_t3chimp {
 	settings {
 
