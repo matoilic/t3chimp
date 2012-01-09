@@ -23,8 +23,9 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
         $this->checkApi();
     }
 
-    private function checkApi($ignoreCode = null) {
-        if($this->api->errorCode && $this->api->errorCode != $ignoreCode) {
+    private function checkApi($ignoreCode = array()) {
+        $errorCode = $this->api->errorCode;
+        if(!$errorCode && !in_array($errorCode, $ignoreCode)) {
             throw new Exception('Mailchimp error: ' . $this->api->errorMessage . '(' . $this->api->errorCode . ')');
         }
     }
@@ -49,6 +50,6 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
 
     public function removeSubscriber($listId, $email) {
         $this->api->listUnsubscribe($listId, $email);
-        $this->checkApi(215);
+        $this->checkApi(array(215, 232));
     }
 }
