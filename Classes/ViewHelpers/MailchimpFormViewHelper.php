@@ -25,6 +25,10 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
                     $content .= $this->renderTextField($fieldDefinition);
                 break;
 
+                case 'radio':
+                    $content .= $this->renderRadioField($fieldDefinition);
+                break;
+
                 case 'text':
                     $content .= $this->renderTextField($fieldDefinition);
                 break;
@@ -84,6 +88,30 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
             $label->addContent(' *');
         }
         return $label;
+    }
+
+    public function renderRadioField($fieldDefinition) {
+        $value = $fieldDefinition['value'] != NULL ? $fieldDefinition['value'] : $fieldDefinition['default'];
+        if($value == '') $value = $fieldDefinition['choices'][0];
+
+        $radioGroup = new HtmlTag('p');
+        $radioGroup->addContent($fieldDefinition['name'] . '<br />');
+
+        foreach($fieldDefinition['choices'] as $choice) {
+            $id = $fieldDefinition['name'] . '_' . $choice;
+            $radio = new HtmlTag('input', true);
+            $radio->setAttribute('type', 'radio');
+            $radio->setAttribute('name', $fieldDefinition['name']);
+            $radio->setAttribute('id', $id);
+            $radio->setAttribute('value', $choice);
+            if($choice == $value) {
+                $radio->setAttribute('checked', 'checked');
+            }
+            $radioGroup->addContent($radio);
+            $radioGroup->addContent($this->renderLabel($choice, $id, false));
+        }
+
+        return $radioGroup;
     }
 
     public function renderTextField($fieldDefinition) {

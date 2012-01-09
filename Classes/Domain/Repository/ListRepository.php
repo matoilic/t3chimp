@@ -23,9 +23,9 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
         $this->checkApi();
     }
 
-    private function checkApi($ignoreCode = array()) {
+    private function checkApi($ignoreCode = false) {
         $errorCode = $this->api->errorCode;
-        if(!$errorCode && !in_array($errorCode, $ignoreCode)) {
+        if($errorCode != '' && !in_array($errorCode, $ignoreCode)) {
             throw new Exception('Mailchimp error: ' . $this->api->errorMessage . '(' . $this->api->errorCode . ')');
         }
     }
