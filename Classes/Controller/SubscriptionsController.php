@@ -86,7 +86,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
             } else if($field['field_type'] == 'email' && !$this->validateEmail($field['value'])) {
                 $field['errors'][] = $this->translate('form.invalidEmail');
                 $hasErrors = $hasErrors || true;
-            } else if($field['field_type'] == 'dropdown' && !in_array($field['value'], $field['choices'])) {
+            } else if(in_array($field['field_type'], array('dropdown', 'radio')) && !in_array($field['value'], $field['choices'])) {
                 $field['errors'][] = $this->translate('form.invalidValue');
                 $hasErrors = $hasErrors || true;
             } else {

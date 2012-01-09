@@ -98,10 +98,10 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
         $radioGroup->addContent($fieldDefinition['name'] . '<br />');
 
         foreach($fieldDefinition['choices'] as $choice) {
-            $id = $fieldDefinition['name'] . '_' . $choice;
+            $id = $fieldDefinition['tag'] . '_' . $choice;
             $radio = new HtmlTag('input', true);
             $radio->setAttribute('type', 'radio');
-            $radio->setAttribute('name', $fieldDefinition['name']);
+            $radio->setAttribute('name', $fieldDefinition['tag']);
             $radio->setAttribute('id', $id);
             $radio->setAttribute('value', $choice);
             if($choice == $value) {
