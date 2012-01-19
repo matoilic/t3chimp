@@ -9,10 +9,12 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
 
     /**
      * @param array $fieldDefinitions
+     * @param array $interestGroupings
      * @return string
      */
-    public function render($fieldDefinitions) {
-        usort($fieldDefinition, array($this, 'sort'));
+    public function render($fieldDefinitions, $interestGroupings = array()) {
+        usort($fieldDefinition, array($this, 'sortFields'));
+        usort($interestGroupings, array($this, 'sortGroupings'));
         $content = '';
 
         foreach($fieldDefinitions as $fieldDefinition) {
@@ -35,6 +37,10 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
             }
         }
 
+        foreach($interestGroupings as $grouping) {
+            $content .= $this->renderInterestGrouping($grouping);
+        }
+
         return $content;
     }
 
@@ -55,6 +61,7 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
         }
 
         $section = new HtmlTag('p');
+        $section->setAttribute('class', 'mc-field, mc-field-' . strtolower($fieldDefinition['tag']));
         $section->addContent($this->renderLabel($fieldDefinition['name'], $fieldDefinition['tag'], $fieldDefinition['req']));
         $section->addContent('<br />');
         $section->addContent($select);
@@ -80,6 +87,32 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
         return $container;
     }
 
+    public function renderInterestGrouping($grouping) {
+        $choices = $grouping['groups'];
+        usort($groups, array($choices, 'sortGroupings'));
+        $selection = (is_array($grouping['selection'])) ? $grouping['selection'] : array();
+
+        $group = new HtmlTag('p');
+        $group->setAttribute('class', 'mc-group, mc-group-' . $grouping['id']);
+        $group->addContent('<span class="radio-caption">' . $grouping['name'] . '</span><br />');
+
+        foreach($choices as $choice) {
+            $id = 'mc_group_' . $grouping['id'] . '_' . $choice['bit'];
+            $checkbox = new HtmlTag('input', true);
+            $checkbox->setAttribute('type', 'checkbox');
+            $checkbox->setAttribute('name', $id);
+            $checkbox->setAttribute('id', $id);
+            $checkbox->setAttribute('value', $choice['bit']);
+            if(in_array($choice['bit'], $selection)) {
+                $checkbox->setAttribute('checked', 'checked');
+            }
+            $group->addContent($checkbox);
+            $group->addContent($this->renderLabel($choice['name'], $id, false));
+        }
+
+        return $group;
+    }
+
     public function renderLabel($text, $target, $required) {
         $label = new HtmlTag('label');
         $label->setAttribute('for', $target);
@@ -95,7 +128,8 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
         if($value == '') $value = $fieldDefinition['choices'][0];
 
         $radioGroup = new HtmlTag('p');
-        $radioGroup->addContent($fieldDefinition['name'] . '<br />');
+        $radioGroup->setAttribute('class', 'mc-field, mc-field-' . strtolower($fieldDefinition['tag']));
+        $radioGroup->addContent('<span class="radio-caption">' . $fieldDefinition['name'] . '</span><br />');
 
         foreach($fieldDefinition['choices'] as $choice) {
             $id = $fieldDefinition['tag'] . '_' . $choice;
@@ -126,6 +160,7 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
         $input->setAttribute('value', $value);
 
         $section = new HtmlTag('p');
+        $section->setAttribute('class', 'mc-field, mc-field-' . strtolower($fieldDefinition['tag']));
         $section->addContent($this->renderLabel($fieldDefinition['name'], $fieldDefinition['tag'], $fieldDefinition['req']));
         $section->addContent('<br />');
         $section->addContent($input);
@@ -139,11 +174,19 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
         return $section;
     }
 
-    public function sort($a, $b) {
+    public function sortFields($a, $b) {
         if ($a['order'] == $b['order']) {
             return 0;
         }
 
         return ($a['order'] < $b['order']) ? -1 : 1;
+    }
+
+    public function sortGroupings($a, $b) {
+        if ($a['display_order'] == $b['display_order']) {
+            return 0;
+        }
+
+        return ($a['display_order'] < $b['display_order']) ? -1 : 1;
     }
 }

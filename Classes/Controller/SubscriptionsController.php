@@ -23,8 +23,11 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
     }
 
     public function indexAction() {
-        $fields = $this->listRepository->getFieldsFor($this->settings['subscriptionList']);
+        $fields = $this->listRepository->getFieldsFor($this->listId);
+        $interestGroupings = $this->listRepository->getInterestGroupingsFor($this->listId);
+//        die(print_r($interestGroupings, true));
         $this->view->assign('fieldDefinitions', $fields);
+        $this->view->assign('interestGroupings', $interestGroupings);
         $this->view->assign('action', 'subscribe');
     }
 
@@ -35,9 +38,10 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
         }
 
         $fields = $this->listRepository->getFieldsFor($this->listId);
+        $interestGroupings = $this->listRepository->getInterestGroupingsFor($this->listId);
 
-        if($this->validateSubscription(&$fields, $_POST)) {
-            $this->listRepository->addSubscriber($this->listId, $fields);
+        if($this->validateSubscription(&$fields, &$interestGroupings, $_POST)) {
+            $this->listRepository->addSubscriber($this->listId, $fields, $interestGroupings);
         } else {
             $this->view->assign('fieldDefinitions', $fields);
             $this->view->assign('action', 'subscribe');
@@ -72,7 +76,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
         return preg_match("/^([a-z0-9])([a-z0-9-_.]+)@([a-z0-9])([a-z0-9-_]+\.)+([a-z]{2,4})$/i", $email);
     }
 
-    private function validateSubscription($fields, $values) {
+    private function validateSubscription($fields, $interestGroupings, $values) {
         $hasErrors = false;
 
         for($i = 0; $i < count($fields); $i++) {
@@ -94,6 +98,21 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
             }
 
             $fields[$i] = $field;
+        }
+
+        for($i = 0; $i < count($interestGroupings); $i++) {
+            $grouping = $interestGroupings[$i];
+            $selection = array();
+
+            foreach($grouping['groups'] as $group) {
+                $fieldName = 'mc_group_' . $grouping['id'] . '_' . $group['bit'];
+                if(isset($values[$fieldName]) && $values[$fieldName] == $group['bit']) {
+                    $selection[] = $group['name'];
+                }
+            }
+
+            $grouping['selection'] = $selection;
+            $interestGroupings[$i] = $grouping;
         }
 
         return !$hasErrors;

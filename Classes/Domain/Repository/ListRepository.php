@@ -7,7 +7,7 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
         $this->api = new MCAPI(T3CHIMP_API_KEY);
     }
 
-    public function addSubscriber($listId, $fieldValues) {
+    public function addSubscriber($listId, $fieldValues, $interestGroupings) {
         $mergeVars = array();
         $email = '';
 
@@ -17,6 +17,11 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
             } else {
                 $email = $field['value'];
             }
+        }
+
+        $mergeVars['GROUPINGS'] = array();
+        foreach($interestGroupings as $grouping) {
+            $mergeVars['GROUPINGS'][] = array('id' => $grouping['id'], 'groups' => implode(',', $grouping['selection']));
         }
 
         $this->api->listSubscribe($listId, $email, $mergeVars, 'html', false, true, true, true);
@@ -46,6 +51,13 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
         }
 
         return $config;
+    }
+
+    public function getInterestGroupingsFor($listId) {
+        $groups = $this->api->listInterestGroupings($listId);
+        $this->checkApi(array(211));
+
+        return ($groups == null) ? array() : $groups;
     }
 
     public function removeSubscriber($listId, $email) {
