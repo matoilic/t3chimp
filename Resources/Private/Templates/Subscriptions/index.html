@@ -2,10 +2,10 @@
 
 <f:flashMessages renderMode="div" class="errors" />
 
-<f:form action="subscribe" controller="Subscriptions" id="subscription">
+<f:form action="subscribe" controller="Subscriptions" id="subscription" class="mc-form">
     <f:form.hidden name="cc" id="cc" value="" />
 
-    <p>
+    <p class="mc-action">
         <f:translate key="form.action">Aktion</f:translate><br />
 
         <f:if condition="{0:action} == {0:'subscribe'}">

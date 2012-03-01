@@ -15,7 +15,7 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
     public function render($fieldDefinitions, $interestGroupings = array()) {
         usort($fieldDefinition, array($this, 'sortFields'));
         usort($interestGroupings, array($this, 'sortGroupings'));
-        $content = '';
+        $content = '<div class="mc-fields">';
 
         foreach($fieldDefinitions as $fieldDefinition) {
             switch($fieldDefinition['field_type']) {
@@ -37,8 +37,10 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
             }
         }
 
+        $content .= '</div>';
+
         foreach($interestGroupings as $grouping) {
-            $content .= $this->renderInterestGrouping($grouping);
+            $content .= '<div class="mc-groups">' . $this->renderInterestGrouping($grouping) . '</div>';
         }
 
         return $content;
@@ -94,20 +96,25 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
 
         $group = new HtmlTag('p');
         $group->setAttribute('class', 'mc-group, mc-group-' . $grouping['id']);
-        $group->addContent('<span class="radio-caption">' . $grouping['name'] . '</span><br />');
+        $group->addContent('<span class="caption">' . $grouping['name'] . '</span>');
 
         foreach($choices as $choice) {
             $id = 'mc_group_' . $grouping['id'] . '_' . $choice['bit'];
+            $container = new HtmlTag('span');
+            $container->setAttribute('id', $id . '_container');
+
             $checkbox = new HtmlTag('input', true);
             $checkbox->setAttribute('type', 'checkbox');
             $checkbox->setAttribute('name', $id);
             $checkbox->setAttribute('id', $id);
+            $checkbox->setAttribute('checked', "checked");
             $checkbox->setAttribute('value', $choice['bit']);
             if(in_array($choice['bit'], $selection)) {
                 $checkbox->setAttribute('checked', 'checked');
             }
-            $group->addContent($checkbox);
-            $group->addContent($this->renderLabel($choice['name'], $id, false));
+            $container->addContent($checkbox);
+            $container->addContent($this->renderLabel($choice['name'], $id, false));
+            $group->addContent($container);
         }
 
         return $group;
