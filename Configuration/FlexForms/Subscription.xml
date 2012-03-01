@@ -6,13 +6,13 @@
         <main>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>List</sheetTitle>
+                    <sheetTitle>General</sheetTitle>
                 </TCEforms>
                 <type>array</type>
                 <el>
                     <settings.subscriptionList>
                         <TCEforms>
-                            <label>LLL:EXT:t3chimp/Resources/Language/locallang.xml:flexForm.list</label>
+                            <label>List</label>
                             <config>
                                 <type>select</type>
                                 <items></items>
@@ -22,35 +22,16 @@
                             </config>
                         </TCEforms>
                     </settings.subscriptionList>
+                    <settings.doubleOptIn>
+                        <TCEforms>
+                            <label>Double opt-in</label>
+                            <config>
+                                <type>check</type>
+                            </config>
+                        </TCEforms>
+                    </settings.doubleOptIn>
                 </el>
             </ROOT>
         </main>
-        <templates>
-            <ROOT>
-                <TCEforms>
-                    <sheetTitle>Templates</sheetTitle>
-                </TCEforms>
-                <type>array</type>
-                <el>
-                    <settings.fieldTemplate>
-                        <TCEforms>
-                            <label>LLL:EXT:t3chimp/Resources/Language/locallang.xml:flexForm.fieldTemplate</label>
-                            <config>
-                                <type>text</type>
-								<cols>50</cols>
-                                <rows>30</rows>
-                                <default>
-                                    &lt;p&gt;
-	                                    %label%&lt;br /&gt;
-	                                    %field%
-                                    &lt;/p&gt;
-                                </default>
-                                <eval>trim</eval>
-                            </config>
-                        </TCEforms>
-                    </settings.fieldTemplate>
-                </el>
-            </ROOT>
-        </templates>
     </sheets>
 </T3DataStructure>

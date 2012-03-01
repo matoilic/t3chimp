@@ -41,7 +41,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
         $interestGroupings = $this->listRepository->getInterestGroupingsFor($this->listId);
 
         if($this->validateSubscription(&$fields, &$interestGroupings, $_POST)) {
-            $this->listRepository->addSubscriber($this->listId, $fields, $interestGroupings);
+            $this->listRepository->addSubscriber($this->listId, $fields, $interestGroupings, $this->settings['doubleOptIn']);
         } else {
             $this->view->assign('fieldDefinitions', $fields);
             $this->view->assign('action', 'subscribe');

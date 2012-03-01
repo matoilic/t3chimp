@@ -7,7 +7,7 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
         $this->api = new MCAPI(T3CHIMP_API_KEY);
     }
 
-    public function addSubscriber($listId, $fieldValues, $interestGroupings) {
+    public function addSubscriber($listId, $fieldValues, $interestGroupings, $doubleOptIn = true) {
         $mergeVars = array();
         $email = '';
 
@@ -24,7 +24,7 @@ class Tx_T3chimp_Domain_Repository_ListRepository {
             $mergeVars['GROUPINGS'][] = array('id' => $grouping['id'], 'groups' => implode(',', $grouping['selection']));
         }
 
-        $this->api->listSubscribe($listId, $email, $mergeVars, 'html', false, true, true, true);
+        $this->api->listSubscribe($listId, $email, $mergeVars, 'html', $doubleOptIn, true, true, true);
         $this->checkApi();
     }
 
