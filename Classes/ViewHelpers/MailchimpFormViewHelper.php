@@ -95,7 +95,7 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
         $selection = (is_array($grouping['selection'])) ? $grouping['selection'] : array();
 
         $group = new HtmlTag('p');
-        $group->setAttribute('class', 'mc-group, mc-group-' . $grouping['id']);
+        $group->setAttribute('class', 'mc-group mc-group-' . $grouping['id']);
         $group->addContent('<span class="caption">' . $grouping['name'] . '</span>');
 
         foreach($choices as $choice) {
