@@ -1,0 +1,17 @@
+{namespace t = Tx_T3chimp_ViewHelpers}
+
+<t:form action="process" controller="Subscriptions" class="mc-form" object="{form}">
+    <f:form.hidden name="cc" class="cc" value="" />
+
+    <t:form.formField property="FORM_ACTION"/>
+
+    <t:form.remainingFields />
+
+    <p>
+        <f:form.submit value="{f:translate(key: 't3chimp.form.submit')}" />
+    </p>
+
+    <p>
+        * <f:translate key="t3chimp.form.requiredFields">Required fields</f:translate>
+    </p>
+</t:form>

@@ -1,0 +1,13 @@
+{namespace t = Tx_T3chimp_ViewHelpers}
+<p>
+    <span class="caption">
+        <f:translate key="t3chimp: {field.label}">{field.label}</f:translate>
+    </span><br>
+    <f:for each="{field.choices}" as="choice">
+        <t:form.radio property="{field.name}" id="{choice.id}" value="{choice.value}" checked="{choice.isSelected}" />
+        <label for="{choice.id}">
+            <f:translate key="t3chimp: {choice.value}">{choice.value}</f:translate>
+        </label>
+    </f:for>
+    <t:form.errors property="{field.name}" />
+</p>

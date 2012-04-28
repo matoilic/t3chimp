@@ -16,7 +16,7 @@
                             <config>
                                 <type>select</type>
                                 <items></items>
-                                <itemsProcFunc>Tx_T3chimp_Domain_Repository_ListRepository->getFlexFormValues</itemsProcFunc>
+                                <itemsProcFunc>Tx_T3chimp_Service_MailChimp->getListsAsFlexFormValues</itemsProcFunc>
                                 <maxitems>1</maxitems>
 								<size>1</size>
                             </config>
@@ -30,6 +30,14 @@
                             </config>
                         </TCEforms>
                     </settings.doubleOptIn>
+                    <settings.secureConnection>
+                        <TCEforms>
+                            <label>Use secure connection</label>
+                            <config>
+                                <type>check</type>
+                            </config>
+                        </TCEforms>
+                    </settings.secureConnection>
                 </el>
             </ROOT>
         </main>

@@ -1,0 +1,8 @@
+{namespace t = Tx_T3chimp_ViewHelpers}
+<p>
+    <label for="{field.id}">{property}
+        <f:translate key="t3chimp: {field.label}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
+    </label><br>
+    <t:form.select property="{field.name}" id="{field.id}" options="{field.choices}" optionValueField="value" optionLabelField="localizedValue" />
+    <t:form.errors property="{field.name}" />
+</p>

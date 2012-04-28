@@ -7,9 +7,9 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
     private $listId;
 
     /**
-     * @var Tx_T3chimp_Domain_Repository_ListRepository
+     * @var Tx_T3chimp_Service_MailChimp
      */
-    private $listRepository;
+    private $mailChimpService;
 
     private function generateCaptcha() {
         $_SESSION['cc'] = rand(10, 1000000000);
@@ -18,30 +18,69 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
 
     public function initializeAction() {
         parent::initializeAction();
-        $this->listRepository = new Tx_T3chimp_Domain_Repository_ListRepository();
+        $this->mailChimpService = $this->objectManager->get('Tx_T3chimp_Service_MailChimp');
         $this->listId = $this->settings['subscriptionList'];
     }
 
+    /**
+     * @NotCsrfProtected
+     */
     public function indexAction() {
-        $fields = $this->listRepository->getFieldsFor($this->listId);
-        $interestGroupings = $this->listRepository->getInterestGroupingsFor($this->listId);
-//        die(print_r($interestGroupings, true));
-        $this->view->assign('fieldDefinitions', $fields);
-        $this->view->assign('interestGroupings', $interestGroupings);
-        $this->view->assign('action', 'subscribe');
+        $this->view->assign('form', $this->mailChimpService->getForm());
     }
 
+    /**
+     * @param Tx_T3chimp_Service_MailChimp $service
+     */
+    public function injectMailChimpService(Tx_T3chimp_Service_MailChimp $service) {
+        $this->mailChimpService = $service;
+    }
+
+    /**
+     * TODO enable csrf protection
+     * @NotCsrfProtected
+     */
+    public function processAction() {
+        $form = $this->mailChimpService->getForm();
+        $form->bindRequest($this->request);
+        if($form->isValid()) {
+            if($this->mailChimpService->saveForm($form) > 0) {
+                $this->redirect('subscribed');
+            } else {
+                $this->redirect('unsubscribed');
+            }
+            return;
+        }
+
+        $this->view->assign('form', $form);
+    }
+
+    /**
+     * @NotCsrfProtected
+     */
+    public function subscribedAction() {
+
+    }
+
+    /**
+     * @NotCsrfProtected
+     */
+    public function unsubscribedAction() {
+
+    }
+
+    //TODO remove
     public function subscribeAction() {
         if(!$this->validateCaptcha()) {
             $this->redirect('index');
             return;
         }
 
-        $fields = $this->listRepository->getFieldsFor($this->listId);
-        $interestGroupings = $this->listRepository->getInterestGroupingsFor($this->listId);
+        $fields = $this->mailChimpService->getFieldsFor($this->listId);
+        $interestGroupings = $this->mailChimpService->getInterestGroupingsFor($this->listId);
 
         if($this->validateSubscription(&$fields, &$interestGroupings, $_POST)) {
-            $this->listRepository->addSubscriber($this->listId, $fields, $interestGroupings, $this->settings['doubleOptIn']);
+            $this->mailChimpService->addSubscriber($this->listId, $fields, $interestGroupings, $this->settings['doubleOptIn']);
         } else {
             $this->view->assign('fieldDefinitions', $fields);
             $this->view->assign('action', 'subscribe');
@@ -49,6 +88,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
         }
     }
 
+    //todo remove
     public function unsubscribeAction() {
         if(!$this->validateCaptcha()) {
             $this->redirect('index');
@@ -58,10 +98,10 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
         $email = $_POST['EMAIL'];
 
         if($this->validateEmail($email)) {
-            $this->listRepository->removeSubscriber($this->listId, $email);
+            $this->mailChimpService->removeSubscriber($this->listId, $email);
         } else {
             $this->flashMessageContainer->add($this->translate('form.invalidEmail'));
-            $fields = $this->listRepository->getFieldsFor($this->listId);
+            $fields = $this->mailChimpService->getFieldsFor($this->listId);
             $this->view->assign('fieldDefinitions', $fields);
             $this->view->assign('action', 'unsubscribe');
             return $this->view->render('index');

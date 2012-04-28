@@ -23,14 +23,11 @@ class Tx_T3chimp_ViewHelpers_MailchimpFormViewHelper extends Tx_Fluid_Core_ViewH
                     $content .= $this->renderDropdownField($fieldDefinition);
                 break;
 
-                case 'email':
-                    $content .= $this->renderTextField($fieldDefinition);
-                break;
-
                 case 'radio':
                     $content .= $this->renderRadioField($fieldDefinition);
                 break;
 
+                case 'email':
                 case 'text':
                     $content .= $this->renderTextField($fieldDefinition);
                 break;

@@ -6,18 +6,35 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="flexForm.list">Liste</label>
-			<label index="flexForm.doubleOtpIn">Double Opt-In</label>
-            <label index="form.invalidEmail">Ungültige E-Mail Adresse</label>
-            <label index="form.invalidValue">Ungültiger Wert</label>
-            <label index="form.required">Dies ist ein Pflichtfeld</label>
-            <label index="form.submit">Abschicken</label>
-            <label index="form.subscribe">Anmelden</label>
-            <label index="form.unsubscribe">Abmelden</label>
-            <label index="form.requiredFields">Pflichtfelder</label>
-            <label index="form.action">Aktion</label>
-            <label index="form.subscribed">Ihre Anmeldung wurde gespeichert.</label>
-            <label index="form.unsubscribed">Ihre Anmeldung wurde gelöscht.</label>
+			<label index="t3chimp.flexForm.list">List</label>
+			<label index="t3chimp.flexForm.doubleOtpIn">Double Opt-In</label>
+            <label index="t3chimp.error.invalidEmail">Invalid email address</label>
+            <label index="t3chimp.error.invalidValue">Invalid value</label>
+            <label index="t3chimp.error.required">This is a required field</label>
+            <label index="t3chimp.form.submit">Submit</label>
+            <label index="t3chimp.form.requiredFields">Required fields</label>
+            <label index="t3chimp.form.subscribed">You have successfully subscribed.</label>
+            <label index="t3chimp.form.unsubscribed">You have successfully unsubscribed.</label>
+
+            <label index="t3chimp: Action">Action</label>
+            <label index="t3chimp: Subscribe">Subscribe</label>
+            <label index="t3chimp: Unsubscribe">Unsubscribe</label>
 		</languageKey>
+
+        <languageKey index="de" type="array">
+            <label index="t3chimp.flexForm.list">Liste</label>
+            <label index="t3chimp.flexForm.doubleOtpIn">Double Opt-In</label>
+            <label index="t3chimp.error.invalidEmail">Ungültige E-Mail Adresse</label>
+            <label index="t3chimp.error.invalidValue">Ungültiger Wert</label>
+            <label index="t3chimp.error.required">Dies ist ein Pflichtfeld</label>
+            <label index="t3chimp.form.submit">Abschicken</label>
+            <label index="t3chimp.form.requiredFields">Pflichtfelder</label>
+            <label index="t3chimp.form.subscribed">Ihre Anmeldung wurde gespeichert.</label>
+            <label index="t3chimp.form.unsubscribed">Ihre Anmeldung wurde gelöscht.</label>
+
+            <label index="t3chimp: Action">Anmelden</label>
+            <label index="t3chimp: Subscribe">Anmelden</label>
+            <label index="t3chimp: Unsubscribe">Abmelden</label>
+        </languageKey>
 	</data>
 </T3locallang>

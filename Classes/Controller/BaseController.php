@@ -1,8 +1,6 @@
 <?php
     abstract class Tx_T3chimp_Controller_BaseController extends Tx_Extbase_MVC_Controller_ActionController {
-        protected $currentLanguageId = 0;
         const EXTKEY = 't3chimp';
-        protected $isLoggedIn = false;
 
         private function cleanSettingKeys($settings) {
             if(!is_array($settings)) {
@@ -21,24 +19,40 @@
             return $cleanedSettings;
         }
 
-        protected function isInUserGroup($group) {
-            if(!$this->isLoggedIn) {
-                return false;
-            }
-
-            return in_array($group, $GLOBALS['TSFE']->fe_user->groupData['title']);
-        }
-
         public function initializeAction() {
             parent::initializeAction();
-            $this->mergeSettings();
-            $this->currentLanguageId = $GLOBALS['TSFE']->sys_language_uid;
-            $this->isLoggedIn = ($GLOBALS['TSFE']->fe_user->user != null);
-            if($this->isLoggedIn) {
-                $GLOBALS['TSFE']->fe_user->fetchGroupData();
+
+            $actionAnnotations = $this->reflectionService->getMethodTagsValues(get_class($this), $this->actionMethodName);
+
+            if(!isset($actionAnnotations['NotCsrfProtected'])) {
+                $submittedToken = '';
+                if($this->request->hasArgument('csrf-token')) {
+                    $submittedToken = $this->request->getArgument('csrf-token');
+                } else if(isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+                    $submittedToken = $_SERVER['HTTP_X_CSRF_TOKEN'];
+                }
+
+                if($submittedToken !== $this->initializeCsrfToken()) {
+                    throw new Exception('t3chimp: invalid CRSF token');
+                }
             }
 
-            $this->response->addAdditionalHeaderData('<meta name="lang" content="' . $this->currentLanguageId . '" />');
+            $this->mergeSettings();
+
+            $this->response->addAdditionalHeaderData('<meta name="t3chimp:lang" content="' . $GLOBALS['TSFE']->sys_language_uid . '" />');
+            $this->response->addAdditionalHeaderData('<meta name="t3chimp:lang-iso" content="' . $GLOBALS['TSFE']->sys_language_isocode . '" />');
+            $this->response->addAdditionalHeaderData('<meta name="t3chimp:csrf-token" content="' . $this->initializeCsrfToken() . '" />');
+        }
+
+        /**
+         * @return string
+         */
+        private function initializeCsrfToken() {
+            if($_SESSION['t3chimp:csrfToken'] === null) {
+                $_SESSION['t3chimp:csrfToken'] = md5(rand() . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']);
+            }
+
+            return $_SESSION['t3chimp:csrfToken'];
         }
 
         public function initializeView($view) {

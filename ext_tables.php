@@ -1,8 +1,6 @@
 <?php
 if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
-require_once(t3lib_extMgm::extPath('t3chimp') . '/Classes/Domain/Repository/ListRepository.php');
-
 if(!defined('T3CHIMP_API_KEY')) {
     $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
     define('T3CHIMP_API_KEY', $global['apiKey']);
@@ -14,4 +12,4 @@ $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_subscriptio
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_subscription', 'FILE:EXT:t3chimp/Configuration/FlexForms/Subscription.xml');
 
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'T3Chimp Setup');
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/DefaultStyles', 'T3Chimp Showroom CSS Styles (optional)');
+t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/DefaultStyles', 'T3Chimp CSS Styles (optional)');

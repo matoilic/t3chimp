@@ -10,12 +10,44 @@ plugin.tx_t3chimp {
 	settings {
 
 	}
+
 	persistence { }
+
 	view {
 	    templateRootPath = {$plugin.tx_t3chimp.view.templateRootPath}
 		partialRootPath = {$plugin.tx_t3chimp.view.partialRootPath}
 		layoutRootPath = {$plugin.tx_t3chimp.view.layoutRootPath}
 		defaultPid = auto
+	}
+
+	ajax {
+        config {
+            disableAllHeaderCode = 1
+            disablePrefixComment = 1
+            xhtml_cleaning = 0
+            admPanel = 0
+            no_cache = 1
+            additionalHeaders = Content-type:application/json
+        }
+
+        typeNum = 1296728024
+
+        10 = USER_INT
+        10 {
+            userFunc = tx_t3chimp_core_bootstrap->run
+            pluginName = subscription
+            extensionName = T3Chimp
+            settings =< plugin.tx_t3chimp.settings
+            persistence =< plugin.tx_t3chimp.persistence
+            view =< plugin.tx_t3chimp.view
+
+            switchableControllerActions {
+                Subscriptions {
+                    1 = subscribe
+                    2 = unsubscribe
+                }
+            }
+        }
 	}
 }
 
