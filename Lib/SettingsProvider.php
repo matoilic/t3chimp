@@ -2,6 +2,11 @@
 
 class SettingsProvider implements t3lib_Singleton {
     /**
+     * @var Tx_T3chimp_Session_Provider
+     */
+    private $session;
+
+    /**
      * @var array
      */
     private $settings = array();
@@ -43,13 +48,35 @@ class SettingsProvider implements t3lib_Singleton {
     }
 
     /**
+     * @param Tx_Extbase_Object_ObjectManager $manager
+     */
+    public function injectObjectManager(Tx_Extbase_Object_ObjectManager $manager) {
+        $this->injectSessionProvider($manager->get('Tx_T3chimp_Session_Provider'));
+        $this->injectConfigurationManager($manager->get('Tx_Extbase_Configuration_ConfigurationManagerInterface'));
+    }
+
+    /**
      * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $manager
      */
-    public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $manager) {
-        global $_EXTKEY;
+    private function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $manager) {
         $this->settings = $manager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
-        $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
+
+        //read session stored settings for ajax requests
+        if(count($this->settings) == 0 && $this->session->settings != null) {
+            $this->settings = $this->session->settings;
+        } else {
+            $this->session->settings = $this->settings;
+        }
+
+        $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
         $global = $this->cleanSettingKeys($global);
         $this->settings = array_merge($this->settings, $global);
+    }
+
+    /**
+     * @param Tx_T3chimp_Session_Provider $provider
+     */
+    private function injectSessionProvider(Tx_T3chimp_Session_Provider $provider) {
+        $this->session = $provider;
     }
 }

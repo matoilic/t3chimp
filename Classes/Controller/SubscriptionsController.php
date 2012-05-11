@@ -1,6 +1,6 @@
 <?php
 
-class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controller_BaseController {
+class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Controller_ActionController {
     /**
      * @var int
      */
@@ -11,20 +11,30 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
      */
     private $mailChimpService;
 
-    private function generateCaptcha() {
-        $_SESSION['cc'] = rand(10, 1000000000);
-        $this->response->addAdditionalHeaderData('<meta name="cc" content="' . $_SESSION['captcha'] . '" />');
+    /**
+     * @var Tx_T3chimp_Session_Provider
+     */
+    protected $session;
+
+    protected function checkCsrfToken() {
+        if($_SERVER['HTTP_X_CSRF_TOKEN'] !== $this->session->csrfToken) {
+            throw new Exception('t3chimp: invalid CRSF token');
+        }
     }
 
     public function initializeAction() {
         parent::initializeAction();
-        $this->mailChimpService = $this->objectManager->get('Tx_T3chimp_Service_MailChimp');
-        $this->listId = $this->settings['subscriptionList'];
+
+        if(!isset($this->session->csrfToken)) {
+            $this->session->csrfToken = md5(rand() . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']);
+        }
+
+        $this->response->addAdditionalHeaderData('<meta name="t3chimp:csrf-token" content="' . $this->session->csrfToken . '" />');
+        $this->response->addAdditionalHeaderData('<meta name="t3chimp:lang" content="' . $GLOBALS['TSFE']->sys_language_uid . '" />');
+        $this->response->addAdditionalHeaderData('<meta name="t3chimp:lang-iso" content="' . $GLOBALS['TSFE']->sys_language_isocode . '" />');
+        $this->response->addAdditionalHeaderData('<meta name="t3chimp:pid" content="' . $GLOBALS['TSFE']->id . '" />');
     }
 
-    /**
-     * @NotCsrfProtected
-     */
     public function indexAction() {
         $this->view->assign('form', $this->mailChimpService->getForm());
     }
@@ -37,124 +47,50 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_T3chimp_Controlle
     }
 
     /**
-     * TODO enable csrf protection
-     * @NotCsrfProtected
+     * @param Tx_T3chimp_Session_Provider $provider
      */
+    public function injectSessionProvider(Tx_T3chimp_Session_Provider $provider) {
+        $this->session = $provider;
+    }
+
+    /**
+     * @param SettingsProvider $provider
+     */
+    public function injectSettingsProvider(SettingsProvider $provider) {
+        $this->settings = $provider->getAll();
+    }
+
     public function processAction() {
+        $this->checkCsrfToken();
+
         $form = $this->mailChimpService->getForm();
         $form->bindRequest($this->request);
+
         if($form->isValid()) {
             if($this->mailChimpService->saveForm($form) > 0) {
-                $this->redirect('subscribed');
+                $message = $this->translate('t3chimp.form.subscribed');
             } else {
-                $this->redirect('unsubscribed');
+                $message = $this->translate('t3chimp.form.unsubscribed');
             }
-            return;
+
+            return json_encode(array('html' => $message), JSON_HEX_TAG | JSON_HEX_QUOT);
         }
 
         $this->view->assign('form', $form);
+
+        return json_encode(array('html' => $this->view->render()), JSON_HEX_TAG | JSON_HEX_QUOT);
     }
 
     /**
-     * @NotCsrfProtected
+     * @param $key the key for the label
+     * @param null|array $arguments
+     * @param string $default
+     * @return string
      */
-    public function subscribedAction() {
+    protected function translate($key, $arguments = null, $default = 'MISSING TRANSLATION') {
+        $extensionName = $this->request->getControllerExtensionName();
+        $value = Tx_Extbase_Utility_Localization::translate($key, $extensionName, $arguments);
 
-    }
-
-    /**
-     * @NotCsrfProtected
-     */
-    public function unsubscribedAction() {
-
-    }
-
-    //TODO remove
-    public function subscribeAction() {
-        if(!$this->validateCaptcha()) {
-            $this->redirect('index');
-            return;
-        }
-
-        $fields = $this->mailChimpService->getFieldsFor($this->listId);
-        $interestGroupings = $this->mailChimpService->getInterestGroupingsFor($this->listId);
-
-        if($this->validateSubscription(&$fields, &$interestGroupings, $_POST)) {
-            $this->mailChimpService->addSubscriber($this->listId, $fields, $interestGroupings, $this->settings['doubleOptIn']);
-        } else {
-            $this->view->assign('fieldDefinitions', $fields);
-            $this->view->assign('action', 'subscribe');
-            return $this->view->render('index');
-        }
-    }
-
-    //todo remove
-    public function unsubscribeAction() {
-        if(!$this->validateCaptcha()) {
-            $this->redirect('index');
-            return;
-        }
-
-        $email = $_POST['EMAIL'];
-
-        if($this->validateEmail($email)) {
-            $this->mailChimpService->removeSubscriber($this->listId, $email);
-        } else {
-            $this->flashMessageContainer->add($this->translate('form.invalidEmail'));
-            $fields = $this->mailChimpService->getFieldsFor($this->listId);
-            $this->view->assign('fieldDefinitions', $fields);
-            $this->view->assign('action', 'unsubscribe');
-            return $this->view->render('index');
-        }
-    }
-
-    private function validateCaptcha() {
-        return $this->request->getArgument('cc') == $_SESSION['cc'];
-    }
-
-    private function validateEmail($email) {
-        return preg_match("/^([a-z0-9])([a-z0-9-_.]+)@([a-z0-9])([a-z0-9-_]+\.)+([a-z]{2,4})$/i", $email);
-    }
-
-    private function validateSubscription($fields, $interestGroupings, $values) {
-        $hasErrors = false;
-
-        for($i = 0; $i < count($fields); $i++) {
-            $field = $fields[$i];
-            $field['value'] = trim($values[$field['tag']]);
-            $field['errors'] = array();
-
-            if($field['value'] == null && $field['req']) {
-                $field['errors'][] = $this->translate('form.required');
-                $hasErrors = $hasErrors || true;
-            } else if($field['field_type'] == 'email' && !$this->validateEmail($field['value'])) {
-                $field['errors'][] = $this->translate('form.invalidEmail');
-                $hasErrors = $hasErrors || true;
-            } else if(in_array($field['field_type'], array('dropdown', 'radio')) && !in_array($field['value'], $field['choices'])) {
-                $field['errors'][] = $this->translate('form.invalidValue');
-                $hasErrors = $hasErrors || true;
-            } else {
-                $hasErrors = $hasErrors || false;
-            }
-
-            $fields[$i] = $field;
-        }
-
-        for($i = 0; $i < count($interestGroupings); $i++) {
-            $grouping = $interestGroupings[$i];
-            $selection = array();
-
-            foreach($grouping['groups'] as $group) {
-                $fieldName = 'mc_group_' . $grouping['id'] . '_' . $group['bit'];
-                if(isset($values[$fieldName]) && $values[$fieldName] == $group['bit']) {
-                    $selection[] = $group['name'];
-                }
-            }
-
-            $grouping['selection'] = $selection;
-            $interestGroupings[$i] = $grouping;
-        }
-
-        return !$hasErrors;
+        return ($value != NULL) ? $value : $default;
     }
 }

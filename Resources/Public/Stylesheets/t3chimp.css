@@ -1,7 +1,15 @@
-.invalid input {
-    border:  1px solid #a00;
+.t3chimp-error {
+    color: #a00;
 }
 
-.errors {
-    color: #a00;
+.t3chimp-loading {
+    background: url('../Images/loading.gif') no-repeat top left;
+}
+
+.t3chimp-loading * {
+    visibility: hidden;
+}
+
+.t3chimp-field {
+
 }

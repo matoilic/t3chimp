@@ -49,7 +49,7 @@ class Tx_T3chimp_ViewHelpers_Form_TextfieldViewHelper extends Tx_T3chimp_ViewHel
 	 * @author Robert Lemke <robert@typo3.org>
 	 * @api
 	 */
-	public function render($required = NULL, $type = 'text', $placeholder = NULL) {
+	public function render($required = FALSE, $type = 'text', $placeholder = NULL) {
 		$name = $this->getName();
 		$this->registerFieldNameForFormTokenGeneration($name);
 
@@ -66,7 +66,7 @@ class Tx_T3chimp_ViewHelpers_Form_TextfieldViewHelper extends Tx_T3chimp_ViewHel
 			$this->tag->addAttribute('value', $value);
 		}
 
-		if ($required !== NULL) {
+		if ($required) {
 			$this->tag->addAttribute('required', 'required');
 		}
 

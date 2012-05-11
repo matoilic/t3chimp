@@ -1,5 +1,3 @@
- # Include T3Chimp default styles
-
 page.includeCSS {
 	file100 = EXT:t3chimp/Resources/Public/Stylesheets/t3chimp.css
 	file100.media = screen

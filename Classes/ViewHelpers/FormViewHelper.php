@@ -1,6 +1,8 @@
 <?php
 
 class Tx_T3chimp_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormViewHelper {
+    protected static $typeNum = 1296728024;
+
     /**
      * Render the form.
      *
@@ -11,7 +13,6 @@ class Tx_T3chimp_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormVie
      * @param string $pluginName Target plugin. If empty, the current plugin name is used
      * @param integer $pageUid Target page uid
      * @param mixed $object Object to use for the form. Use in conjunction with the "property" attribute on the sub tags
-     * @param integer $pageType Target page type
      * @param boolean $noCache set this to disable caching for the target page. You should not need this.
      * @param boolean $noCacheHash set this to supress the cHash query parameter created by TypoLink. You should not need this.
      * @param string $section The anchor to be added to the action URI (only active if $actionUri is not set)
@@ -25,9 +26,14 @@ class Tx_T3chimp_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormVie
      * @param string $objectName name of the object that is bound to this form. If this argument is not specified, the name attribute of this form is used to determine the FormObjectName
      * @return string rendered form
      */
-    public function render($action = NULL, array $arguments = array(), $controller = NULL, $extensionName = NULL, $pluginName = NULL, $pageUid = NULL, $object = NULL, $pageType = 0, $noCache = FALSE, $noCacheHash = FALSE, $section = '', $format = '', array $additionalParams = array(), $absolute = FALSE, $addQueryString = FALSE, array $argumentsToBeExcludedFromQueryString = array(), $fieldNamePrefix = NULL, $actionUri = NULL, $objectName = NULL) {
+    public function render($action = NULL, array $arguments = array(), $controller = NULL, $extensionName = NULL, $pluginName = NULL, $pageUid = NULL, $object = NULL, $noCache = FALSE, $noCacheHash = FALSE, $section = '', $format = '', array $additionalParams = array(), $absolute = FALSE, $addQueryString = FALSE, array $argumentsToBeExcludedFromQueryString = array(), $fieldNamePrefix = NULL, $actionUri = NULL, $objectName = NULL) {
         $this->viewHelperVariableContainer->add('Tx_T3chimp_ViewHelpers_FormViewHelper', 'renderedProperties', array());
 
-        return parent::render($action, $arguments, $controller, $extensionName, $pluginName, $pageUid, $object, $pageType, $noCache, $noCacheHash, $section, $format, $additionalParams, $absolute, $addQueryString, $argumentsToBeExcludedFromQueryString, $fieldNamePrefix, $actionUri, $objectName);
+        $this->arguments = new Tx_T3chimp_ViewHelpers_WritableArguments($this->arguments);
+        $this->arguments['pageType'] = self::$typeNum;
+
+        $this->tag->addAttribute('id', 't3chimp-form');
+
+        return parent::render($action, $arguments, $controller, $extensionName, $pluginName, $pageUid, $object, self::$typeNum, $noCache, $noCacheHash, $section, $format, $additionalParams, $absolute, $addQueryString, $argumentsToBeExcludedFromQueryString, $fieldNamePrefix, $actionUri, $objectName);
     }
 }

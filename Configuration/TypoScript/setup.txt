@@ -4,23 +4,21 @@ page.includeJS.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.js
 page.includeJS.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.min.js
 [end]
 
-page.includeJS.file2 = EXT:t3chimp/Resources/Public/JavaScripts/jquery.html5form.min.js
-
 plugin.tx_t3chimp {
 	settings {
 
 	}
 
-	persistence { }
+	persistence {
+
+	}
 
 	view {
-	    templateRootPath = {$plugin.tx_t3chimp.view.templateRootPath}
-		partialRootPath = {$plugin.tx_t3chimp.view.partialRootPath}
-		layoutRootPath = {$plugin.tx_t3chimp.view.layoutRootPath}
 		defaultPid = auto
 	}
 
-	ajax {
+	ajax = PAGE
+    ajax {
         config {
             disableAllHeaderCode = 1
             disablePrefixComment = 1
@@ -28,27 +26,9 @@ plugin.tx_t3chimp {
             admPanel = 0
             no_cache = 1
             additionalHeaders = Content-type:application/json
+            metaCharset = utf-8
         }
-
-        typeNum = 1296728024
-
-        10 = USER_INT
-        10 {
-            userFunc = tx_t3chimp_core_bootstrap->run
-            pluginName = subscription
-            extensionName = T3Chimp
-            settings =< plugin.tx_t3chimp.settings
-            persistence =< plugin.tx_t3chimp.persistence
-            view =< plugin.tx_t3chimp.view
-
-            switchableControllerActions {
-                Subscriptions {
-                    1 = subscribe
-                    2 = unsubscribe
-                }
-            }
-        }
-	}
+    }
 }
 
 module.tx_t3chimp {
@@ -60,4 +40,27 @@ module.tx_t3chimp {
 		partialRootPath = {$module.tx_t3chimp.view.partialRootPath}
 		layoutRootPath = {$module.tx_t3chimp.view.layoutRootPath}
 	}
+}
+
+tx_t3chimp_subscriptions_ajax_page < plugin.tx_t3chimp.ajax
+tx_t3chimp_subscriptions_ajax_page {
+    typeNum = 1296728024
+
+    settings =< plugin.tx_t3chimp.settings
+
+    10 = USER_INT
+    10 {
+        userFunc = tx_t3chimp_core_bootstrap->run
+        pluginName = subscription
+        extensionName = T3chimp
+        settings =< plugin.tx_t3chimp.settings
+        persistence =< plugin.tx_t3chimp.persistence
+        view =< plugin.tx_t3chimp.view
+
+        switchableControllerActions {
+            Subscriptions {
+                1 = process
+            }
+        }
+    }
 }
