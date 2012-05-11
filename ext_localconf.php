@@ -21,8 +21,3 @@ Tx_Extbase_Utility_Extension::configurePlugin(
         'Subscriptions' => 'process'
     )
 );
-
-function tx_t3chimp_debug() {
-    $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
-    return $global['debug'];
-}

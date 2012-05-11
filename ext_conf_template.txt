@@ -1,5 +1,2 @@
 # cat=plugin.tx_t3chimp//; type=string; label= Mailchimp API key
 apiKey = Your API Key
-
-# cat=plugin.tx_t3chimp//; type=boolean; label= debug
-debug = 0
