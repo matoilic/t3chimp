@@ -1,5 +1,5 @@
 {namespace t = Tx_T3chimp_ViewHelpers}
-<p class="t3chimp-field t3chimp-field-{field.name}">
+<p class="t3chimp-field t3chimp-field-checkboxes<f:if condition='{field.isRequired}'> t3chimp-field-checkboxes-required</f:if> t3chimp-field-{field.name}">
     <span class="caption">
         <f:translate key="t3chimp: {field.label}">{field.label}</f:translate>
     </span><br>

@@ -10,6 +10,25 @@
     visibility: hidden;
 }
 
-.t3chimp-field {
+.t3chimp-form p {
+    padding: 0.5em 0.5em 0 0.5em;
+}
 
+.t3chimp-field,
+.t3chimp-submit {
+    border-top: 1px solid #ccc;
+}
+
+.t3chimp-field-text-required label,
+.t3chimp-field-dropdown-required label,
+.t3chimp-field-checkboxes-required .caption,
+.t3chimp-field-radio-required .caption {
+    font-weight: bold;
+}
+
+.t3chimp-field-text-required label:after,
+.t3chimp-field-dropdown-required label:after,
+.t3chimp-field-checkboxes-required .caption:after,
+.t3chimp-field-radio-required .caption:after {
+    content: ' *';
 }
