@@ -1,38 +1,31 @@
 <?php
 
-/**
- * View Helper which creates a simple radio button (<input type="radio">).
+/***************************************************************
+ *  Copyright notice
  *
- * = Examples =
+ *  (c) 2012 Mato Ilic <info@matoilic.ch>
+ *  All rights reserved
  *
- * <code title="Example">
- * <f:form.radio name="myRadioButton" value="someValue" />
- * </code>
- * <output>
- * <input type="radio" name="myRadioButton" value="someValue" />
- * </output>
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * <code title="Preselect">
- * <f:form.radio name="myRadioButton" value="someValue" checked="{object.value} == 5" />
- * </code>
- * <output>
- * <input type="radio" name="myRadioButton" value="someValue" checked="checked" />
- * (depending on $object)
- * </output>
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *  A copy is found in the textfile GPL.txt and important notices to the license
+ *  from the author is found in LICENSE.txt distributed with these scripts.
  *
- * <code title="Bind to object property">
- * <f:form.radio property="newsletter" value="1" /> yes
- * <f:form.radio property="newsletter" value="0" /> no
- * </code>
- * <output>
- * <input type="radio" name="user[newsletter]" value="1" checked="checked" /> yes
- * <input type="radio" name="user[newsletter]" value="0" /> no
- * (depending on property "newsletter")
- * </output>
  *
- * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
- * @api
- */
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
 class Tx_T3chimp_ViewHelpers_Form_RadioViewHelper extends Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper {
 
 	/**

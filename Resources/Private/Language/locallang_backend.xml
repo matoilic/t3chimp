@@ -7,7 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="mlang_tabs_tab">MailChimp</label>
-			<label index="mlang_labels_tabdescr">MailChimp</label>
+			<label index="mlang_labels_tabdescr">MailChimp backend integration</label>
 			<label index="mlang_labels_tablabel">MailChimp</label>
 		</languageKey>
 	</data>

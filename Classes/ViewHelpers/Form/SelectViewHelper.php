@@ -1,48 +1,31 @@
 <?php
 
-/**
- * This view helper generates a <select> dropdown list for the use with a form.
+/***************************************************************
+ *  Copyright notice
  *
- * = Basic usage =
+ *  (c) 2012 Mato Ilic <info@matoilic.ch>
+ *  All rights reserved
  *
- * The most straightforward way is to supply an associative array as the "options" parameter.
- * The array key is used as option key, and the value is used as human-readable name.
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * <code title="Basic usage">
- * <f:form.select name="paymentOptions" options="{payPal: 'PayPal International Services', visa: 'VISA Card'}" />
- * </code>
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *  A copy is found in the textfile GPL.txt and important notices to the license
+ *  from the author is found in LICENSE.txt distributed with these scripts.
  *
- * = Pre-select a value =
  *
- * To pre-select a value, set "value" to the option key which should be selected.
- * <code title="Default value">
- * <f:form.select name="paymentOptions" options="{payPal: 'PayPal International Services', visa: 'VISA Card'}" value="visa" />
- * </code>
- * Generates a dropdown box like above, except that "VISA Card" is selected.
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * If the select box is a multi-select box (multiple="true"), then "value" can be an array as well.
- *
- * = Usage on domain objects =
- *
- * If you want to output domain objects, you can just pass them as array into the "options" parameter.
- * To define what domain object value should be used as option key, use the "optionValueField" variable. Same goes for optionLabelField.
- * If neither is given, the Identifier (UID/uid) and the __toString() method are tried as fallbacks.
- *
- * If the optionValueField variable is set, the getter named after that value is used to retrieve the option key.
- * If the optionLabelField variable is set, the getter named after that value is used to retrieve the option value.
- *
- * <code title="Domain objects">
- * <f:form.select name="users" options="{userArray}" optionValueField="id" optionLabelField="firstName" />
- * </code>
- * In the above example, the userArray is an array of "User" domain objects, with no array key specified.
- *
- * So, in the above example, the method $user->getId() is called to retrieve the key, and $user->getFirstName() to retrieve the displayed value of each entry.
- *
- * The "value" property now expects a domain object, and tests for object equivalence.
- *
- * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
- * @api
- */
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
 class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper {
 
 	/**

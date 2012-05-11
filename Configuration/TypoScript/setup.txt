@@ -1,8 +1,4 @@
-[userFunc = tx_t3chimp_debug()]
 page.includeJS.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.js
-[else]
-page.includeJS.file1 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.min.js
-[end]
 
 plugin.tx_t3chimp {
 	settings {
