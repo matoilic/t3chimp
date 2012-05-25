@@ -94,7 +94,11 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
 
         if($form->isValid()) {
             if($this->mailChimpService->saveForm($form) > 0) {
-                $message = $this->translate('t3chimp.form.subscribed');
+                if($this->settings['doubleOptIn']) {
+                    $message = $this->translate('t3chimp.form.almostSubscribed');
+                } else {
+                    $message = $this->translate('t3chimp.form.subscribed');
+                }
             } else {
                 $message = $this->translate('t3chimp.form.unsubscribed');
             }

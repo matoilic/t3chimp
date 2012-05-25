@@ -11,9 +11,14 @@
             <label index="t3chimp.error.invalidEmail">Invalid email address</label>
             <label index="t3chimp.error.invalidValue">Invalid value</label>
             <label index="t3chimp.error.required">This is a required field</label>
+            <label index="t3chimp.error.notNumber">Please enter a number</label>
             <label index="t3chimp.form.submit">Submit</label>
             <label index="t3chimp.form.requiredFields">Required fields</label>
             <label index="t3chimp.form.subscribed">You have successfully subscribed.</label>
+            <label index="t3chimp.form.almostSubscribed">
+                Almost finished. To complete the subscription process, please click the link in the email
+                you will receive shortly.
+            </label>
             <label index="t3chimp.form.unsubscribed">You have successfully unsubscribed.</label>
 
             <label index="t3chimp: Action">Action</label>
@@ -27,9 +32,14 @@
             <label index="t3chimp.error.invalidEmail">Ungültige E-Mail Adresse</label>
             <label index="t3chimp.error.invalidValue">Ungültiger Wert</label>
             <label index="t3chimp.error.required">Dies ist ein Pflichtfeld</label>
+            <label index="t3chimp.error.notNumber">Bitte geben Sie eine Nummer ein</label>
             <label index="t3chimp.form.submit">Abschicken</label>
             <label index="t3chimp.form.requiredFields">Pflichtfelder</label>
             <label index="t3chimp.form.subscribed">Ihre Anmeldung wurde gespeichert.</label>
+            <label index="t3chimp.form.almostSubscribed">
+                Fast fertig. Um die Anmeldung abzuschliessen, klicken Sie bitte auf den Bestätigungslink in der E-Mail
+                die Sie in Kürze erhalten.
+            </label>
             <label index="t3chimp.form.unsubscribed">Ihre Anmeldung wurde gelöscht.</label>
 
             <label index="t3chimp: Action">Anmelden</label>
