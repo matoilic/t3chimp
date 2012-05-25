@@ -88,6 +88,6 @@ abstract class Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper extends T
     }
 
     protected function getValue() {
-        $this->getField()->getValue();
+        return $this->getField()->getValue();
     }
 }
