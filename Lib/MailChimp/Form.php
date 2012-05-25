@@ -59,7 +59,8 @@ class MailChimp_Form {
         'email',
         'dropdown',
         'radio',
-        'text'
+        'text',
+        'number'
     );
 
     /**
