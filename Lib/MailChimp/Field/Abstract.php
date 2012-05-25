@@ -139,7 +139,7 @@ abstract class MailChimp_Field_Abstract implements MailChimp_Field {
      * @return mixed
      */
     public function getValue() {
-        return ($this->value !== null) ? $this->value : $this->getDefaultValue();
+        return (!empty($this->value)) ? $this->value : $this->getDefaultValue();
     }
 
     protected function resetValidation() {
