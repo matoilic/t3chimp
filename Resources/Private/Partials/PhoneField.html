@@ -1,0 +1,15 @@
+{namespace t = Tx_T3chimp_ViewHelpers}
+<p class="t3chimp-field t3chimp-field-phone<f:if condition='{field.isRequired}'> t3chimp-field-phone-required</f:if> t3chimp-field-{field.name}">
+    <label for="{field.id}">
+        <f:translate key="t3chimp: {field.label}">{field.label}</f:translate>
+    </label><br>
+    <f:if condition="{format} == 'US'">
+        <f:then>
+            <t:form.textField property="{field.name}" id="{field.id}" required="{field.isRequired}" placeholder="123-123-1234" title="{f:translate(key: 't3chimp.phone.usFormat')}" pattern="^\d{3,3}-\d{3,3}-\d{4,4}$" />
+        </f:then>
+        <f:else>
+            <t:form.textField property="{field.name}" id="{field.id}" required="{field.isRequired}" />
+        </f:else>
+    </f:if>
+    <t:form.errors property="{field.name}" />
+</p>

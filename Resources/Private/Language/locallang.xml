@@ -21,6 +21,7 @@
                 you will receive shortly.
             </label>
             <label index="t3chimp.form.unsubscribed">You have successfully unsubscribed.</label>
+            <label index="t3chimp.phone.usFormat">eg. 123-123-1234</label>
 
             <label index="t3chimp: Action">Action</label>
             <label index="t3chimp: Subscribe">Subscribe</label>
@@ -43,6 +44,7 @@
                 die Sie in Kürze erhalten.
             </label>
             <label index="t3chimp.form.unsubscribed">Ihre Anmeldung wurde gelöscht.</label>
+            <label index="t3chimp.phone.usFormat">z.B. 123-123-1234</label>
 
             <label index="t3chimp: Action">Anmelden</label>
             <label index="t3chimp: Subscribe">Anmelden</label>

@@ -61,7 +61,8 @@ class MailChimp_Form {
         'radio',
         'text',
         'number',
-        'zip'
+        'zip',
+        'phone'
     );
 
     /**
