@@ -155,7 +155,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      */
     public function injectSettingsProvider(SettingsProvider $provider) {
         $this->settingsProvider = $provider;
-        $this->api = new MCAPI($this->settingsProvider->get('apiKey'));
+        $this->api = new MCAPI($this->settingsProvider->get('apiKey'), $this->settingsProvider->get('secureConnection'));
     }
 
     /**
