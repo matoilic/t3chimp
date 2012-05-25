@@ -66,6 +66,14 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
     }
 
     /**
+     * @param Tx_Extbase_Configuration_ConfigurationManager $configurationManager
+     */
+    public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManager $configurationManager) {
+        $this->configurationManager = $configurationManager;
+    }
+
+
+    /**
      * @param Tx_T3chimp_Service_MailChimp $service
      */
     public function injectMailChimpService(Tx_T3chimp_Service_MailChimp $service) {
@@ -85,6 +93,8 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
     public function injectSettingsProvider(SettingsProvider $provider) {
         $this->settings = $provider->getAll();
     }
+
+
 
     public function processAction() {
         $this->checkCsrfToken();

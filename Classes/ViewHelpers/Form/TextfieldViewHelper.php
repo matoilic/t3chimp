@@ -46,6 +46,7 @@ class Tx_T3chimp_ViewHelpers_Form_TextfieldViewHelper extends Tx_T3chimp_ViewHel
 		$this->registerTagAttribute('maxlength', 'int', 'The maxlength attribute of the input field (will not be validated)');
 		$this->registerTagAttribute('readonly', 'string', 'The readonly attribute of the input field');
 		$this->registerTagAttribute('size', 'int', 'The size of the input field');
+		$this->registerTagAttribute('pattern', 'string', 'The input format');
 		$this->registerArgument('errorClass', 'string', 'CSS class to set if there are errors for this view helper', FALSE, 'f3-form-error');
 		$this->registerUniversalTagAttributes();
 	}

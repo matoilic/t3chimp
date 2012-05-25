@@ -17,6 +17,7 @@ return array(
     'mailchimp_field_checkboxes' => $base . 'Lib/MailChimp/Field/Checkboxes.php',
     'mailchimp_field_interestgrouping' => $base . 'Lib/MailChimp/Field/InterestGrouping.php',
     'mailchimp_field_number' => $base . 'Lib/MailChimp/Field/Number.php',
+    'mailchimp_field_zip' => $base . 'Lib/MailChimp/Field/Zip.php',
     'mailchimp_field_helper_choice' => $base . 'Lib/MailChimp/Field/Helper/Choice.php',
     'mailchimp_field_helper_multichoice' => $base . 'Lib/MailChimp/Field/Helper/MultiChoice.php',
 );

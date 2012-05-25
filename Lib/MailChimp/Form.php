@@ -60,7 +60,8 @@ class MailChimp_Form {
         'dropdown',
         'radio',
         'text',
-        'number'
+        'number',
+        'zip'
     );
 
     /**

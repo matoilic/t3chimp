@@ -91,6 +91,14 @@ abstract class MailChimp_Field_Abstract implements MailChimp_Field {
     }
 
     /**
+     * @return bool
+     */
+    public function getIsEmpty() {
+        $value = $this->getValue();
+        return empty($value);
+    }
+
+    /**
      * @return boolean
      */
     public function getIsRequired() {

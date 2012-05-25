@@ -26,12 +26,12 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Number extends MailChimp_Field_Abstract {
+class MailChimp_Field_Zip extends MailChimp_Field_Abstract {
     protected function validate() {
         parent::validate();
 
-        if($this->getIsValid() && !$this->getIsEmpty() && !preg_match('#^((\d+)?\.)?\d+(e\d+)?$#i', $this->getValue())) {
-            $this->errors[] = 't3chimp.error.notNumber';
+        if($this->getIsValid() && !$this->getIsEmpty() && !preg_match('/^\d{5}$/', $this->getValue())) {
+            $this->errors[] = 't3chimp.error.invalidZip';
         }
     }
 
