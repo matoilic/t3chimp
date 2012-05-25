@@ -3,6 +3,6 @@
     <label for="{field.id}">
         <f:translate key="t3chimp: {field.label}">{field.label}</f:translate>
     </label><br>
-    <t:form.textField property="{field.name}" id="{field.id}" required="{field.isRequired}" />
+    <t:form.textField property="{field.name}" id="{field.id}" required="{field.isRequired}" pattern="{field.htmlPattern}" />
     <t:form.errors property="{field.name}" />
 </p>

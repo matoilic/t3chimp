@@ -26,13 +26,16 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Zip extends MailChimp_Field_Abstract {
+class MailChimp_Field_Zip extends MailChimp_Field_PatternBased {
+    public function getHtmlPattern() {
+        return '^\d{5}$';
+    }
+
     protected function validate() {
         parent::validate();
 
-        if($this->getIsValid() && !$this->getIsEmpty() && !preg_match('/^\d{5}$/', $this->getValue())) {
+        if($this->getIsValid() && !$this->getIsEmpty() && !preg_match($this->getPattern(), $this->getValue())) {
             $this->errors[] = 't3chimp.error.invalidZip';
         }
     }
-
 }

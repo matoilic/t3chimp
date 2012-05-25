@@ -26,16 +26,16 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Number extends MailChimp_Field_PatternBased {
-    public function getHtmlPattern() {
-        return '^((\d+)?\.)?\d+((e|E)\d+(\.\d+)?)?$';
-    }
+abstract class MailChimp_Field_PatternBased extends MailChimp_Field_Abstract {
+    /**
+     * @return string
+     */
+    abstract public function getHtmlPattern();
 
-    protected function validate() {
-        parent::validate();
-
-        if($this->getIsValid() && !$this->getIsEmpty() && !preg_match($this->getPattern(), $this->getValue())) {
-            $this->errors[] = 't3chimp.error.notNumber';
-        }
+    /**
+     * @return string
+     */
+    public function getPattern() {
+        return '/' . str_replace('/', '\/', $this->getHtmlPattern()) . '/';
     }
 }

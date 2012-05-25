@@ -26,16 +26,21 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Number extends MailChimp_Field_PatternBased {
+class MailChimp_Field_Url extends MailChimp_Field_PatternBased {
     public function getHtmlPattern() {
-        return '^((\d+)?\.)?\d+((e|E)\d+(\.\d+)?)?$';
+        return '^(https?://)?([a-zA-Z0-9\-]+\.)([a-z0-9\-]+\.)+(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2})(\:[0-9]+)?(/(\$|[a-zA-Z0-9\.\,\?\'\\\+&%\$#\=~_\-%]+)?)*$';
     }
+
+    public function setValue($value) {
+        parent::setValue(strtolower($value));
+    }
+
 
     protected function validate() {
         parent::validate();
 
         if($this->getIsValid() && !$this->getIsEmpty() && !preg_match($this->getPattern(), $this->getValue())) {
-            $this->errors[] = 't3chimp.error.notNumber';
+            $this->errors[] = 't3chimp.error.invalidUrl';
         }
     }
 }

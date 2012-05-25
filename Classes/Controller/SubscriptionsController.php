@@ -61,6 +61,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
         $this->response->addAdditionalHeaderData('<meta name="t3chimp:pid" content="' . $GLOBALS['TSFE']->id . '" />');
     }
 
+
     public function indexAction() {
         $this->view->assign('form', $this->mailChimpService->getForm());
     }
