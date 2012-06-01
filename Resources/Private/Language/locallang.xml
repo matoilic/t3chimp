@@ -14,6 +14,7 @@
             <label index="t3chimp.error.notNumber">Please enter a number</label>
             <label index="t3chimp.error.invalidZip">Please enter a zip code (5 digits)</label>
             <label index="t3chimp.error.invalidUrl">Please enter a valid URL</label>
+            <label index="t3chimp.error.invalidDate">Please enter a valid date</label>
             <label index="t3chimp.form.submit">Submit</label>
             <label index="t3chimp.form.requiredFields">Required fields</label>
             <label index="t3chimp.form.subscribed">You have successfully subscribed.</label>
@@ -38,6 +39,7 @@
             <label index="t3chimp.error.notNumber">Bitte geben Sie eine Nummer ein</label>
             <label index="t3chimp.error.invalidZip">Bitte geben Sie eine PLZ ein (5 Ziffern)</label>
             <label index="t3chimp.error.invalidUrl">Bitte geben Sie eine gültige URL ein</label>
+            <label index="t3chimp.error.invalidDate">Bitte geben Sie ein gültiges Datum ein</label>
             <label index="t3chimp.form.submit">Abschicken</label>
             <label index="t3chimp.form.requiredFields">Pflichtfelder</label>
             <label index="t3chimp.form.subscribed">Ihre Anmeldung wurde gespeichert.</label>

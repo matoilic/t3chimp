@@ -64,6 +64,13 @@ abstract class MailChimp_Field_Abstract implements MailChimp_Field {
     /**
      * @return mixed
      */
+    public function getApiValue() {
+        return $this->getValue();
+    }
+
+    /**
+     * @return mixed
+     */
     public function getDefaultValue() {
         return $this->definition['default'];
     }

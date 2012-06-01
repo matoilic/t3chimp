@@ -182,12 +182,12 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
                 } elseif($field instanceof MailChimp_Field_InterestGrouping) {
                     $selectedGroupings[] = array(
                         'id' => $field->getGroupingId(),
-                        'selection' => $field->getValue()
+                        'selection' => $field->getApiValue()
                     );
                 } else {
                     $fieldValues[] = array(
                         'tag' => $field->getTag(),
-                        'value' => $field->getValue()
+                        'value' => $field->getApiValue()
                     );
                 }
             }
@@ -201,7 +201,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
 
             return 1;
         } else {
-            $this->removeSubscriber($form->getListId(), $form->getField('EMAIL')->getValue());
+            $this->removeSubscriber($form->getListId(), $form->getField('EMAIL')->getApiValue());
             return -1;
         }
     }

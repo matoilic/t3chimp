@@ -63,7 +63,8 @@ class MailChimp_Form {
         'number',
         'zip',
         'phone',
-        'url'
+        'url',
+        'date'
     );
 
     /**
