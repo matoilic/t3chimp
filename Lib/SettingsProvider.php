@@ -94,6 +94,7 @@ class SettingsProvider implements t3lib_Singleton {
             $this->session->settings = $this->settings;
         }
 
+        $this->settings = array_merge($this->settings, $manager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));
         $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
         $global = $this->cleanSettingKeys($global);
         $this->settings = array_merge($this->settings, $global);

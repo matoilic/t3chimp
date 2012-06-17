@@ -22,6 +22,7 @@ return array(
     'mailchimp_field_url' => $base . 'Lib/MailChimp/Field/Url.php',
     'mailchimp_field_phone' => $base . 'Lib/MailChimp/Field/Phone.php',
     'mailchimp_field_date' => $base . 'Lib/MailChimp/Field/Date.php',
+    'mailchimp_field_imageurl' => $base . 'Lib/MailChimp/Field/Imageurl.php',
     'mailchimp_field_helper_choice' => $base . 'Lib/MailChimp/Field/Helper/Choice.php',
     'mailchimp_field_helper_multichoice' => $base . 'Lib/MailChimp/Field/Helper/MultiChoice.php',
 );

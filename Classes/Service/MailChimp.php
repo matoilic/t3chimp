@@ -50,6 +50,11 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     protected static $exceptionNamespace = 'Tx_T3chimp_Service_MailChimp_';
 
     /**
+     * @var Tx_Extbase_Object_ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * @var SettingsProvider
      */
     protected $settingsProvider;
@@ -118,7 +123,8 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
             $interestGroupings = array();
         }
 
-        $form = new MailChimp_Form($fields, $listId);
+        $form = $this->objectManager->create('MailChimp_Form', $fields, $listId);
+        //$form->injectObjectManager($this->objectManager);
         $form->setInterestGroupings($interestGroupings);
 
         return $form;
@@ -148,6 +154,13 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         $this->checkApi();
 
         return ($groups == null) ? array() : $groups;
+    }
+
+    /**
+     * @param Tx_Extbase_Object_ObjectManager $objectManager
+     */
+    public function injectObjectManager(Tx_Extbase_Object_ObjectManager $objectManager) {
+        $this->objectManager = $objectManager;
     }
 
     /**

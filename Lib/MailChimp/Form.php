@@ -35,6 +35,11 @@ class MailChimp_Form {
     /**
      * @var array
      */
+    protected $fieldDefinitions;
+
+    /**
+     * @var array
+     */
     protected $fields = array();
 
     /**
@@ -50,7 +55,12 @@ class MailChimp_Form {
     /**
      * @var string
      */
-    private $listId;
+    protected $listId;
+
+    /**
+     * @var Tx_Extbase_Object_ObjectManagerInterface
+     */
+    protected $objectManager;
 
     /**
      * @var array
@@ -64,7 +74,8 @@ class MailChimp_Form {
         'zip',
         'phone',
         'url',
-        'date'
+        'date',
+        'imageurl'
     );
 
     /**
@@ -72,15 +83,13 @@ class MailChimp_Form {
      * @param string $listId
      */
     public function __construct(array $fieldDefinitions, $listId) {
+        $this->fieldDefinitions = $fieldDefinitions;
         $this->listId = $listId;
-        $this->initializeFields($fieldDefinitions);
     }
 
     public function bindRequest(Tx_Extbase_MVC_Request $request) {
         foreach($this->getFields() as $field) {
-            if($request->hasArgument($field->getName())) {
-                $field->setValue($request->getArgument($field->getName()));
-            }
+            $field->bindRequest($request);
         }
 
         $this->isBound = true;
@@ -125,11 +134,19 @@ class MailChimp_Form {
             $type = $fieldDefinition['field_type'];
             if(in_array($type, self::$supportedTypes)) {
                 $class = self::$fieldNamespace . ucfirst($type);
-                $this->fields[] = new $class($fieldDefinition, $this);
+                $this->fields[] = $this->objectManager->create($class, $fieldDefinition, $this);
             } else {
                 trigger_error('MailChimp_Form: unsupported type ' . $type, E_WARNING);
             }
         }
+    }
+
+    /**
+     * @param Tx_Extbase_Object_ObjectManager $objectManager
+     */
+    public function injectObjectManager(Tx_Extbase_Object_ObjectManager $objectManager) {
+        $this->objectManager = $objectManager;
+        $this->initializeFields($this->fieldDefinitions);
     }
 
     /**
@@ -145,7 +162,7 @@ class MailChimp_Form {
      */
     public function isValid() {
         if(!$this->isBound) {
-            throw new Exception('Can not validate a unbound form');
+            throw new Exception('Can not validate an unbound form');
         }
 
         foreach($this->getFields() as $field) {

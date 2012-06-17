@@ -61,6 +61,12 @@ abstract class MailChimp_Field_Abstract implements MailChimp_Field {
         $this->form = $form;
     }
 
+    public function bindRequest(Tx_Extbase_MVC_Request $request) {
+        if($request->hasArgument($this->getName())) {
+            $this->setValue($request->getArgument($this->getName()));
+        }
+    }
+
     /**
      * @return mixed
      */

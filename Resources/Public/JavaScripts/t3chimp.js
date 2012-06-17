@@ -5,8 +5,13 @@
         event.preventDefault();
 
         $form.addClass('t3chimp-loading');
+        $form.append('<input type="hidden" name="CSRF_TOKEN" value="' + prop('csrf-token') + '">');
 
-        $.post($form.attr('action'), $form.serialize(), onResponse, 'json')
+        $form.ajaxSubmit({
+            success: onResponse,
+            iframe: true,
+            dataType: 'json'
+        });
     }
 
     function onResponse(data) {
