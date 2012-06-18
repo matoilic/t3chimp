@@ -26,21 +26,31 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Url extends MailChimp_Field_PatternBased {
-    public function getHtmlPattern() {
-        return '^(https?://)?([a-zA-Z0-9\-]+\.)([a-z0-9\-]+\.)+(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2})(\:[0-9]+)?(/(\$|[a-zA-Z0-9\.\,\?\'\\\+&%\$#\=~_\-%]+)?)*$';
+class Tx_T3chimp_MailChimp_Field_Action extends Tx_T3chimp_MailChimp_Field_Radio {
+    /**
+     * @var array
+     */
+    protected static $_choices = array('Subscribe', 'Unsubscribe');
+
+    /**
+     * @param array $definition
+     * @param Tx_T3chimp_MailChimp_Form $form
+     */
+    public function __construct(array $definition, Tx_T3chimp_MailChimp_Form $form) {
+        $definition['choices'] = self::$_choices;
+        $definition['req'] = true;
+        parent::__construct($definition, $form);
     }
 
-    public function setValue($value) {
-        parent::setValue(strtolower($value));
+    public function getDefaultValue() {
+        return self::$_choices[0];
     }
 
+    public function getLabel() {
+        return 'Action';
+    }
 
-    protected function validate() {
-        parent::validate();
-
-        if($this->getIsValid() && !$this->getIsEmpty() && !preg_match($this->getPattern(), $this->getValue())) {
-            $this->errors[] = 't3chimp.error.invalidUrl';
-        }
+    public function getTag() {
+        return 'FORM_ACTION';
     }
 }

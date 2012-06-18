@@ -26,6 +26,18 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Text extends MailChimp_Field_Abstract {
+class Tx_T3chimp_MailChimp_Field_Phone extends Tx_T3chimp_MailChimp_Field_Abstract {
+    public function getFormat() {
+        return $this->definition['format'];
+    }
 
+    protected function validate() {
+        parent::validate();
+
+        if($this->getIsValid() && !$this->getIsEmpty() && $this->getFormat() == 'US') {
+            if(!preg_match('\d{3}-\d{3}-\d{4}', $this->getValue())) {
+                $this->errors[] = 't3chimp.error.invalidPhone';
+            }
+        }
+    }
 }

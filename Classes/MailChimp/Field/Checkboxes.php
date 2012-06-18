@@ -26,40 +26,19 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Radio extends MailChimp_Field_Abstract {
-    /**
-     * @var array
-     */
-    protected $choices = array();
-
-    /**
-     * @var array
-     */
-    protected $validValues = array();
-
-    /**
-     * @param array $definition
-     * @param MailChimp_Form $form
-     */
-    public function __construct(array $definition, MailChimp_Form $form) {
-        parent::__construct($definition, $form);
-        $this->initializeChoices($this->definition['choices']);
+class Tx_T3chimp_MailChimp_Field_Checkboxes extends Tx_T3chimp_MailChimp_Field_Radio {
+    public function getDefaultValue() {
+        return array();
     }
 
-    /**
-     * @return array
-     */
-    public function getChoices() {
-        return $this->choices;
-    }
 
     /**
      * @param array $choices
      */
     protected function initializeChoices(array $choices) {
         foreach($choices as $choice) {
-            $this->choices[] = new MailChimp_Field_Helper_Choice($this, $choice);
-            $this->validValues[] = $choice;
+            $this->choices[] = new Tx_T3chimp_MailChimp_Field_Helper_MultiChoice($this, $choice['name']);
+            $this->validValues[] = $choice['name'];
         }
     }
 
@@ -68,10 +47,34 @@ class MailChimp_Field_Radio extends MailChimp_Field_Abstract {
      * @throws Exception
      */
     public function setValue($value) {
-        if(!in_array($value, $this->validValues)) {
-            throw new Exception('Invalid choice ' . htmlentities($value) . ' for field ' . $this->getName());
+        if($value === null || strlen($value) == 0) {
+            $this->value = array();
+            return;
         }
 
-        parent::setValue($value);
+        if(!is_array($value)) {
+            throw new Exception('Value for checkboxes field must be an array');
+        }
+
+        foreach($value as $selection) {
+            if(!in_array($selection, $this->validValues)) {
+                throw new Exception('Invalid choice ' . htmlentities($selection) . ' for field ' . $this->getName());
+            }
+        }
+
+        $this->value = $value;
+        $this->resetValidation();
+    }
+
+
+    /**
+     * @return void
+     */
+    protected function validate() {
+        $this->isValidated = true;
+        $value = $this->getValue();
+        if($this->getIsRequired() && count($value) == 0) {
+            $this->errors[] = 't3chimp.error.required';
+        }
     }
 }

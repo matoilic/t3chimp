@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-abstract class MailChimp_Field_Abstract implements MailChimp_Field {
+abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChimp_Field {
     /**
      * @var array
      */
@@ -38,7 +38,7 @@ abstract class MailChimp_Field_Abstract implements MailChimp_Field {
     protected $errors = array();
 
     /**
-     * @var MailChimp_Form
+     * @var Tx_T3chimp_MailChimp_Form
      */
     protected $form;
 
@@ -54,9 +54,9 @@ abstract class MailChimp_Field_Abstract implements MailChimp_Field {
 
     /**
      * @param array $definition
-     * @param MailChimp_Form $form
+     * @param Tx_T3chimp_MailChimp_Form $form
      */
-    public function __construct(array $definition, MailChimp_Form $form) {
+    public function __construct(array $definition, Tx_T3chimp_MailChimp_Form $form) {
         $this->definition = $definition;
         $this->form = $form;
     }

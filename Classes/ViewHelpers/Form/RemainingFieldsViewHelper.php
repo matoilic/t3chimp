@@ -46,7 +46,7 @@ class Tx_T3chimp_ViewHelpers_Form_RemainingFieldsViewHelper extends Tx_T3chimp_V
     }
 
     /**
-     * @param MailChimp_Field $field
+     * @param Tx_T3chimp_MailChimp_Field $field
      * @return string
      */
     protected function renderField($field) {

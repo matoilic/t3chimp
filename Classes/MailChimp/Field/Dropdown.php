@@ -26,16 +26,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Zip extends MailChimp_Field_PatternBased {
-    public function getHtmlPattern() {
-        return '^\d{5}$';
-    }
+class Tx_T3chimp_MailChimp_Field_Dropdown extends Tx_T3chimp_MailChimp_Field_Radio {
 
-    protected function validate() {
-        parent::validate();
-
-        if($this->getIsValid() && !$this->getIsEmpty() && !preg_match($this->getPattern(), $this->getValue())) {
-            $this->errors[] = 't3chimp.error.invalidZip';
-        }
-    }
 }

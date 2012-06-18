@@ -26,31 +26,16 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Action extends MailChimp_Field_Radio {
-    /**
-     * @var array
-     */
-    protected static $_choices = array('Subscribe', 'Unsubscribe');
-
-    /**
-     * @param array $definition
-     * @param MailChimp_Form $form
-     */
-    public function __construct(array $definition, MailChimp_Form $form) {
-        $definition['choices'] = self::$_choices;
-        $definition['req'] = true;
-        parent::__construct($definition, $form);
+class Tx_T3chimp_MailChimp_Field_Zip extends Tx_T3chimp_MailChimp_Field_PatternBased {
+    public function getHtmlPattern() {
+        return '^\d{5}$';
     }
 
-    public function getDefaultValue() {
-        return self::$_choices[0];
-    }
+    protected function validate() {
+        parent::validate();
 
-    public function getLabel() {
-        return 'Action';
-    }
-
-    public function getTag() {
-        return 'FORM_ACTION';
+        if($this->getIsValid() && !$this->getIsEmpty() && !preg_match($this->getPattern(), $this->getValue())) {
+            $this->errors[] = 't3chimp.error.invalidZip';
+        }
     }
 }

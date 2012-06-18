@@ -26,11 +26,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Form {
+class Tx_T3chimp_MailChimp_Form {
     /**
      * @var string
      */
-    protected static $fieldNamespace = 'MailChimp_Field_';
+    protected static $fieldNamespace = 'Tx_T3chimp_MailChimp_Field_';
 
     /**
      * @var array
@@ -104,7 +104,7 @@ class MailChimp_Form {
 
     /**
      * @param string $name
-     * @return MailChimp_Field|null
+     * @return Tx_T3chimp_MailChimp_Field|null
      */
     public function getField($name) {
         foreach($this->getFields() as $field) {
@@ -136,7 +136,7 @@ class MailChimp_Form {
                 $class = self::$fieldNamespace . ucfirst($type);
                 $this->fields[] = $this->objectManager->create($class, $fieldDefinition, $this);
             } else {
-                trigger_error('MailChimp_Form: unsupported type ' . $type, E_WARNING);
+                trigger_error('Tx_T3chimp_MailChimp_Form: unsupported type ' . $type, E_WARNING);
             }
         }
     }
@@ -185,7 +185,7 @@ class MailChimp_Form {
                 'name' => $grouping['name'],
                 'groupingId' => $grouping['id']
             );
-            $this->fields[] = new MailChimp_Field_InterestGrouping($definition, $this);
+            $this->fields[] = new Tx_T3chimp_MailChimp_Field_InterestGrouping($definition, $this);
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
-require_once(t3lib_extMgm::extPath($_EXTKEY) . '/Lib/MCAPI.class.php');
+require_once(t3lib_extMgm::extPath($_EXTKEY) . '/Vendor/MCAPI.class.php');
 
 if(!defined('T3CHIMP_API_KEY')) {
     $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);

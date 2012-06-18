@@ -26,6 +26,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Dropdown extends MailChimp_Field_Radio {
+class Tx_T3chimp_MailChimp_Field_Text extends Tx_T3chimp_MailChimp_Field_Abstract {
 
 }

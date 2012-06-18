@@ -26,16 +26,56 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-abstract class MailChimp_Field_PatternBased extends MailChimp_Field_Abstract {
+class Tx_T3chimp_MailChimp_Field_Helper_Choice {
     /**
-     * @return string
+     * @var string
      */
-    abstract public function getHtmlPattern();
+    protected $id;
+
+    /**
+     * @var Tx_T3chimp_MailChimp_Field
+     */
+    protected $parent;
+
+    /**
+     * @var mixed
+     */
+    protected $value;
+
+    /**
+     * @param Tx_T3chimp_MailChimp_Field $parent
+     * @param mixed $value
+     */
+    public function __construct(Tx_T3chimp_MailChimp_Field $parent, $value) {
+        $this->parent = $parent;
+        $this->value = $value;
+        $this->id = strtolower(str_replace(' ', '-', $value));
+    }
 
     /**
      * @return string
      */
-    public function getPattern() {
-        return '/' . str_replace('/', '\/', $this->getHtmlPattern()) . '/';
+    public function getId() {
+        return $this->parent->getId() . '-' . $this->id;
+    }
+
+    public function getLocalizedValue() {
+        $value = Tx_Extbase_Utility_Localization::translate(
+            't3chimp: ' . $this->getValue(),
+            'T3chimp'
+        );
+
+        return ($value !== null) ? $value : $this->getValue();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValue() {
+        return $this->value;
+    }
+
+    public function getIsSelected() {
+        return $this->value == $this->parent->getValue();
     }
 }

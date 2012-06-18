@@ -55,7 +55,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     protected $objectManager;
 
     /**
-     * @var SettingsProvider
+     * @var Tx_T3chimp_Provider_Settings
      */
     protected $settingsProvider;
 
@@ -105,7 +105,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
-     * @return MailChimp_Form
+     * @return Tx_T3chimp_MailChimp_Form
      */
     public function getForm() {
         return $this->getFormFor($this->settingsProvider->get('subscriptionList'));
@@ -113,7 +113,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
 
     /**
      * @param string $listId
-     * @return MailChimp_Form
+     * @return Tx_T3chimp_MailChimp_Form
      */
     public function getFormFor($listId) {
         $fields = $this->getFieldsFor($listId);
@@ -123,26 +123,10 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
             $interestGroupings = array();
         }
 
-        $form = $this->objectManager->create('MailChimp_Form', $fields, $listId);
-        //$form->injectObjectManager($this->objectManager);
+        $form = $this->objectManager->create('Tx_T3chimp_MailChimp_Form', $fields, $listId);
         $form->setInterestGroupings($interestGroupings);
 
         return $form;
-    }
-
-    /**
-     * @param array $config
-     * @return mixed
-     */
-    public function getListsAsFlexFormValues($config) {
-        $result = $this->api->lists();
-        $this->checkApi();
-
-        foreach($result['data'] as $list) {
-            $config['items'][] = array($list['name'], $list['id']);
-        }
-
-        return $config;
     }
 
     /**
@@ -164,9 +148,9 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
-     * @param SettingsProvider $provider
+     * @param Tx_T3chimp_Provider_Settings $provider
      */
-    public function injectSettingsProvider(SettingsProvider $provider) {
+    public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $provider) {
         $this->settingsProvider = $provider;
         $this->api = new MCAPI($this->settingsProvider->get('apiKey'), $this->settingsProvider->get('secureConnection'));
     }
@@ -181,18 +165,18 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
-     * @param MailChimp_Form $form
+     * @param Tx_T3chimp_MailChimp_Form $form
      * @return int -1 if the user unsubscribed, 1 if the user subscribed
      */
-    public function saveForm(MailChimp_Form $form) {
+    public function saveForm(Tx_T3chimp_MailChimp_Form $form) {
         if($form->getField('FORM_ACTION')->getValue() == 'Subscribe') {
             $fieldValues = array();
             $selectedGroupings = array();
 
             foreach($form->getFields() as $field) {
-                if($field instanceof MailChimp_Field_Action) {
+                if($field instanceof Tx_T3chimp_MailChimp_Field_Action) {
                     continue;
-                } elseif($field instanceof MailChimp_Field_InterestGrouping) {
+                } elseif($field instanceof Tx_T3chimp_MailChimp_Field_InterestGrouping) {
                     $selectedGroupings[] = array(
                         'id' => $field->getGroupingId(),
                         'selection' => $field->getApiValue()

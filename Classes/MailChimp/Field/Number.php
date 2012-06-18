@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Number extends MailChimp_Field_PatternBased {
+class Tx_T3chimp_MailChimp_Field_Number extends Tx_T3chimp_MailChimp_Field_PatternBased {
     public function getHtmlPattern() {
         return '^((\d+)?\.)?\d+((e|E)\d+(\.\d+)?)?$';
     }

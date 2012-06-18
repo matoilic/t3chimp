@@ -26,18 +26,47 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Phone extends MailChimp_Field_Abstract {
-    public function getFormat() {
-        return $this->definition['format'];
+class Tx_T3chimp_Provider_Session implements t3lib_Singleton {
+    const KEY = 'tx_t3chimp';
+
+    /**
+     * @var tslib_feUserAuth
+     */
+    private $feUser;
+
+    /**
+     * @var array
+     */
+    private $sessionData = array();
+
+    public function __construct() {
+        //hold a reference to the fe_user object so the destructor has guaranteed access to it
+        $this->feUser = $GLOBALS['TSFE']->fe_user;
+        $data = $this->feUser->getKey('ses', self::KEY);
+
+        if($data != null) {
+            $this->sessionData = unserialize($data);
+        }
     }
 
-    protected function validate() {
-        parent::validate();
+    public function __destruct() {
+        $this->feUser->setKey('ses', self::KEY, serialize($this->sessionData));
+        $this->feUser->storeSessionData();
+    }
 
-        if($this->getIsValid() && !$this->getIsEmpty() && $this->getFormat() == 'US') {
-            if(!preg_match('\d{3}-\d{3}-\d{4}', $this->getValue())) {
-                $this->errors[] = 't3chimp.error.invalidPhone';
-            }
-        }
+    public function __get($key) {
+        return $this->sessionData[$key];
+    }
+
+    public function __isset($key) {
+        return isset($this->sessionData[$key]);
+    }
+
+    public function __set($key, $value) {
+        $this->sessionData[$key] = $value;
+    }
+
+    public function __unset($key) {
+        unset($this->sessionData[$key]);
     }
 }

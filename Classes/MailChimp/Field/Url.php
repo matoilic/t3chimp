@@ -26,56 +26,21 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Helper_Choice {
-    /**
-     * @var string
-     */
-    protected $id;
-
-    /**
-     * @var MailChimp_Field
-     */
-    protected $parent;
-
-    /**
-     * @var mixed
-     */
-    protected $value;
-
-    /**
-     * @param MailChimp_Field $parent
-     * @param mixed $value
-     */
-    public function __construct(MailChimp_Field $parent, $value) {
-        $this->parent = $parent;
-        $this->value = $value;
-        $this->id = strtolower(str_replace(' ', '-', $value));
+class Tx_T3chimp_MailChimp_Field_Url extends Tx_T3chimp_MailChimp_Field_PatternBased {
+    public function getHtmlPattern() {
+        return '^(https?://)?([a-zA-Z0-9\-]+\.)([a-z0-9\-]+\.)+(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2})(\:[0-9]+)?(/(\$|[a-zA-Z0-9\.\,\?\'\\\+&%\$#\=~_\-%]+)?)*$';
     }
 
-    /**
-     * @return string
-     */
-    public function getId() {
-        return $this->parent->getId() . '-' . $this->id;
+    public function setValue($value) {
+        parent::setValue(strtolower($value));
     }
 
-    public function getLocalizedValue() {
-        $value = Tx_Extbase_Utility_Localization::translate(
-            't3chimp: ' . $this->getValue(),
-            'T3chimp'
-        );
 
-        return ($value !== null) ? $value : $this->getValue();
-    }
+    protected function validate() {
+        parent::validate();
 
-    /**
-     * @return mixed
-     */
-    public function getValue() {
-        return $this->value;
-    }
-
-    public function getIsSelected() {
-        return $this->value == $this->parent->getValue();
+        if($this->getIsValid() && !$this->getIsEmpty() && !preg_match($this->getPattern(), $this->getValue())) {
+            $this->errors[] = 't3chimp.error.invalidUrl';
+        }
     }
 }

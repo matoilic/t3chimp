@@ -26,12 +26,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_InterestGrouping extends MailChimp_Field_Checkboxes {
-    public function getGroupingId() {
-        return $this->definition['groupingId'];
-    }
-
-    public function getTag() {
-        return $this->definition['name'];
+class Tx_T3chimp_MailChimp_Field_Helper_MultiChoice extends Tx_T3chimp_MailChimp_Field_Helper_Choice {
+    /**
+     * @return bool
+     */
+    public function getIsSelected() {
+        return in_array($this->getValue(), $this->parent->getValue());
     }
 }

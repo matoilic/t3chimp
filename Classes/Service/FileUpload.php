@@ -33,7 +33,7 @@ class Tx_T3chimp_Service_FileUpload implements t3lib_Singleton {
     protected $allowedExtensions;
 
     /**
-     * @var SettingsProvider
+     * @var Tx_T3chimp_Provider_Settings
      */
     protected $settingsProvider;
 
@@ -53,9 +53,9 @@ class Tx_T3chimp_Service_FileUpload implements t3lib_Singleton {
     }
 
     /**
-     * @param SettingsProvider $settingsProvider
+     * @param Tx_T3chimp_Provider_Settings $settingsProvider
      */
-    public function injectSettingsProvider(SettingsProvider $settingsProvider) {
+    public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $settingsProvider) {
         $key = 'tx_' . strtolower($settingsProvider->get('extensionName')) . '_' . $settingsProvider->get('pluginName');
 
         if(array_key_exists($key, $_FILES)) {

@@ -28,18 +28,18 @@
 
 class Tx_T3chimp_ViewHelpers_Form_ErrorsViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
     /**
-     * @var MailChimp_Field
+     * @var Tx_T3chimp_MailChimp_Field
      */
     protected $field = null;
 
     /**
-     * @var MailChimp_Form
+     * @var Tx_T3chimp_MailChimp_Form
      */
     private $form = null;
 
     /**
      * @param string $property
-     * @return MailChimp_Field
+     * @return Tx_T3chimp_MailChimp_Field
      * @throws Exception
      */
     protected function getField($property) {
@@ -54,7 +54,7 @@ class Tx_T3chimp_ViewHelpers_Form_ErrorsViewHelper extends Tx_Fluid_Core_ViewHel
     }
 
     /**
-     * @return MailChimp_Form
+     * @return Tx_T3chimp_MailChimp_Form
      */
     protected function getForm() {
         if($this->form === null) {

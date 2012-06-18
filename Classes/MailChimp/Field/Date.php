@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class MailChimp_Field_Date extends MailChimp_Field_PatternBased {
+class Tx_T3chimp_MailChimp_Field_Date extends Tx_T3chimp_MailChimp_Field_PatternBased {
     /**
      * @var string
      */

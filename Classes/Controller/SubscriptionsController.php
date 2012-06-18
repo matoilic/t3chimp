@@ -82,16 +82,16 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
     }
 
     /**
-     * @param Tx_T3chimp_Session_Provider $provider
+     * @param Tx_T3chimp_Provider_Session $provider
      */
-    public function injectSessionProvider(Tx_T3chimp_Session_Provider $provider) {
+    public function injectSessionProvider(Tx_T3chimp_Provider_Session $provider) {
         $this->session = $provider;
     }
 
     /**
-     * @param SettingsProvider $provider
+     * @param Tx_T3chimp_Provider_Settings $provider
      */
-    public function injectSettingsProvider(SettingsProvider $provider) {
+    public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $provider) {
         $this->settings = $provider->getAll();
     }
 

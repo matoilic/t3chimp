@@ -26,72 +26,12 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-interface MailChimp_Field
-{
-    /**
-     * @abstract
-     * @return mixed
-     */
-    public function getDefaultValue();
+class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_Field_Checkboxes {
+    public function getGroupingId() {
+        return $this->definition['groupingId'];
+    }
 
-    /**
-     * @abstract
-     * @return array
-     */
-    public function getErrors();
-
-    /**
-     * @abstract
-     * @return string
-     */
-    public function getId();
-
-    /**
-     * @abstract
-     * @return boolean
-     */
-    public function getIsRequired();
-
-    /**
-     * @abstract
-     * @return boolean
-     */
-    public function getIsValid();
-
-    /**
-     * @abstract
-     * @return string
-     */
-    public function getLabel();
-
-    /**
-     * @abstract
-     * @return string
-     */
-    public function getName();
-
-    /**
-     * @abstract
-     * @return string
-     */
-    public function getTag();
-
-    /**
-     * @abstract
-     * @return string
-     */
-    public function getTemplate();
-
-    /**
-     * @abstract
-     * @return mixed
-     */
-    public function getValue();
-
-    /**
-     * @abstract
-     * @param mixed $value
-     * @return void
-     */
-    public function setValue($value);
+    public function getTag() {
+        return $this->definition['name'];
+    }
 }

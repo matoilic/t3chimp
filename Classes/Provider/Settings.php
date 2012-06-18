@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class SettingsProvider implements t3lib_Singleton {
+class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
     /**
      * @var Tx_T3chimp_Session_Provider
      */
@@ -77,7 +77,7 @@ class SettingsProvider implements t3lib_Singleton {
      * @param Tx_Extbase_Object_ObjectManager $manager
      */
     public function injectObjectManager(Tx_Extbase_Object_ObjectManager $manager) {
-        $this->injectSessionProvider($manager->get('Tx_T3chimp_Session_Provider'));
+        $this->injectSessionProvider($manager->get('Tx_T3chimp_Provider_Session'));
         $this->injectConfigurationManager($manager->get('Tx_Extbase_Configuration_ConfigurationManagerInterface'));
     }
 
@@ -103,7 +103,7 @@ class SettingsProvider implements t3lib_Singleton {
     /**
      * @param Tx_T3chimp_Session_Provider $provider
      */
-    private function injectSessionProvider(Tx_T3chimp_Session_Provider $provider) {
+    private function injectSessionProvider(Tx_T3chimp_Provider_Session $provider) {
         $this->session = $provider;
     }
 }
