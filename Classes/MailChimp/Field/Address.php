@@ -80,6 +80,21 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     /**
      * @return array
      */
+    public function getDefaultValue() {
+        return array(
+            'addr1' => '',
+            'addr1' => '',
+            'city' => '',
+            'state' => '',
+            'zip' => '',
+            'country' => $this->definition['defaultcountry_cc'],
+        );
+    }
+
+
+    /**
+     * @return array
+     */
     public function getCountryList() {
         $countries = $this->countryRepository->findAllOrderedBy('officialNameLocal');
         $list = array();
@@ -103,7 +118,8 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
      * @return string
      */
     private function getField($field) {
-        return array_key_exists($field, $this->value) ? $this->value[$field] : '';
+        $value = $this->getValue();
+        return array_key_exists($field, $value) ? $value[$field] : '';
     }
 
     /**
