@@ -153,7 +153,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
             return null;
         }
 
-        $file = $this->getCachePath($listId);
+        $file = $this->getCachePath($listId . '.mc');
 
         if(file_exists($file)) {
             return unserialize(file_get_contents($file));
