@@ -6,16 +6,16 @@
                 <f:translate key="t3chimp: {field.label}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
                 (<f:translate key="t3chimp: {field.format}">{field.format}</f:translate>)
             </label><br>
-            <t:form.birthday.month property="{field.name}" id="{field.id}" required="{field.isRequired}" /> /
-            <t:form.birthday.day property="{field.name}" id="{field.id}" required="{field.isRequired}" />
+            <t:form.birthday.month property="{field.name}" id="{field.id}_month" required="{field.isRequired}" /> /
+            <t:form.birthday.day property="{field.name}" id="{field.id}_day" required="{field.isRequired}" />
         </f:then>
         <f:else>
             <label for="{field.id}_day">
                 <f:translate key="t3chimp: {field.label}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
                 (<f:translate key="t3chimp: {field.format}">{field.format}</f:translate>)
             </label><br>
-            <t:form.birthday.day property="{field.name}" id="{field.id}" required="{field.isRequired}" /> /
-            <t:form.birthday.month property="{field.name}" id="{field.id}" required="{field.isRequired}" />
+            <t:form.birthday.day property="{field.name}" id="{field.id}_day" required="{field.isRequired}" /> /
+            <t:form.birthday.month property="{field.name}" id="{field.id}_month" required="{field.isRequired}" />
         </f:else>
     </f:if>
 
