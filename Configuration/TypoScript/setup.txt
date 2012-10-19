@@ -7,7 +7,17 @@ plugin.tx_t3chimp {
 	}
 
 	persistence {
-
+	    classes {
+            Tx_T3chimp_Domain_Model_Country {
+                mapping {
+                    tableName = static_countries
+                    columns {
+                        cn_official_name_en.mapOnProperty = name
+                        cn_iso_2.mapOnProperty = isoCode
+                    }
+                }
+            }
+        }
 	}
 
 	view {

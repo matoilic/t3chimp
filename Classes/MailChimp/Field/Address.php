@@ -33,7 +33,7 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     private static $allowedKeys = array('addr1', 'addr2', 'state', 'city', 'zip', 'country');
 
     /**
-     * @var Tx_StaticInfoTablesExtbase_Domain_Repository_StaticCountryRepository
+     * @var Tx_T3chimp_Domain_Repository_CountryRepository
      */
     private $countryRepository;
 
@@ -45,7 +45,7 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     /**
      * @param Tx_StaticInfoTablesExtbase_Domain_Repository_StaticCountryRepository $repo
      */
-    public function injectStaticCountriesRepository(Tx_StaticInfoTablesExtbase_Domain_Repository_StaticCountryRepository $repo) {
+    public function injectStaticCountriesRepository(Tx_T3chimp_Domain_Repository_CountryRepository $repo) {
         $this->countryRepository = $repo;
     }
 
@@ -96,17 +96,17 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
      * @return array
      */
     public function getCountryList() {
-        $countries = $this->countryRepository->findAllOrderedBy('officialNameLocal');
+        $countries = $this->countryRepository->findAllOrdered();
         $list = array();
 
         /**
-         * @var $country Tx_StaticInfoTablesExtbase_Domain_Model_StaticCountry
+         * @var $country Tx_T3chimp_Domain_Model_Country
          */
         foreach($countries as $country) {
             $list[] = new Tx_T3chimp_MailChimp_Field_Helper_CountryChoice(
                 $this,
-                $country->getIsoCodeA2(),
-                $country->getOfficialNameLocal()
+                $country->getIsoCode(),
+                $country->getName()
             );
         }
 

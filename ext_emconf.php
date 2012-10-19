@@ -38,8 +38,7 @@ $EM_CONF[$_EXTKEY] = array(
 			'typo3' => '4.5.0-0.0.0',
 			'extbase' => '1.3.0-0.0.0',
 			'fluid' => '1.3.0-0.0.0',
-			't3jquery' => '2.0.0-0.0.0',
-            'static_info_tables_extbase' => '1.1.0-0.0.0'
+			't3jquery' => '2.0.0-0.0.0'
 		),
 		'conflicts' => array(
 		),
