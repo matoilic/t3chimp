@@ -27,7 +27,6 @@
  ***************************************************************/
 
 class Tx_T3chimp_ViewHelpers_Form_TextfieldViewHelper extends Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper {
-
 	/**
 	 * @var string
 	 */
@@ -37,8 +36,6 @@ class Tx_T3chimp_ViewHelpers_Form_TextfieldViewHelper extends Tx_T3chimp_ViewHel
 	 * Initialize the arguments.
 	 *
 	 * @return void
-	 * @author Robert Lemke <robert@typo3.org>
-	 * @api
 	 */
 	public function initializeArguments() {
 		parent::initializeArguments();
@@ -58,8 +55,6 @@ class Tx_T3chimp_ViewHelpers_Form_TextfieldViewHelper extends Tx_T3chimp_ViewHel
 	 * @param string $type The field type, e.g. "text", "email", "url" etc.
 	 * @param string $placeholder A string used as a placeholder for the value to enter
 	 * @return string
-	 * @author Robert Lemke <robert@typo3.org>
-	 * @api
 	 */
 	public function render($required = FALSE, $type = 'text', $placeholder = NULL) {
 		$name = $this->getName();
@@ -86,7 +81,6 @@ class Tx_T3chimp_ViewHelpers_Form_TextfieldViewHelper extends Tx_T3chimp_ViewHel
 
 		return $this->tag->render();
 	}
-
 }
 
 ?>

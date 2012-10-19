@@ -1,0 +1,23 @@
+{namespace t = Tx_T3chimp_ViewHelpers}
+<p class="t3chimp-field t3chimp-field-birthdate<f:if condition='{field.isRequired}'> t3chimp-field-birthdate-required</f:if> t3chimp-field-{field.name}">
+    <f:if condition="{field.monthFirst}">
+        <f:then>
+            <label for="{field.id}_month">
+                <f:translate key="t3chimp: {field.label}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
+                (<f:translate key="t3chimp: {field.format}">{field.format}</f:translate>)
+            </label><br>
+            <t:form.birthday.month property="{field.name}" id="{field.id}" required="{field.isRequired}" /> /
+            <t:form.birthday.day property="{field.name}" id="{field.id}" required="{field.isRequired}" />
+        </f:then>
+        <f:else>
+            <label for="{field.id}_day">
+                <f:translate key="t3chimp: {field.label}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
+                (<f:translate key="t3chimp: {field.format}">{field.format}</f:translate>)
+            </label><br>
+            <t:form.birthday.day property="{field.name}" id="{field.id}" required="{field.isRequired}" /> /
+            <t:form.birthday.month property="{field.name}" id="{field.id}" required="{field.isRequired}" />
+        </f:else>
+    </f:if>
+
+    <t:form.errors property="{field.name}" />
+</p>

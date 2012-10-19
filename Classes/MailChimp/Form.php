@@ -76,7 +76,8 @@ class Tx_T3chimp_MailChimp_Form {
         'url',
         'date',
         'imageurl',
-        'address'
+        'address',
+        'birthday'
     );
 
     /**

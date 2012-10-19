@@ -18,6 +18,13 @@
             <label index="t3chimp.error.unsupportedImageFormat">Unsupported image format</label>
             <label index="t3chimp.error.fileTooLarge">File too large</label>
             <label index="t3chimp.error.filePartiallyUploaded">Upload failed</label>
+            <label index="t3chimp.error.addr1.required">Please enter a value for address line 1</label>
+            <label index="t3chimp.error.addr2.required">Please enter a value for address line 2</label>
+            <label index="t3chimp.error.state.required">Please enter a value for state</label>
+            <label index="t3chimp.error.zip.required">Please enter a value for zip code</label>
+            <label index="t3chimp.error.city.required">Please enter a value for city</label>
+            <label index="t3chimp.error.country.required">Please enter a value for country</label>
+            <label index="t3chimp.error.invalidBirthDate">Please enter a valid birthday</label>
             <label index="t3chimp.form.submit">Submit</label>
             <label index="t3chimp.form.requiredFields">Required fields</label>
             <label index="t3chimp.form.subscribed">You have successfully subscribed.</label>

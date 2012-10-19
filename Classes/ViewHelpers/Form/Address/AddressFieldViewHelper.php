@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-abstract class Tx_T3chimp_ViewHelpers_Form_Address_TextfieldViewHelper extends Tx_T3chimp_ViewHelpers_Form_TextfieldViewHelper {
+abstract class Tx_T3chimp_ViewHelpers_Form_Address_AddressFieldViewHelper extends Tx_T3chimp_ViewHelpers_Form_TextfieldViewHelper {
     protected function getName() {
         return $this->prefixFieldName($this->getField()->getName()) . '[' . static::$fieldKey . ']';
     }

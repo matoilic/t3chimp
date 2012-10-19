@@ -60,7 +60,7 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
      * @return string
      */
     public function getAddressLine2() {
-        return $this->getField('addr1');
+        return $this->getField('addr2');
     }
 
     /**
@@ -83,7 +83,7 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     public function getDefaultValue() {
         return array(
             'addr1' => '',
-            'addr1' => '',
+            'addr2' => '',
             'city' => '',
             'state' => '',
             'zip' => '',

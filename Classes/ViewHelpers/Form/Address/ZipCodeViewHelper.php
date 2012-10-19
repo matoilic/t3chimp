@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_ViewHelpers_Form_Address_ZipCodeViewHelper extends Tx_T3chimp_ViewHelpers_Form_Address_TextfieldViewHelper {
+class Tx_T3chimp_ViewHelpers_Form_Address_ZipCodeViewHelper extends Tx_T3chimp_ViewHelpers_Form_Address_AddressFieldViewHelper {
     protected static $fieldKey = 'zip';
 
     protected function getFieldValue() {
