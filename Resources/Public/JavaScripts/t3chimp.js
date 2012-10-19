@@ -43,12 +43,5 @@
         } else {
             setStateSubscribe();
         }
-
-        $.ajaxPrefilter(function(options, originalOptions, xhr) {
-            xhr.setRequestHeader('X-CSRF-Token', prop('csrf-token'));
-            xhr.setRequestHeader('X-Language', prop('lang'));
-            xhr.setRequestHeader('X-Language-ISO', prop('lang-iso'));
-            xhr.setRequestHeader('X-PID', prop('pid'));
-        });
     });
 })(jQuery);

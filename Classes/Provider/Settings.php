@@ -28,6 +28,11 @@
 
 class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
     /**
+     * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+     */
+    private $configurationManager;
+
+    /**
      * @var Tx_T3chimp_Session_Provider
      */
     private $session;
@@ -74,6 +79,15 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
     }
 
     /**
+     * @return bool
+     */
+    public function getIsCacheDisabled() {
+        $config = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+
+        return array_key_exists('no_cache', $config['config.']) && $config['config.']['no_cache'] == '1';
+    }
+
+    /**
      * @param Tx_Extbase_Object_ObjectManager $manager
      */
     public function injectObjectManager(Tx_Extbase_Object_ObjectManager $manager) {
@@ -85,6 +99,8 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
      * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $manager
      */
     private function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $manager) {
+        $this->configurationManager = $manager;
+
         $this->settings = $manager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
 
         //read session stored settings for ajax requests

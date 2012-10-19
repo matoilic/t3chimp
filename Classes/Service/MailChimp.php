@@ -94,6 +94,14 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
+     * @param string $listId
+     * @return string
+     */
+    protected function getCachePath($listId) {
+        return PATH_site . 'typo3temp/tx_t3chimp/' . str_replace(array('/', '\\', '..'), '', $listId);
+    }
+
+    /**
      * @param int $listId
      * @return array
      */
@@ -116,6 +124,11 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @return Tx_T3chimp_MailChimp_Form
      */
     public function getFormFor($listId) {
+        $form = $this->getFormFromCache($listId . '.mc');
+        if($form !== null) {
+            return $form;
+        }
+
         $fields = $this->getFieldsFor($listId);
         try {
             $interestGroupings = $this->getInterestGroupingsFor($listId);
@@ -126,7 +139,27 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         $form = $this->objectManager->create('Tx_T3chimp_MailChimp_Form', $fields, $listId);
         $form->setInterestGroupings($interestGroupings);
 
+        $this->writeToCache($form);
+
         return $form;
+    }
+
+    /**
+     * @param $listId
+     * @return Tx_T3chimp_MailChimp_Form|null
+     */
+    protected function getFormFromCache($listId) {
+        if($this->settingsProvider->getIsCacheDisabled()) {
+            return null;
+        }
+
+        $file = $this->getCachePath($listId);
+
+        if(file_exists($file)) {
+            return unserialize(file_get_contents($file));
+        }
+
+        return null;
     }
 
     /**
@@ -216,5 +249,23 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         $exceptionClass .= "Exception";
 
         throw new $exceptionClass("MailChimp error: $errorMessage ($errorCode)");
+    }
+
+    /**
+     * @param Tx_T3chimp_MailChimp_Form $form
+     */
+    protected function writeToCache(Tx_T3chimp_MailChimp_Form $form) {
+        if($this->settingsProvider->getIsCacheDisabled()) {
+            return;
+        }
+
+        $cachePath = $this->getCachePath('');
+        if(!file_exists($cachePath)) {
+            mkdir($cachePath, 0777, true);
+            file_put_contents($this->getCachePath('index.html'), '');
+        }
+
+        $file = $this->getCachePath($form->getListId() . '.mc');
+        file_put_contents($file, serialize($form));
     }
 }

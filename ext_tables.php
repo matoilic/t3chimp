@@ -1,11 +1,6 @@
 <?php
 if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
-if(!defined('T3CHIMP_API_KEY')) {
-    $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
-    define('T3CHIMP_API_KEY', $global['apiKey']);
-}
-
 Tx_Extbase_Utility_Extension::registerPlugin($_EXTKEY, 'subscription', 'Newsletter Subscription');
 
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_subscription'] = 'pi_flexform';
