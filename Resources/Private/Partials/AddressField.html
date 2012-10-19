@@ -1,0 +1,34 @@
+{namespace t = Tx_T3chimp_ViewHelpers}
+<p class="t3chimp-field t3chimp-field-address<f:if condition='{field.isRequired}'> t3chimp-field-address-required</f:if> t3chimp-field-{field.name}">
+    <label for="{field.id}_addressLine1">
+        <f:translate key="t3chimp: Address Line 1">Address Line 1</f:translate><f:if condition="{field.isRequired}"> *</f:if>
+    </label><br>
+    <t:form.address.addressLine1 property="{field.name}" id="{field.id}_addressLine1" required="{field.isRequired}" /><br>
+
+    <label for="{field.id}_addressLine2">
+        <f:translate key="t3chimp: Address Line 2">Address Line 2</f:translate>
+    </label><br>
+    <t:form.address.addressLine2 property="{field.name}" id="{field.id}_addressLine2" required="{field.isRequired}" /><br>
+
+    <label for="{field.id}_city">
+        <f:translate key="t3chimp: City">City</f:translate><f:if condition="{field.isRequired}"> *</f:if>
+    </label><br>
+    <t:form.address.city property="{field.name}" id="{field.id}_city" required="{field.isRequired}" /><br>
+
+    <label for="{field.id}_state">
+        <f:translate key="t3chimp: State/Province/Region">State/Province/Region</f:translate>
+    </label><br>
+    <t:form.address.state property="{field.name}" id="{field.id}_state" required="{field.isRequired}" /><br>
+
+    <label for="{field.id}_zip">
+        <f:translate key="t3chimp: Postal/Zip Code">Postal/Zip Code</f:translate><f:if condition="{field.isRequired}"> *</f:if>
+    </label><br>
+    <t:form.address.zipCode property="{field.name}" id="{field.id}_zip" required="{field.isRequired}" /><br>
+
+    <label for="{field.id}_country">
+        <f:translate key="t3chimp: Country">Country</f:translate><f:if condition="{field.isRequired}"> *</f:if>
+    </label><br>
+    <t:form.address.countryList property="{field.name}" id="{field.id}_country" options="{field.countryList}" optionValueField="value" optionLabelField="localizedValue" />
+
+    <t:form.errors property="{field.name}" />
+</p>

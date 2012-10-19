@@ -3,7 +3,7 @@ page.includeJS.file2 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.js
 
 plugin.tx_t3chimp {
 	settings {
-
+        debug = 0
 	}
 
 	persistence {

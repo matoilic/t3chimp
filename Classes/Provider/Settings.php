@@ -88,7 +88,7 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
         $this->settings = $manager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
 
         //read session stored settings for ajax requests
-        if(count($this->settings) == 0 && $this->session->settings != null) {
+        if(array_key_exists('type', $_GET) && $this->session->settings != null) {
             $this->settings = $this->session->settings;
         } else {
             $this->session->settings = $this->settings;
