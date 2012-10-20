@@ -30,11 +30,17 @@ class Tx_T3chimp_Provider_Session implements t3lib_Singleton {
     const KEY = 'tx_t3chimp';
 
     /**
+     * @var tslib_feUserAuth
+     */
+    private $feUser;
+
+    /**
      * @var array
      */
     private $sessionData = array();
 
     public function __construct() {
+        $this->feUser = $GLOBALS['TSFE']->fe_user;
         $data = $this->feUser->getKey('ses', self::KEY);
 
         if($data != null) {
