@@ -47,7 +47,7 @@ class Tx_T3chimp_MailChimp_Field_Checkboxes extends Tx_T3chimp_MailChimp_Field_R
      * @throws Exception
      */
     public function setValue($value) {
-        if($value === null || strlen($value) == 0) {
+        if($value === null) {
             $this->value = array();
             return;
         }

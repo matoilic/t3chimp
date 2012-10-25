@@ -42,13 +42,10 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 	 * Initialize arguments.
 	 *
 	 * @return void
-	 * @author Sebastian Kurfürst <sebastian@typo3.org>
-	 * @api
 	 */
 	public function initializeArguments() {
 		parent::initializeArguments();
 		$this->registerUniversalTagAttributes();
-		$this->registerTagAttribute('multiple', 'string', 'if set, multiple select field');
 		$this->registerTagAttribute('size', 'string', 'Size of input field');
 		$this->registerTagAttribute('disabled', 'string', 'Specifies that the input element should be disabled when the page loads');
 		$this->registerArgument('options', 'array', 'Associative array with internal IDs as key, and the values are displayed in the select box', TRUE);
@@ -63,15 +60,9 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 	 * Render the tag.
 	 *
 	 * @return string rendered tag.
-	 * @author Sebastian Kurfürst <sebastian@typo3.org>
-	 * @author Bastian Waidelich <bastian@typo3.org>
-	 * @api
 	 */
 	public function render() {
 		$name = $this->getName();
-		if ($this->arguments->hasArgument('multiple')) {
-			$name .= '[]';
-		}
 
 		$this->tag->addAttribute('name', $name);
 
@@ -85,17 +76,7 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 
 		$content = '';
 
-			// register field name for token generation.
-			// in case it is a multi-select, we need to register the field name
-			// as often as there are elements in the box
-		if ($this->arguments->hasArgument('multiple') && $this->arguments['multiple'] !== '') {
-			$content .= $this->renderHiddenFieldForEmptyValue();
-			for ($i=0; $i<count($options); $i++) {
-				$this->registerFieldNameForFormTokenGeneration($name);
-			}
-		} else {
-			$this->registerFieldNameForFormTokenGeneration($name);
-		}
+		$this->registerFieldNameForFormTokenGeneration($name);
 
 		$content .= $this->tag->render();
 		return $content;
@@ -106,7 +87,6 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 	 *
 	 * @param array $options the options for the form.
 	 * @return string rendered tags.
-	 * @author Bastian Waidelich <bastian@typo3.org>
 	 */
 	protected function renderOptionTags($options) {
 		$output = '';
@@ -122,8 +102,7 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 	 * Render the option tags.
 	 *
 	 * @return array an associative array of options, key will be the value of the option tag
-	 * @author Bastian Waidelich <bastian@typo3.org>
-	 * @author Karsten Dambekalns <karsten@typo3.org>
+     * @throws Tx_Fluid_Core_ViewHelper_Exception
 	 */
 	protected function getOptions() {
 		if (!is_array($this->arguments['options']) && !($this->arguments['options'] instanceof Traversable)) {
@@ -134,7 +113,8 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 		foreach ($optionsArgument as $key => $value) {
 			if (is_object($value)) {
 
-				if ($this->arguments->hasArgument('optionValueField')) {
+				if ((is_array($this->arguments) && array_key_exists('optionValueField', $this->arguments)) ||
+                    (is_object($this->arguments) && $this->arguments->hasArgument('optionValueField'))) { //4.5.x compatibility
 					$key = Tx_Extbase_Reflection_ObjectAccess::getProperty($value, $this->arguments['optionValueField']);
 					if (is_object($key)) {
 						if (method_exists($key, '__toString')) {
@@ -151,7 +131,8 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 					throw new Tx_Fluid_Core_ViewHelper_Exception('No identifying value for object of class "' . get_class($value) . '" found.' , 1247826696);
 				}
 
-				if ($this->arguments->hasArgument('optionLabelField')) {
+				if ((is_array($this->arguments) && array_key_exists('optionLabelField', $this->arguments)) ||
+                    ((is_object($this->arguments) && $this->arguments->hasArgument('optionLabelField')))) { //4.5.x compatibility
 					$value = Tx_Extbase_Reflection_ObjectAccess::getProperty($value, $this->arguments['optionLabelField']);
 					if (is_object($value)) {
 						if (method_exists($value, '__toString')) {
@@ -177,22 +158,15 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 	/**
 	 * Render the option tags.
 	 *
+     * @param mixed $value
 	 * @return boolean TRUE if the value should be marked a s selected; FALSE otherwise
-	 * @author Bastian Waidelich <bastian@typo3.org>
-	 * @author Jochen Rau <jochen.rau@typoplanet.de>
 	 */
 	protected function isSelected($value) {
 		$selectedValue = $this->getSelectedValue();
 		if ($value === $selectedValue || (string)$value === $selectedValue) {
 			return TRUE;
 		}
-		if ($this->arguments->hasArgument('multiple')) {
-			if (is_null($selectedValue) && $this->arguments['selectAllByDefault'] === TRUE) {
-				return TRUE;
-			} elseif (is_array($selectedValue) && in_array($value, $selectedValue)) {
-				return TRUE;
-			}
-		}
+
 		return FALSE;
 	}
 
@@ -200,11 +174,12 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 	 * Retrieves the selected value(s)
 	 *
 	 * @return mixed value string or an array of strings
-	 * @author Bastian Waidelich <bastian@typo3.org>
 	 */
 	protected function getSelectedValue() {
 		$value = $this->getValue();
-		if (!$this->arguments->hasArgument('optionValueField')) {
+		if ((is_array($this->arguments) && !array_key_exists('optionValueField', $this->arguments)) ||
+            ((is_object($this->arguments) && $this->arguments->hasArgument('optionValueField'))) //4.5.x compatibility
+        ) {
 			return $value;
 		}
 		if (!is_array($value) && !($value instanceof Iterator)) {
@@ -230,9 +205,8 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 	 *
 	 * @param string $value value attribute of the option tag (will be escaped)
 	 * @param string $label content of the option tag (will be escaped)
-	 * @param boolean $isSelected specifies wheter or not to add selected attribute
+	 * @param boolean $isSelected specifies whether or not to add selected attribute
 	 * @return string the rendered option tag
-	 * @author Bastian Waidelich <bastian@typo3.org>
 	 */
 	protected function renderOptionTag($value, $label, $isSelected) {
 		$output = '<option value="' . htmlspecialchars($value) . '"';
