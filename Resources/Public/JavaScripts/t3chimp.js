@@ -1,5 +1,5 @@
 ;(function($) {
-    var $form, $doc = $(document);
+    var $form, $doc = $(document), properVersion = !!jQuery.fn.on;
 
     function onFormSubmit(event) {
         event.preventDefault();
@@ -31,17 +31,23 @@
         $form.find('p:not(.t3chimp-always)').hide();
     }
 
-    $doc.on('click', '#tx_t3chimp_form_action-subscribe', setStateSubscribe);
-    $doc.on('click', '#tx_t3chimp_form_action-unsubscribe', setStateUnsubscribe);
-    $doc.on('submit', '#t3chimp-form', onFormSubmit);
+    if(properVersion) {
+        $doc.on('click', '#tx_t3chimp_form_action-subscribe', setStateSubscribe);
+        $doc.on('click', '#tx_t3chimp_form_action-unsubscribe', setStateUnsubscribe);
+        $doc.on('submit', '#t3chimp-form', onFormSubmit);
+    }
 
     $(function() {
         $form = $('#t3chimp-form');
 
-        if($('#tx_t3chimp_form_action-unsubscribe').attr('checked')) {
-            setStateUnsubscribe();
+        if(properVersion) {
+            if($('#tx_t3chimp_form_action-unsubscribe').attr('checked')) {
+                setStateUnsubscribe();
+            } else {
+                setStateSubscribe();
+            }
         } else {
-            setStateSubscribe();
+            $form.html('T3Chimp requires at least jQuery 1.7');
         }
     });
 })(jQuery);
