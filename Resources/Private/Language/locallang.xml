@@ -33,7 +33,9 @@
                 you will receive shortly.
             </label>
             <label index="t3chimp.form.unsubscribed">You have successfully unsubscribed.</label>
+            <label index="t3chimp.form.updated">Your subscription data has been updated.</label>
             <label index="t3chimp.phone.usFormat">eg. 123-123-1234</label>
+            <label index="t3chimp.exception.invalidEmail">You cannot subscribe with this email address</label>
 
             <label index="t3chimp: Action">Action</label>
             <label index="t3chimp: Subscribe">Subscribe</label>
@@ -53,6 +55,13 @@
             <label index="t3chimp.error.unsupportedImageFormat">Ungültiges Bildformat</label>
             <label index="t3chimp.error.fileTooLarge">Datei zu gross</label>
             <label index="t3chimp.error.filePartiallyUploaded">Upload fehlgeschlagen</label>
+            <label index="t3chimp.error.addr1.required">Bitte geben Sie Ihre Adresse ein</label>
+            <label index="t3chimp.error.addr2.required">Bitte geben Sie Ihre Adresse ein</label>
+            <label index="t3chimp.error.state.required">Bitte geben Sie Ihren Bundesstaat ein</label>
+            <label index="t3chimp.error.zip.required">Bitte geben Sie Ihre PLZ ein</label>
+            <label index="t3chimp.error.city.required">Bitte gebe Sie ihren Wohnort ein</label>
+            <label index="t3chimp.error.country.required">Bitte wählen Sie Ihr Land aus</label>
+            <label index="t3chimp.error.invalidBirthDate">Bitte gebe Sie einen gültigen Geburtstag ein</label>
             <label index="t3chimp.form.submit">Abschicken</label>
             <label index="t3chimp.form.requiredFields">Pflichtfelder</label>
             <label index="t3chimp.form.subscribed">Ihre Anmeldung wurde gespeichert.</label>
@@ -61,7 +70,9 @@
                 die Sie in Kürze erhalten.
             </label>
             <label index="t3chimp.form.unsubscribed">Ihre Anmeldung wurde gelöscht.</label>
+            <label index="t3chimp.form.updated">Ihre Anmeldung wurde aktualisiert.</label>
             <label index="t3chimp.phone.usFormat">z.B. 123-123-1234</label>
+            <label index="t3chimp.exception.invalidEmail">Unzulässige E-Mail Adresse</label>
 
             <label index="t3chimp: Action">Anmelden</label>
             <label index="t3chimp: Subscribe">Anmelden</label>

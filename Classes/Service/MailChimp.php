@@ -27,6 +27,10 @@
  ***************************************************************/
 
 class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
+    const ACTION_UNSUBSCRIBE = -1;
+    const ACTION_SUBSCRIBE = 1;
+    const ACTION_UPDATE = 2;
+
     /**
      * @var MCAPI
      */
@@ -41,7 +45,8 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         215 => 'ListAlreadySubscribed',
         230 => 'EmailAlreadySubscribed',
         231 => 'EmailAlreadyUnsubscribed',
-        232 => 'EmailNotExists'
+        232 => 'EmailNotExists',
+        502 => 'InvalidEmail'
     );
 
     /**
@@ -67,23 +72,9 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @param string $emailType
      */
     public function addSubscriber($listId, $fieldValues, $interestGroupings, $doubleOptIn = true, $emailType = 'html') {
-        $mergeVars = array();
-        $email = '';
+        $data = $this->prepareFieldValues($fieldValues, $interestGroupings);
 
-        foreach($fieldValues as $field) {
-            if($field['tag'] != 'EMAIL') {
-                $mergeVars[$field['tag']] = $field['value'];
-            } else {
-                $email = $field['value'];
-            }
-        }
-
-        $mergeVars['GROUPINGS'] = array();
-        foreach($interestGroupings as $grouping) {
-            $mergeVars['GROUPINGS'][] = array('id' => $grouping['id'], 'groups' => implode(',', $grouping['selection']));
-        }
-
-        $this->api->listSubscribe($listId, $email, $mergeVars, $emailType, $doubleOptIn, true, true, true);
+        $this->api->listSubscribe($listId, $data['email'], $data['mergeVars'], $emailType, $doubleOptIn, false, true, true);
         $this->checkApi();
     }
 
@@ -189,6 +180,31 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
+     * @param array $fieldValues
+     * @param array $interestGroupings
+     * @return array
+     */
+    protected function prepareFieldValues($fieldValues, $interestGroupings) {
+        $mergeVars = array();
+        $email = '';
+
+        foreach($fieldValues as $field) {
+            if($field['tag'] != 'EMAIL') {
+                $mergeVars[$field['tag']] = $field['value'];
+            } else {
+                $email = $field['value'];
+            }
+        }
+
+        $mergeVars['GROUPINGS'] = array();
+        foreach($interestGroupings as $grouping) {
+            $mergeVars['GROUPINGS'][] = array('id' => $grouping['id'], 'groups' => implode(',', $grouping['selection']));
+        }
+
+        return array('email' => $email, 'mergeVars' => $mergeVars);
+    }
+
+    /**
      * @param int $listId
      * @param string $email
      */
@@ -202,6 +218,8 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @return int -1 if the user unsubscribed, 1 if the user subscribed
      */
     public function saveForm(Tx_T3chimp_MailChimp_Form $form) {
+        $action = 0;
+
         if($form->getField('FORM_ACTION')->getValue() == 'Subscribe') {
             $fieldValues = array();
             $selectedGroupings = array();
@@ -222,18 +240,31 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
                 }
             }
 
-            $this->addSubscriber(
-                $form->getListId(),
-                $fieldValues,
-                $selectedGroupings,
-                $this->settingsProvider->get('doubleOptIn')
-            );
+            try {
+                $this->addSubscriber(
+                    $form->getListId(),
+                    $fieldValues,
+                    $selectedGroupings,
+                    $this->settingsProvider->get('doubleOptIn')
+                );
 
-            return 1;
+                $action = self::ACTION_SUBSCRIBE;
+            } catch(Tx_T3chimp_Service_MailChimp_EmailAlreadySubscribedException $ex) {
+                $this->updateSubscriber(
+                    $form->getListId(),
+                    $fieldValues,
+                    $selectedGroupings
+                );
+
+                $action = self::ACTION_UPDATE;
+            }
+
         } else {
             $this->removeSubscriber($form->getListId(), $form->getField('EMAIL')->getApiValue());
-            return -1;
+            $action = self::ACTION_UNSUBSCRIBE;
         }
+
+        return $action;
     }
 
     /**
@@ -248,7 +279,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         }
         $exceptionClass .= "Exception";
 
-        throw new $exceptionClass("MailChimp error: $errorMessage ($errorCode)");
+        throw new $exceptionClass("MailChimp error: $errorMessage ($errorCode)", $errorCode);
     }
 
     /**
@@ -267,5 +298,18 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
 
         $file = $this->getCachePath($form->getListId() . '.mc');
         file_put_contents($file, serialize($form));
+    }
+
+    /**
+     * @param string $listId
+     * @param array $fieldValues
+     * @param array $interestGroupings
+     * @param string $emailType
+     */
+    public function updateSubscriber($listId, $fieldValues, $interestGroupings, $emailType = 'html') {
+        $data = $this->prepareFieldValues($fieldValues, $interestGroupings);
+
+        $this->api->listUpdateMember($listId, $data['email'], $data['mergeVars'], $emailType, true);
+        $this->checkApi();
     }
 }

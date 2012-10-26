@@ -110,14 +110,24 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
         $form->bindRequest($this->request);
 
         if($form->isValid()) {
-            if($this->mailChimpService->saveForm($form) > 0) {
-                if($this->settings['doubleOptIn']) {
-                    $message = $this->translate('t3chimp.form.almostSubscribed');
+            try {
+                $performedAction = $this->mailChimpService->saveForm($form);
+
+                if($performedAction == Tx_T3chimp_Service_MailChimp::ACTION_SUBSCRIBE) {
+                    if($this->settings['doubleOptIn']) {
+                        $message = $this->translate('t3chimp.form.almostSubscribed');
+                    } else {
+                        $message = $this->translate('t3chimp.form.subscribed');
+                    }
+                } else if($performedAction == Tx_T3chimp_Service_MailChimp::ACTION_UPDATE) {
+                    $message = $this->translate('t3chimp.form.updated');
                 } else {
-                    $message = $this->translate('t3chimp.form.subscribed');
+                    $message = $this->translate('t3chimp.form.unsubscribed');
                 }
-            } else {
-                $message = $this->translate('t3chimp.form.unsubscribed');
+            } catch(Tx_T3chimp_Service_MailChimp_InvalidEmailException $ex) {
+                $message = $this->translate('t3chimp.exception.invalidEmail');
+            } catch(Tx_T3chimp_Service_MailChimp_Exception $ex) {
+                $message = $ex->getMessage();
             }
 
             return json_encode(array('html' => $message), JSON_HEX_TAG | JSON_HEX_QUOT);
