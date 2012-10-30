@@ -6,6 +6,8 @@ $TYPO3_CONF_VARS['FE']['eID_include'][$_EXTKEY] = t3lib_extMgm::extPath($_EXTKEY
 
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][$_EXTKEY] = t3lib_extMgm::extPath($_EXTKEY).'Classes/Hook/Cache.php:&Tx_T3chimp_Hook_Cache->clearCache';
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_MaintenanceCommandController';
+
 Tx_Extbase_Utility_Extension::configurePlugin(
     $_EXTKEY,
     'subscription',
