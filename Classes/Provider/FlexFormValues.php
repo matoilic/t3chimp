@@ -8,7 +8,7 @@ class Tx_T3chimp_Provider_FlexFormValues {
 
     public function __construct() {
         $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
-        $this->api = new MCAPI($globals['apiKey']);
+        $this->api = new Tx_T3chimp_MailChimp_Api($globals['apiKey']);
     }
 
     /**
