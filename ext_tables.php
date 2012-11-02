@@ -1,7 +1,7 @@
 <?php
 if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
-Tx_Extbase_Utility_Extension::registerPlugin($_EXTKEY, 'subscription', 'Newsletter Subscription');
+Tx_Extbase_Utility_Extension::registerPlugin($_EXTKEY, 'subscription', 'T3Chimp: Newsletter Subscription');
 
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_subscription'] = 'pi_flexform';
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_subscription', 'FILE:EXT:t3chimp/Configuration/FlexForms/Subscription.xml');
@@ -25,3 +25,21 @@ if (TYPO3_MODE === 'BE') {
         )
     );
 }
+
+t3lib_div::loadTCA('fe_users');
+$feUserColumns = array(
+    'subscribed_to_newsletter' => array (
+        'exclude' => 0,
+        'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:fe_users.subscribed_to_newsletter',
+        'config' => Array (
+            'type' => 'check',
+            'default' => '0'
+        )
+    )
+);
+t3lib_extMgm::addTCAcolumns('fe_users', $feUserColumns, 1);
+t3lib_extMgm::addToAllTCAtypes('fe_users', 'subscribed_to_newsletter');
+$TCA['fe_users']['interface']['showRecordFieldList'] .= ',subscribed_to_newsletter';
+$TCA['fe_users']['feInterface']['fe_admin_fieldList'] .= ',subscribed_to_newsletter';
+$TCA['fe_users']['palettes'][1]['showitem'] .= ',--linebreak--,subscribed_to_newsletter';
+

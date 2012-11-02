@@ -32,7 +32,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     const ACTION_UPDATE = 2;
 
     /**
-     * @var MCAPI
+     * @var Tx_T3chimp_MailChimp_Api
      */
     protected $api;
 
@@ -65,6 +65,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     protected $settingsProvider;
 
     /**
+     * TODO make sending of welcome message configurable
      * @param string $listId
      * @param array $fieldValues
      * @param array $interestGroupings
@@ -75,6 +76,23 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         $data = $this->prepareFieldValues($fieldValues, $interestGroupings);
 
         $this->api->listSubscribe($listId, $data['email'], $data['mergeVars'], $emailType, $doubleOptIn, false, true, true);
+        $this->checkApi();
+    }
+
+    /**
+     * @param string $listId
+     * @param array $subscribers
+     * @param bool $doubleOptIn
+     * @param string $emailType
+     */
+    public function addSubscribers($listId, $subscribers, $doubleOptIn = false, $emailType = 'html') {
+        for($i = 0, $n = count($subscribers); $i < $n; $i++) {
+            $subscribers[$i]['EMAIL_TYPE'] = $emailType;
+        }
+
+        $response = $this->api->listBatchSubscribe($listId, $subscribers, $doubleOptIn, true, true);
+        $this->logResponseErrors($response);
+
         $this->checkApi();
     }
 
@@ -165,6 +183,25 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
+     * @param string $listId
+     * @return array
+     */
+    public function getSubscribersFor($listId) {
+        $subscribers = array();
+
+        $page = 0;
+        $limit = 15000;
+        do {
+            $response = $this->api->listMembers($listId, 'subscribed', null, $page, $limit);
+            $this->checkApi();
+            $page++;
+            $subscribers = array_merge($subscribers, $response['data']);
+        } while(count($subscribers) < $response['total']);
+
+        return $subscribers;
+    }
+
+    /**
      * @param Tx_Extbase_Object_ObjectManager $objectManager
      */
     public function injectObjectManager(Tx_Extbase_Object_ObjectManager $objectManager) {
@@ -177,6 +214,16 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $provider) {
         $this->settingsProvider = $provider;
         $this->api = new Tx_T3chimp_MailChimp_Api($this->settingsProvider->get('apiKey'), $this->settingsProvider->get('secureConnection'));
+    }
+
+    /**
+     * @param array $response
+     */
+    protected function logResponseErrors($response) {
+        foreach($response['errors'] as $error) {
+            $message = 'T3Chimp: Error(' . $error['code'] . ') => ' . $error['message'];
+            t3lib_div::sysLog($message, 't3chimp', 1);
+        }
     }
 
     /**
@@ -210,12 +257,26 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      */
     public function removeSubscriber($listId, $email) {
         $this->api->listUnsubscribe($listId, $email);
-        $this->checkApi(array(215, 232));
+        $this->checkApi();
+    }
+
+    /**
+     * @param int $listId
+     * @param array $emails
+     * @param bool $delete
+     * @param bool $sendGoodbye
+     * @param bool $sendNotification
+     */
+    public function removeSubscribers($listId, $emails, $delete = FALSE, $sendGoodbye = FALSE, $sendNotification = FALSE) {
+        $response = $this->api->listBatchUnsubscribe($listId, $emails, $delete, $sendGoodbye, $sendNotification);
+        $this->logResponseErrors($response);
+
+        $this->checkApi();
     }
 
     /**
      * @param Tx_T3chimp_MailChimp_Form $form
-     * @return int -1 if the user unsubscribed, 1 if the user subscribed
+     * @return int the performed action
      */
     public function saveForm(Tx_T3chimp_MailChimp_Form $form) {
         $action = 0;

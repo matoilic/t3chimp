@@ -102,6 +102,9 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
         $this->configurationManager = $manager;
 
         $this->settings = $manager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
+        if($this->settings == NULL) {
+            $this->settings = array();
+        }
 
         //read session stored settings for ajax requests
         if(array_key_exists('type', $_GET) && $this->session->settings != null) {
@@ -117,7 +120,7 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
     }
 
     /**
-     * @param Tx_T3chimp_Session_Provider $provider
+     * @param Tx_T3chimp_Provider_Session $provider
      */
     private function injectSessionProvider(Tx_T3chimp_Provider_Session $provider) {
         $this->session = $provider;

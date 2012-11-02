@@ -26,45 +26,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Provider_Session implements t3lib_Singleton {
-    const KEY = 'tx_t3chimp';
+class Tx_T3chimp_Domain_Model_FrontendUser extends Tx_Extbase_Domain_Model_FrontendUser {
 
-    /**
-     * @var tslib_feUserAuth
-     */
-    private $feUser;
-
-    /**
-     * @var array
-     */
-    private $sessionData = array();
-
-    public function __construct() {
-        $this->feUser = $GLOBALS['TSFE']->fe_user;
-        $data = (is_object($this->feUser)) ? $this->feUser->getKey('ses', self::KEY) : array();
-
-        if($data != null) {
-            $this->sessionData = unserialize($data);
-        }
-    }
-
-    public function __get($key) {
-        return $this->sessionData[$key];
-    }
-
-    public function __isset($key) {
-        return isset($this->sessionData[$key]);
-    }
-
-    public function __set($key, $value) {
-        $this->sessionData[$key] = $value;
-        if(is_object($this->feUser)) {
-            $this->feUser->setKey('ses', self::KEY, serialize($this->sessionData));
-            $this->feUser->storeSessionData();
-        }
-    }
-
-    public function __unset($key) {
-        unset($this->sessionData[$key]);
-    }
 }

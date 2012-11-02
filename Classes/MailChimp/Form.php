@@ -89,7 +89,7 @@ class Tx_T3chimp_MailChimp_Form {
         $this->listId = $listId;
     }
 
-    public function bindRequest(Tx_Extbase_MVC_Request $request) {
+    public function bindRequest(Tx_Extbase_MVC_RequestInterface $request) {
         foreach($this->getFields() as $field) {
             $field->bindRequest($request);
         }

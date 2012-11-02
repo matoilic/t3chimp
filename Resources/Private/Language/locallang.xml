@@ -40,6 +40,8 @@
             <label index="t3chimp: Action">Action</label>
             <label index="t3chimp: Subscribe">Subscribe</label>
             <label index="t3chimp: Unsubscribe">Unsubscribe</label>
+
+            <label index="fe_users.subscribed_to_newsletter">Subscribe to newsletter</label>
 		</languageKey>
 
         <languageKey index="de" type="array">
@@ -77,6 +79,8 @@
             <label index="t3chimp: Action">Anmelden</label>
             <label index="t3chimp: Subscribe">Anmelden</label>
             <label index="t3chimp: Unsubscribe">Abmelden</label>
+
+            <label index="fe_users.subscribed_to_newsletter">Newsletter abonnieren</label>
         </languageKey>
 	</data>
 </T3locallang>

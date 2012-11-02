@@ -61,7 +61,7 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
         $this->form = $form;
     }
 
-    public function bindRequest(Tx_Extbase_MVC_Request $request) {
+    public function bindRequest(Tx_Extbase_MVC_RequestInterface $request) {
         if($request->hasArgument($this->getName())) {
             $this->setValue($request->getArgument($this->getName()));
         }

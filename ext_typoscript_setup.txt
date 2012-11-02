@@ -1,3 +1,17 @@
+config.tx_extbase {
+	persistence {
+		enableAutomaticCacheClearing = 1
+		updateReferenceIndex = 0
+		classes {
+			Tx_T3chimp_Domain_Model_FrontendUser {
+				mapping {
+					tableName = fe_users
+				}
+			}
+		}
+	}
+}
+
 plugin.tx_t3chimp {
 	settings {
         debug = 0

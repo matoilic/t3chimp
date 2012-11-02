@@ -40,10 +40,10 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     /**
      * @var array if this field is required, then those keys must be set and not be empty in the value array
      */
-    private static $requiredKeys = array('addr1', 'city', 'zip', 'country');
+    private static $requiredKeys = array('addr1', 'city', 'zip', 'country', 'state');
 
     /**
-     * @param Tx_StaticInfoTablesExtbase_Domain_Repository_StaticCountryRepository $repo
+     * @param Tx_T3chimp_Domain_Repository_CountryRepository $repo
      */
     public function injectStaticCountriesRepository(Tx_T3chimp_Domain_Repository_CountryRepository $repo) {
         $this->countryRepository = $repo;
@@ -150,6 +150,12 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
 
         if(!array_key_exists('country', $value) || empty($value['country'])) {
             $value['country'] = $this->definition['defaultcountry_cc'];
+        }
+
+        foreach(self::$allowedKeys as $key) {
+            if(!array_key_exists($key, $value)) {
+                $value[$key] = '';
+            }
         }
 
         $this->value = $value;
