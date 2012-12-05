@@ -33,7 +33,7 @@
                 you will receive shortly.
             </label>
             <label index="t3chimp.form.unsubscribed">You have successfully unsubscribed.</label>
-            <label index="t3chimp.form.updated">Your subscription data has been updated.</label>
+            <label index="t3chimp.form.updated">Your subscription has been updated.</label>
             <label index="t3chimp.phone.usFormat">eg. 123-123-1234</label>
             <label index="t3chimp.exception.invalidEmail">You cannot subscribe with this email address</label>
 

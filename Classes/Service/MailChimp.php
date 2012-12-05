@@ -41,8 +41,8 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      */
     protected static $exceptions = array(
         211 => 'ListInvalidOption',
-        214 => 'ListNotSubscribed',
-        215 => 'ListAlreadySubscribed',
+        214 => 'ListAlreadySubscribed',
+        215 => 'ListNotSubscribed',
         230 => 'EmailAlreadySubscribed',
         231 => 'EmailAlreadyUnsubscribed',
         232 => 'EmailNotExists',
@@ -310,7 +310,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
                 );
 
                 $action = self::ACTION_SUBSCRIBE;
-            } catch(Tx_T3chimp_Service_MailChimp_EmailAlreadySubscribedException $ex) {
+            } catch(Tx_T3chimp_Service_MailChimp_AlreadySubscribedException $ex) {
                 $this->updateSubscriber(
                     $form->getListId(),
                     $fieldValues,

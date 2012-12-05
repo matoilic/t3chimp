@@ -98,10 +98,15 @@ class Tx_T3chimp_MailChimp_Field_Birthday extends Tx_T3chimp_MailChimp_Field_Abs
 
     protected function validate() {
         $this->isValidated = true;
+
         $value = $this->getValue();
 
         $month = $value['month'];
         $day = $value['day'];
+
+        if(!$this->getIsRequired() && $month == 0 && $day == 0) {
+            return;
+        }
 
         if($this->getIsRequired() && $month == 0 && $day == 0) {
             $this->errors[] = 't3chimp.error.required';

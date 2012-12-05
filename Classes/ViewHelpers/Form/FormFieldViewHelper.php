@@ -50,7 +50,11 @@ class Tx_T3chimp_ViewHelpers_Form_FormFieldViewHelper extends Tx_Fluid_Core_View
      */
     protected function getForm() {
         if($this->form === null) {
-            $this->form = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
+            if(class_exists('TYPO3\CMS\Fluid\ViewHelpers\FormViewHelper')) {
+                $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
+            } else { // <6.0 compatibility
+                $this->form = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
+            }
         }
 
         return $this->form;
