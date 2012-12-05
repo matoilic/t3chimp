@@ -26,6 +26,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Service_MailChimp_ListAlreadySubscribedException extends Tx_T3chimp_Service_MailChimp_Exception {
+class Tx_T3chimp_Service_MailChimp_ListAlreadySubscribedException extends Tx_T3chimp_Service_MailChimp_AlreadySubscribedException {
 
 }
