@@ -1,13 +1,9 @@
-page.includeJS.file1 = EXT:t3chimp/Resources/Public/JavaScripts/jquery.form.min.js
-page.includeJS.file2 = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.js
+page.includeJSFooter.t3chimpJQuery = EXT:t3chimp/Resources/Public/JavaScripts/jquery.min.js
+page.includeJSFooter.t3chimpForm = EXT:t3chimp/Resources/Public/JavaScripts/jquery.form.min.js
+page.includeJSFooter.t3chimp = EXT:t3chimp/Resources/Public/JavaScripts/t3chimp.js
 
 module.tx_t3chimp {
 	settings < plugin.tx_t3chimp.settings
 	persistence < plugin.tx_t3chimp.persistence
 	view < plugin.tx_t3chimp.view
-	view {
-		templateRootPath = {$module.tx_t3chimp.view.templateRootPath}
-		partialRootPath = {$module.tx_t3chimp.view.partialRootPath}
-		layoutRootPath = {$module.tx_t3chimp.view.layoutRootPath}
-	}
 }

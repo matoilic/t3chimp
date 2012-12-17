@@ -6,9 +6,11 @@ $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostP
 if (TYPO3_MODE === 'BE' && TYPO3_version >= '4.6.0') {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_SyncFeUsersCommandController';
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_MaintenanceCommandController';
-}
 
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_MaintenanceCommandController';
+    if (TYPO3_version < '6.0.0') {
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_MaintenanceCommandController';
+    }
+}
 
 Tx_Extbase_Utility_Extension::configurePlugin(
     $_EXTKEY,
