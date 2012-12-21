@@ -4,10 +4,14 @@ if (!defined ('TYPO3_MODE')) die ('Access denied.');
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][$_EXTKEY] = t3lib_extMgm::extPath($_EXTKEY).'Classes/Hook/Cache.php:&Tx_T3chimp_Hook_Cache->clearCache';
 
 if (TYPO3_MODE === 'BE' && TYPO3_version >= '4.6.0') {
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_FeUsersCommandController';
+    $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
 
-    if (TYPO3_version < '6.0.0') {
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_MaintenanceCommandController';
+    if($extConf['debug']) {
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_FeUsersCommandController';
+
+        if (TYPO3_version < '6.0.0') {
+            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_MaintenanceCommandController';
+        }
     }
 }
 

@@ -43,3 +43,17 @@ $TCA['fe_users']['interface']['showRecordFieldList'] .= ',subscribed_to_newslett
 $TCA['fe_users']['feInterface']['fe_admin_fieldList'] .= ',subscribed_to_newsletter';
 $TCA['fe_users']['palettes'][1]['showitem'] .= ',--linebreak--,subscribed_to_newsletter';
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Tx_T3chimp_Scheduler_SyncToMailChimpTask'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncToMailChimpTask.name',
+    'description'      => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncToMailChimpTask.description',
+    'additionalFields' => 'Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider'
+);
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Tx_T3chimp_Scheduler_SyncBackFromMailChimpTask'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncBackFromMailChimpTask.name',
+    'description'      => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncBackFromMailChimpTask.description',
+    'additionalFields' => 'Tx_T3chimp_Scheduler_SyncBackFromMailChimpFieldProvider'
+);
+

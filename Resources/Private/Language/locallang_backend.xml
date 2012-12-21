@@ -9,6 +9,19 @@
 			<label index="mlang_tabs_tab">MailChimp</label>
 			<label index="mlang_labels_tabdescr">MailChimp backend integration</label>
 			<label index="mlang_labels_tablabel">MailChimp</label>
+			<label index="syncToMailChimpTask.name">Synchronize users to MailChimp</label>
+			<label index="syncToMailChimpTask.description">
+                Synchronizes the FE users to a MailChimp list. Be careful. All subscribers on the list that are not
+                in the fe users table and are not marked as subscribers will be permanently removed from the list.
+            </label>
+            <label index="syncBackFromMailChimpTask.name">Synchronize users back from MailChimp</label>
+            <label index="syncBackFromMailChimpTask.description">
+                Marks all FE users as subscribers that are on the MailChimp list.
+            </label>
+            <label index="syncToMailChimpTask.label.listId">List</label>
+            <label index="syncToMailChimpTask.label.mappings">Database Field Mappings</label>
+            <label index="syncBackFromMailChimpTask.label.listId">List</label>
+            <label index="syncBackFromMailChimpTask.label.emailField">Email Database Field</label>
 		</languageKey>
 	</data>
 </T3locallang>

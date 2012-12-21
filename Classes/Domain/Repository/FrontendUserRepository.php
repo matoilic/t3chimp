@@ -37,6 +37,14 @@ class Tx_T3chimp_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Per
         return $query->execute();
     }
 
+    public function getFields() {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->getQuerySettings()->setReturnRawQueryResult(true);
+
+        $query->statement("SELECT `column_name` FROM `information_schema`.`columns` WHERE `table_name`='fe_users'");
+    }
+
     /**
      * @param string $emailField
      * @param string $email

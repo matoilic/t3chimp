@@ -13,10 +13,6 @@ config.tx_extbase {
 }
 
 plugin.tx_t3chimp {
-	settings {
-        debug = 0
-	}
-
 	persistence {
 	    classes {
             Tx_T3chimp_Domain_Model_Country {

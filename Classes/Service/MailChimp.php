@@ -183,6 +183,16 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
+     * @return array
+     */
+    public function getLists() {
+        $lists = $this->api->lists();
+        $this->checkApi();
+
+        return $lists['data'];
+    }
+
+    /**
      * @param string $listId
      * @return array
      */
