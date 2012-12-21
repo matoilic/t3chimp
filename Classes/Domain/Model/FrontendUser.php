@@ -27,5 +27,22 @@
  ***************************************************************/
 
 class Tx_T3chimp_Domain_Model_FrontendUser extends Tx_Extbase_Domain_Model_FrontendUser {
+    /**
+     * @var int
+     */
+    protected $subscribedToNewsletter = 0;
 
+    /**
+     * @return int
+     */
+    public function getSubscribedToNewsletter() {
+        return $this->subscribedToNewsletter;
+    }
+
+    /**
+     * @param int $subscribedToNewsletter
+     */
+    public function setSubscribedToNewsletter($subscribedToNewsletter) {
+        $this->subscribedToNewsletter = $subscribedToNewsletter;
+    }
 }

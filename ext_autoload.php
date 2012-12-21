@@ -6,7 +6,7 @@ $extensionClassesPath = t3lib_extMgm::extPath('t3chimp') . 'Classes/';
 return array(
 	'tx_t3chimp_command_maintenancecommandcontroller' => $extensionClassesPath . 'Command/MaintenanceCommandController.php',
 	'tx_t3chimp_command_request' => $extensionClassesPath . 'Command/Request.php',
-	'tx_t3chimp_command_syncfeuserscommandcontroller' => $extensionClassesPath . 'Command/SyncFeUsersCommandController.php',
+	'tx_t3chimp_command_feuserscommandcontroller' => $extensionClassesPath . 'Command/FeUsersCommandController.php',
 	'tx_t3chimp_controller_backendcontroller' => $extensionClassesPath . 'Controller/BackendController.php',
 	'tx_t3chimp_controller_subscriptionscontroller' => $extensionClassesPath . 'Controller/SubscriptionsController.php',
 	'tx_t3chimp_core_bootstrap' => $extensionClassesPath . 'Core/Bootstrap.php',

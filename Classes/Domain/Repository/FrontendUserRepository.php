@@ -36,4 +36,22 @@ class Tx_T3chimp_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Per
 
         return $query->execute();
     }
+
+    /**
+     * @param string $emailField
+     * @param string $email
+     * @param int $state
+     */
+    public function updateNewsletterFlag($emailField, $email, $state) {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
+
+        $query->matching($query->equals($emailField, $email));
+        $result = $query->execute();
+
+        if(count($result > 0)) {
+            $result[0]->setSubscribedToNewsletter($state);
+            $this->update($result[0]);
+        }
+    }
 }
