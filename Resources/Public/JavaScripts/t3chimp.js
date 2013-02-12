@@ -5,7 +5,6 @@
         event.preventDefault();
 
         $form.addClass('t3chimp-loading');
-        $form.append('<input type="hidden" name="CSRF_TOKEN" value="' + prop('csrf-token') + '">');
 
         $form.ajaxSubmit({
             success: onResponse,

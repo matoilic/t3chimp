@@ -45,11 +45,6 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
     public function initializeAction() {
         parent::initializeAction();
 
-        if(!isset($this->session->csrfToken)) {
-            $this->session->csrfToken = md5(rand() . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']);
-        }
-
-        $this->response->addAdditionalHeaderData('<meta name="t3chimp:csrf-token" content="' . $this->session->csrfToken . '" />');
         $this->response->addAdditionalHeaderData('<meta name="t3chimp:lang" content="' . $GLOBALS['TSFE']->sys_language_uid . '" />');
         $this->response->addAdditionalHeaderData('<meta name="t3chimp:lang-iso" content="' . $GLOBALS['TSFE']->sys_language_isocode . '" />');
         $this->response->addAdditionalHeaderData('<meta name="t3chimp:pid" content="' . $GLOBALS['TSFE']->id . '" />');
@@ -62,7 +57,10 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
             var_dump($this->mailChimpService->getFieldsFor($this->settings['subscriptionList']));
             echo '-->';
         }
-        
+
+        $this->view->assign('language', $GLOBALS['TSFE']->sys_language_uid);
+        $this->view->assign('languageIso', strtolower($GLOBALS['TSFE']->sys_language_isocode));
+        $this->view->assign('pageId', $GLOBALS['TSFE']->id);
         $this->view->assign('form', $this->mailChimpService->getForm());
     }
 

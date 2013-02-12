@@ -47,12 +47,13 @@ class Tx_T3chimp_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
         /** @var Tx_Extbase_MVC_Web_FrontendRequestHandler $requestHandler */
         $requestHandler = $requestHandlerResolver->resolveRequestHandler();
 
-        $GLOBALS['TSFE']->sys_language_uid = $_SERVER['HTTP_X_LANGUAGE'];
-        if(strlen($_SERVER['HTTP_X_LANGUAGE_ISO']) > 0) {
-            $GLOBALS['TSFE']->sys_language_isocode = $_SERVER['HTTP_X_LANGUAGE_ISO'];
-            $GLOBALS['TSFE']->config['config']['language'] = $GLOBALS['TSFE']->sys_language_isocode;
+        $GLOBALS['TSFE']->sys_language_uid = $_GET['L'];
+        if(strlen($_GET['LISO']) > 0) {
+            $GLOBALS['TSFE']->sys_language_isocode = $_GET['LISO'];
+            $GLOBALS['TSFE']->config['config']['language'] = $_GET['LISO'];
         }
-        $GLOBALS['TSFE']->id = $_SERVER['HTTP_X_PID'];
+
+        $GLOBALS['TSFE']->id = $_GET['id'];
 
         $response = $requestHandler->handleRequest();
 
