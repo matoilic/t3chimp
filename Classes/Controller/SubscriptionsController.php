@@ -42,12 +42,6 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
      */
     protected $session;
 
-    protected function checkCsrfToken() {
-        if($_SERVER['HTTP_X_CSRF_TOKEN'] !== $this->session->csrfToken && $_POST['CSRF_TOKEN'] !== $this->session->csrfToken) {
-            throw new Exception('t3chimp: invalid CRSF token');
-        }
-    }
-
     public function initializeAction() {
         parent::initializeAction();
 
@@ -104,8 +98,6 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
 
 
     public function processAction() {
-        //$this->checkCsrfToken();
-
         $form = $this->mailChimpService->getFormFor($this->request->getArgument('list'));
         $form->bindRequest($this->request);
 
