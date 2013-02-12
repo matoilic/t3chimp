@@ -104,9 +104,9 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
 
 
     public function processAction() {
-        $this->checkCsrfToken();
+        //$this->checkCsrfToken();
 
-        $form = $this->mailChimpService->getForm();
+        $form = $this->mailChimpService->getFormFor($this->request->getArgument('list'));
         $form->bindRequest($this->request);
 
         if($form->isValid()) {
