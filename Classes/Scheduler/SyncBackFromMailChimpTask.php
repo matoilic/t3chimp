@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Scheduler_SyncBackFromMailChimpTask extends Tx_Extbase_Scheduler_Task {
+class Tx_T3chimp_Scheduler_SyncBackFromMailChimpTask extends Tx_T3chimp_Scheduler_Base {
     /**
      * @var string
      */
@@ -47,33 +47,20 @@ class Tx_T3chimp_Scheduler_SyncBackFromMailChimpTask extends Tx_Extbase_Schedule
      * @return boolean Returns TRUE on successful execution, FALSE on error
      */
     public function execute() {
-        /** @var Tx_Extbase_Object_ObjectManager $objectManager */
-        $objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-        /** @var Tx_Extbase_Scheduler_TaskExecutor $taskExecutor */
-        $taskExecutor = $objectManager->get('Tx_Extbase_Scheduler_TaskExecutor');
+        parent::execute();
 
         try {
-            $taskExecutor->execute($this);
-            return true;
+            $subscribers = $this->retrieveSubscribers($this->listId);
+
+            foreach($subscribers as $subscriber) {
+                $this->userRepo->updateNewsletterFlag($this->emailField, $subscriber['email'], 1);
+            }
         } catch (Exception $e) {
-            t3lib_div::sysLog($e->getMessage(), $this->getCommandIdentifier(), 3);
+            t3lib_div::sysLog($e->getMessage(), 't3chimp', 3);
+            return false;
         }
 
-        return false;
-    }
-
-    public function getArguments() {
-        return array(
-            'listId' => $this->getListId(),
-            'emailField' => $this->getEmailField()
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public function getCommandIdentifier() {
-        return 't3chimp:feusers:syncbackfrommailchimp';
+        return true;
     }
 
     /**

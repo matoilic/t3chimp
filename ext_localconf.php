@@ -7,8 +7,6 @@ if (TYPO3_MODE === 'BE' && TYPO3_version >= '4.6.0') {
     $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
 
     if($extConf['debug']) {
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_FeUsersCommandController';
-
         if (TYPO3_version < '6.0.0') {
             $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'Tx_T3chimp_Command_MaintenanceCommandController';
         }

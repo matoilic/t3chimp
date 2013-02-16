@@ -38,10 +38,7 @@ $feUserColumns = array(
     )
 );
 t3lib_extMgm::addTCAcolumns('fe_users', $feUserColumns, 1);
-t3lib_extMgm::addToAllTCAtypes('fe_users', 'subscribed_to_newsletter');
-$TCA['fe_users']['interface']['showRecordFieldList'] .= ',subscribed_to_newsletter';
-$TCA['fe_users']['feInterface']['fe_admin_fieldList'] .= ',subscribed_to_newsletter';
-$TCA['fe_users']['palettes'][1]['showitem'] .= ',--linebreak--,subscribed_to_newsletter';
+t3lib_extMgm::addToAllTCATypes('fe_users','--div--;T3Chimp,subscribed_to_newsletter;;;;1-1-1');
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Tx_T3chimp_Scheduler_SyncToMailChimpTask'] = array(
     'extension'        => $_EXTKEY,

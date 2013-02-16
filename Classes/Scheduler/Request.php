@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Command_Request implements Tx_Extbase_MVC_RequestInterface {
+class Tx_T3chimp_Scheduler_Request implements Tx_Extbase_MVC_RequestInterface {
     /**
      * @var array
      */
