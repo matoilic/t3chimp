@@ -19,7 +19,7 @@ Tx_Extbase_Utility_Extension::configurePlugin(
     $_EXTKEY,
     'subscription',
     array(
-        'Subscriptions' => 'index,process,subscribed,unsubscribed'
+        'Subscriptions' => 'index,process'
     ),
     array(
         'Subscriptions' => 'process'

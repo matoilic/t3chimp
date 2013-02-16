@@ -58,7 +58,14 @@ class Tx_T3chimp_Scheduler_SyncBackFromMailChimpFieldProvider implements tx_sche
 
         $codeMailField = '<select name="tx_scheduler[emailField]">';
 
-        foreach(array_keys($GLOBALS['TCA']['fe_users']['columns']) as $column) {
+        foreach($GLOBALS['TCA']['fe_users']['columns'] as $column => $config) {
+            $label = $GLOBALS['LANG']->sL($config['label']);
+            if(strlen($label) == 0) {
+                $label = $column;
+            } else {
+                $label = substr($label, 0, strlen($label) - 1);
+            }
+
             $selected = ($task != null && $column == $task->getEmailField()) ? ' selected="selected"' : '';
             $codeMailField .= '<option value="' . $column . '"' . $selected . '>' . $column . '</option>';
         }

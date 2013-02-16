@@ -28,6 +28,11 @@
 
 class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_AdditionalFieldProvider {
     /**
+     * @var string
+     */
+    private $fieldOptions;
+
+    /**
      * @var Tx_T3chimp_Service_MailChimp
      */
     private $mailChimp;
@@ -38,58 +43,151 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
         $this->mailChimp = $objectManager->get('Tx_T3chimp_Service_MailChimp');
     }
 
+    private function createAddressField($fieldDefinition, $values) {
+        $tag = $fieldDefinition['tag'];
+
+        $code = '<strong>' . $fieldDefinition['name'] . '</strong><br />';
+
+        $name = $tag . '.addr1';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.line1') . '<br>';
+        $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
+
+        $name = $tag . '.addr2';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.line2') . '<br>';
+        $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
+
+        $name = $tag . '.city';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.city') . '<br>';
+        $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
+
+        $name = $tag . '.state';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.state') . '<br>';
+        $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
+
+        $name = $tag . '.zip';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.zipCode') . '<br>';
+        $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
+
+        $name = $tag . '.country';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.country') . '<br>';
+        $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
+
+        return $code;
+    }
+
+    /**
+     * @return string
+     */
+    private function createFieldOptions() {
+        if($this->fieldOptions == null) {
+            $this->fieldOptions = '<option value=""></option>';
+            foreach($GLOBALS['TCA']['fe_users']['columns'] as $column => $config) {
+                $label = $GLOBALS['LANG']->sL($config['label']);
+                if(strlen($label) == 0) {
+                    $label = $column;
+                } else {
+                    $label = substr($label, 0, strlen($label) - 1);
+                }
+
+                $this->fieldOptions .= '<option value="' . $column . '">' . $label . ' (' . $column . ')</option>';
+            }
+        }
+
+        return $this->fieldOptions;
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @return string
+     */
+    private function createFieldSelection($name, $value) {
+        $code = '<select name="tx_scheduler[mappings][' . $name . ']">';
+
+        if(strlen($value) > 0) {
+            $value = 'value="' . $value . '"';
+            $code .= str_replace(
+                $value,
+                $value . ' selected="selected"',
+                $this->createFieldOptions()
+            );
+        } else {
+            $code .= $this->createFieldOptions();
+        }
+
+        return $code . '</select>';
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     */
+    private function createListSelection($value) {
+        $code = '<select name="tx_scheduler[listId]" id="listId">';
+        $code .= '<option value=""></option>';
+
+        foreach($this->mailChimp->getLists() as $list) {
+            $selected = ($list['id'] == $value) ? ' selected="selected"' : '';
+            $code .= '<option value="' . $list['id'] . '"' . $selected . '>' . htmlentities($list['name']) . '</option>';
+        }
+
+        $code .= '</select>';
+        $code .= "<script type='text/javascript'>
+            $('listId').observe('change', function() {
+                alert('You need to save and reopen the task to continue with the configuration');
+            });
+        </script>";
+
+        return $code;
+    }
+
+    /**
+     * @param array $fieldDefinition
+     * @param string $value
+     * @return string
+     */
+    private function createSimpleField($fieldDefinition, $value) {
+        $code = '<strong>' . $fieldDefinition['name'] . '</strong><br />';
+        $code .= $this->createFieldSelection(
+            $fieldDefinition['tag'],
+            $value
+        );
+
+        return $code;
+    }
+
     /**
      * Gets additional fields to render in the form to add/edit a task
      *
      * @param array $taskInfo Values of the fields from the add/edit task form
-     * @param Tx_T3chimp_Scheduler_SyncToMailChimpTask $task The task object being eddited. Null when adding a task!
+     * @param Tx_T3chimp_Scheduler_SyncToMailChimpTask $task The task object being edited. Null when adding a task!
      * @param tx_scheduler_Module $schedulerModule Reference to the scheduler backend module
      * @return array A two dimensional array, array('Identifier' => array('fieldId' => array('code' => '', 'label' => '', 'cshKey' => '', 'cshLabel' => ''))
      */
     public function getAdditionalFields(array &$taskInfo, $task, tx_scheduler_Module $schedulerModule) {
         $fields = array();
-
-        $code = '<select name="tx_scheduler[listId]">';
-
-        foreach($this->mailChimp->getLists() as $list) {
-            $selected = ($task != null && $list['id'] == $task->getListId()) ? ' selected="selected"' : '';
-            $code .= '<option value="' . $list['id'] . '"' . $selected . '>' . htmlentities($list['name']) . '</option>';
-        }
-
-        $code .= '</select>';
+        $listId = ($task != null) ? $task->getListId() : null;
 
         $fields['listId'] = array(
-            'code' => $code,
+            'code' => $this->createListSelection($listId),
             'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncToMailChimpTask.label.listId'
         );
 
 
-        if($task != null) {
+        if($task != null && strlen($task->getListId()) > 0) {
             $code = '';
-
-            $columnOptions = '';
-            foreach(array_keys($GLOBALS['TCA']['fe_users']['columns']) as $column) {
-                $columnOptions .= '<option value="' . $column . '">' . $column . '</option>';
-            }
 
             $fieldDefinitions = $this->mailChimp->getFieldsFor($task->getListId());
             $existingMappings = $task->getMappings();
-            foreach($fieldDefinitions as $fieldDefinition) {
-                $code .= '<strong>' . $fieldDefinition['name'] . '</strong><br />';
-                $code .= '<select name="tx_scheduler[mappings][' . $fieldDefinition['tag'] . ']>';
 
-                if(array_key_exists($fieldDefinition['tag'], $existingMappings)) {
-                    $value = 'value="' . $existingMappings[$fieldDefinition['tag']] . '"';
-                    $code .= str_replace(
-                        $value,
-                        $value . ' selected="selected"',
-                        $columnOptions
-                    );
+            foreach($fieldDefinitions as $fieldDefinition) {
+                if($fieldDefinition['field_type'] != 'address') {
+                    $code .= $this->createSimpleField($fieldDefinition, $existingMappings[$fieldDefinition['tag']]);
                 } else {
-                    $code .= $columnOptions;
+                    $code .= $this->createAddressField($fieldDefinition, $existingMappings);
                 }
 
-                $code .= '</select><br />';
+                $code .= '<br />';
             }
 
             $fields['mappings'] = array(

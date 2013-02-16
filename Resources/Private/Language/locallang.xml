@@ -36,6 +36,12 @@
             <label index="t3chimp.form.updated">Your subscription has been updated.</label>
             <label index="t3chimp.phone.usFormat">eg. 123-123-1234</label>
             <label index="t3chimp.exception.invalidEmail">You cannot subscribe with this email address</label>
+            <label index="t3chimp.address.line1">Address Line 1</label>
+            <label index="t3chimp.address.line2">Address Line 2</label>
+            <label index="t3chimp.address.city">City</label>
+            <label index="t3chimp.address.state">State/Province/Region</label>
+            <label index="t3chimp.address.zipCode">Postal/Zip Code</label>
+            <label index="t3chimp.address.country">Country</label>
 
             <label index="t3chimp: Action">Action</label>
             <label index="t3chimp: Subscribe">Subscribe</label>
@@ -75,6 +81,12 @@
             <label index="t3chimp.form.updated">Ihre Anmeldung wurde aktualisiert.</label>
             <label index="t3chimp.phone.usFormat">z.B. 123-123-1234</label>
             <label index="t3chimp.exception.invalidEmail">Unzulässige E-Mail Adresse</label>
+            <label index="t3chimp.address.line1">Adresszeile 1</label>
+            <label index="t3chimp.address.line2">Adresszeile 2</label>
+            <label index="t3chimp.address.city">Stadt</label>
+            <label index="t3chimp.address.state">Staat/Provinz/Region</label>
+            <label index="t3chimp.address.zipCode">PLZ</label>
+            <label index="t3chimp.address.country">Land</label>
 
             <label index="t3chimp: Action">Anmelden</label>
             <label index="t3chimp: Subscribe">Anmelden</label>

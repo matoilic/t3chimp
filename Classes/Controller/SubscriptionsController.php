@@ -28,29 +28,13 @@
 
 class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Controller_ActionController {
     /**
-     * @var int
-     */
-    private $listId;
-
-    /**
      * @var Tx_T3chimp_Service_MailChimp
      */
     private $mailChimpService;
 
     /**
-     * @var Tx_T3chimp_Session_Provider
+     * @return void
      */
-    protected $session;
-
-    public function initializeAction() {
-        parent::initializeAction();
-
-        $this->response->addAdditionalHeaderData('<meta name="t3chimp:lang" content="' . $GLOBALS['TSFE']->sys_language_uid . '" />');
-        $this->response->addAdditionalHeaderData('<meta name="t3chimp:lang-iso" content="' . $GLOBALS['TSFE']->sys_language_isocode . '" />');
-        $this->response->addAdditionalHeaderData('<meta name="t3chimp:pid" content="' . $GLOBALS['TSFE']->id . '" />');
-    }
-
-
     public function indexAction() {
         if($this->settings['debug']) {
             echo '<!--';
@@ -80,21 +64,15 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
     }
 
     /**
-     * @param Tx_T3chimp_Provider_Session $provider
-     */
-    public function injectSessionProvider(Tx_T3chimp_Provider_Session $provider) {
-        $this->session = $provider;
-    }
-
-    /**
      * @param Tx_T3chimp_Provider_Settings $provider
      */
     public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $provider) {
         $this->settings = $provider->getAll();
     }
 
-
-
+    /*
+     * @return void
+     */
     public function processAction() {
         $form = $this->mailChimpService->getFormFor($this->request->getArgument('list'));
         $form->bindRequest($this->request);
