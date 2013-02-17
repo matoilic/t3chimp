@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'T3Chimp MailChimp Integration',
-	'description' => 'MailChimp plugin for Typo3. Integrates subscription forms into Typo3.',
+	'description' => 'Integrates MailChimp into Typo3.',
 	'category' => 'plugin',
 	'shy' => 0,
 	'version' => '1.0.0',
