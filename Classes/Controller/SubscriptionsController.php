@@ -39,6 +39,8 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
         if($this->settings['debug']) {
             echo '<!--';
             var_dump($this->mailChimpService->getFieldsFor($this->settings['subscriptionList']));
+            echo "\n------------------------\n";
+            var_dump($this->mailChimpService->getInterestGroupingsFor($this->settings['subscriptionList']));
             echo '-->';
         }
 

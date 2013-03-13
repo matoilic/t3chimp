@@ -31,7 +31,28 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
         return $this->definition['groupingId'];
     }
 
+    public function getDisplayAsDropdown() {
+        return $this->definition['form_field'] == 'dropdown';
+    }
+
+    public function getDisplayAsCheckboxes() {
+        return $this->definition['form_field'] == 'checkboxes';
+    }
+
+    public function getDisplayAsRadios() {
+        return $this->definition['form_field'] == 'radio';
+    }
+
     public function getTag() {
         return $this->definition['name'];
+    }
+
+    public function setValue($value) {
+        if($value != null && !is_array($value)) {
+            parent::setValue(array($value));
+            return;
+        }
+
+        parent::setValue($value);
     }
 }

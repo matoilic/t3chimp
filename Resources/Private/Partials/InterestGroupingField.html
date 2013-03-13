@@ -1,2 +1,12 @@
 {namespace t = Tx_T3chimp_ViewHelpers}
-<t:renderPartial name="CheckboxesField" arguments="{field: field}" />
+<f:if condition="{field.displayAsCheckboxes}">
+    <t:renderPartial name="CheckboxesField" arguments="{field: field}" />
+</f:if>
+
+<f:if condition="{field.displayAsRadios}">
+    <t:renderPartial name="RadioField" arguments="{field: field}" />
+</f:if>
+
+<f:if condition="{field.displayAsDropdown}">
+    <t:renderPartial name="DropdownField" arguments="{field: field}" />
+</f:if>

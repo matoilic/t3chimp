@@ -185,7 +185,8 @@ class Tx_T3chimp_MailChimp_Form {
                 'choices' => $grouping['groups'],
                 'tag' => $grouping['name'],
                 'name' => $grouping['name'],
-                'groupingId' => $grouping['id']
+                'groupingId' => $grouping['id'],
+                'form_field' => $grouping['form_field']
             );
             $this->fields[] = new Tx_T3chimp_MailChimp_Field_InterestGrouping($definition, $this);
         }
