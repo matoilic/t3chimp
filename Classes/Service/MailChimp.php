@@ -255,7 +255,9 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
 
         $mergeVars['GROUPINGS'] = array();
         foreach($interestGroupings as $grouping) {
-            $mergeVars['GROUPINGS'][] = array('id' => $grouping['id'], 'groups' => implode(',', $grouping['selection']));
+            //commas in interest group names should be escaped with a backslash
+            $selection = str_replace(',', '\\,', $grouping['selection']);
+            $mergeVars['GROUPINGS'][] = array('id' => $grouping['id'], 'groups' => implode(',', $selection));
         }
 
         return array('email' => $email, 'mergeVars' => $mergeVars);
