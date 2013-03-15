@@ -77,14 +77,13 @@ class Tx_T3chimp_MailChimp_Field_Birthday extends Tx_T3chimp_MailChimp_Field_Abs
     }
 
     /**
-     * @param array $value in the format
-     *  array('month' => x, 'day' => x)
-     * @throws Exception
+     * @param array $value in the format array('month' => x, 'day' => x)
+     * @throws Tx_T3chimp_MailChimp_Exception
      */
     public function setValue($value) {
         foreach(array_keys($value) as $key) {
             if($key != 'month' && $key != 'day') {
-                throw new Exception('Unallowed key ' . htmlentities($key) . ' in value for field' . $this->getName());
+                throw new Tx_T3chimp_MailChimp_Exception('Unallowed key ' . htmlentities($key) . ' in value for field' . $this->getName());
             }
         }
 

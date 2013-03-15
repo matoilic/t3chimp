@@ -44,7 +44,7 @@ class Tx_T3chimp_MailChimp_Field_Checkboxes extends Tx_T3chimp_MailChimp_Field_R
 
     /**
      * @param mixed $value
-     * @throws Exception
+     * @throws Tx_T3chimp_MailChimp_Exception
      */
     public function setValue($value) {
         if($value == null) {
@@ -53,12 +53,12 @@ class Tx_T3chimp_MailChimp_Field_Checkboxes extends Tx_T3chimp_MailChimp_Field_R
         }
 
         if(!is_array($value)) {
-            throw new Exception('Value for checkboxes field must be an array');
+            throw new Tx_T3chimp_MailChimp_Exception('Value for checkboxes field must be an array');
         }
 
         foreach($value as $selection) {
             if(!in_array($selection, $this->validValues)) {
-                throw new Exception('Invalid choice ' . htmlentities($selection) . ' for field ' . $this->getName());
+                throw new Tx_T3chimp_MailChimp_Exception('Invalid choice ' . htmlentities($selection) . ' for field ' . $this->getName());
             }
         }
 

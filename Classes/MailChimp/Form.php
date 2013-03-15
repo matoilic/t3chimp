@@ -160,11 +160,11 @@ class Tx_T3chimp_MailChimp_Form {
 
     /**
      * @return bool
-     * @throws Exception
+     * @throws Tx_T3chimp_MailChimp_Exception
      */
     public function isValid() {
         if(!$this->isBound) {
-            throw new Exception('Can not validate an unbound form');
+            throw new Tx_T3chimp_MailChimp_Exception('Can not validate an unbound form');
         }
 
         foreach($this->getFields() as $field) {

@@ -139,12 +139,12 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     /**
      * @param array $value in the format
      *  array('addr1' => '', 'addr2' => '', 'state' => '', 'city' => '', 'zip' => '', 'country' => '')
-     * @throws Exception
+     * @throws Tx_T3chimp_MailChimp_Exception
      */
     public function setValue($value) {
         foreach(array_keys($value) as $key) {
             if(!in_array($key, self::$allowedKeys)) {
-                throw new Exception('Unallowed key in value ' . htmlentities($key));
+                throw new Tx_T3chimp_MailChimp_Exception('Unallowed key in value ' . htmlentities($key));
             }
         }
 

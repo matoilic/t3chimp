@@ -53,6 +53,10 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
             return;
         }
 
+        if(!$this->getDisplayAsCheckboxes() && count($value) > 1) {
+            throw new Tx_T3chimp_MailChimp_Exception('Interest groupings with a field type other than checkboxes can only have one value');
+        }
+
         parent::setValue($value);
     }
 }
