@@ -145,7 +145,11 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
             $interestGroupings = array();
         }
 
-        $form = $this->objectManager->create('Tx_T3chimp_MailChimp_Form', $fields, $listId);
+        if(TYPO3_version < '6.1.0') {
+            $form = $this->objectManager->create('Tx_T3chimp_MailChimp_Form', $fields, $listId);
+        } else {
+            $form = $this->objectManager->get('Tx_T3chimp_MailChimp_Form', $fields, $listId);
+        }
         $form->setInterestGroupings($interestGroupings);
 
         $this->writeToCache($form);

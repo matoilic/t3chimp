@@ -38,17 +38,9 @@ class Tx_T3chimp_Scheduler_SyncBackFromMailChimpTask extends Tx_T3chimp_Schedule
     private $listId;
 
     /**
-     * This is the main method that is called when a task is executed
-     * It MUST be implemented by all classes inheriting from this one
-     * Note that there is no error handling, errors and failures are expected
-     * to be handled and logged by the client implementations.
-     * Should return TRUE on successful execution, FALSE on error.
-     *
      * @return boolean Returns TRUE on successful execution, FALSE on error
      */
-    public function execute() {
-        parent::execute();
-
+    public function executeTask() {
         try {
             $subscribers = $this->retrieveSubscribers($this->listId);
 

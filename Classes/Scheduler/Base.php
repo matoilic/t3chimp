@@ -28,6 +28,11 @@
 
 abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
     /**
+     * @var Tx_Extbase_Configuration_ConfigurationManager
+     */
+    private $configurationManager;
+
+    /**
      * @var array
      */
     protected $extConf;
@@ -56,7 +61,6 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
 
     /**
      * This is the main method that is called when a task is executed
-     * It MUST be implemented by all classes inheriting from this one
      * Note that there is no error handling, errors and failures are expected
      * to be handled and logged by the client implementations.
      * Should return TRUE on successful execution, FALSE on error.
@@ -68,9 +72,43 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
 
         /** @var Tx_Extbase_Object_ObjectManager $objectManager */
         $this->objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
+        $this->configurationManager = $this->objectManager->get('Tx_Extbase_Configuration_ConfigurationManager');
         $this->mailChimp = $this->objectManager->get('Tx_T3chimp_Service_MailChimp');
         $this->userRepo = $this->objectManager->get('Tx_T3chimp_Domain_Repository_FrontendUserRepository');
+
+        $this->configurationManager->setConfiguration(array('extensionName' => 'T3chimp'));
+        $typoScriptSetup = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        if (isset($typoScriptSetup['config.']['tx_extbase.']['objects.'])) {
+            $objectContainer = t3lib_div::makeInstance('Tx_Extbase_Object_Container_Container');
+            foreach ($typoScriptSetup['config.']['tx_extbase.']['objects.'] as $classNameWithDot => $classConfiguration) {
+                if (isset($classConfiguration['className'])) {
+                    $originalClassName = rtrim($classNameWithDot, '.');
+                    $objectContainer->registerImplementation($originalClassName, $classConfiguration['className']);
+                }
+            }
+        }
+
+        /** @var Tx_Extbase_Reflection_Service $reflectionService */
+        $reflectionService = $this->objectManager->get('Tx_Extbase_Reflection_Service');
+        $reflectionService->setDataCache($GLOBALS['typo3CacheManager']->getCache('extbase_reflection'));
+        if (!$reflectionService->isInitialized()) {
+            $reflectionService->initialize();
+        }
+
+        $state = $this->executeTask();
+
+        /** @var Tx_Extbase_Persistence_Manager $persistenceManager */
+        $persistenceManager = $this->objectManager->get('Tx_Extbase_Persistence_Manager');
+        $persistenceManager->persistAll();
+        $reflectionService->shutdown();
+
+        return $state;
     }
+
+    /**
+     * @return boolean Returns TRUE on successful execution, FALSE on error
+     */
+    abstract function executeTask();
 
     /**
      * @param string $listId

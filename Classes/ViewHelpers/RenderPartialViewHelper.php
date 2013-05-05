@@ -46,7 +46,11 @@ class Tx_T3chimp_ViewHelpers_RenderPartialViewHelper extends Tx_Fluid_Core_ViewH
      */
     public function render($name, array $arguments = array()) {
         /* @var Tx_Fluid_ViewHelpers_RenderViewHelper $renderer */
-        $renderer = $this->objectManager->create('Tx_Fluid_ViewHelpers_RenderViewHelper');
+        if(TYPO3_version < '6.1.0') {
+            $renderer = $this->objectManager->create('Tx_Fluid_ViewHelpers_RenderViewHelper');
+        } else {
+            $renderer = $this->objectManager->get('Tx_Fluid_ViewHelpers_RenderViewHelper');
+        }
 
         if(method_exists($this, 'setControllerContext')) { //4.5.x compatibility
             $renderer->setControllerContext($this->controllerContext);

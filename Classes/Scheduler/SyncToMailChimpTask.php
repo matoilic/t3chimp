@@ -43,7 +43,11 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
     private function addSubscribedUsers(array $users) {
         $fieldDefinitions = $this->mailChimp->getFieldsFor($this->listId);
         /** @var Tx_T3chimp_MailChimp_Form $form */
-        $form = $this->objectManager->create('Tx_T3chimp_MailChimp_Form', $fieldDefinitions, $this->listId);
+        if(TYPO3_version < '6.1.0') {
+            $form = $this->objectManager->create('Tx_T3chimp_MailChimp_Form', $fieldDefinitions, $this->listId);
+        } else {
+            $form = $this->objectManager->get('Tx_T3chimp_MailChimp_Form', $fieldDefinitions, $this->listId);
+        }
 
         $usersToSubscribe = array();
         foreach($users as $user) {
@@ -69,7 +73,11 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
      * @return Tx_T3chimp_Command_Request
      */
     private function createRequest($user) {
-        $request = $this->objectManager->create('Tx_T3chimp_Scheduler_Request');
+        if(TYPO3_version < '6.1.0') {
+            $request = $this->objectManager->create('Tx_T3chimp_Scheduler_Request');
+        } else {
+            $request = $this->objectManager->get('Tx_T3chimp_Scheduler_Request');
+        }
 
         $subscriber = array();
         foreach($this->mappings as $tag => $dbField) {
@@ -106,17 +114,9 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
     }
 
     /**
-     * This is the main method that is called when a task is executed
-     * It MUST be implemented by all classes inheriting from this one
-     * Note that there is no error handling, errors and failures are expected
-     * to be handled and logged by the client implementations.
-     * Should return TRUE on successful execution, FALSE on error.
-     *
      * @return boolean Returns TRUE on successful execution, FALSE on error
      */
-    public function execute() {
-        parent::execute();
-
+    public function executeTask() {
         $users = $this->retrieveUsers();
 
         try {

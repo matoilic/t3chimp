@@ -27,6 +27,9 @@
  ***************************************************************/
 
 class Tx_T3chimp_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Persistence_Repository {
+    /**
+     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
     public function findSubscribedUsers() {
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
@@ -45,14 +48,13 @@ class Tx_T3chimp_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Per
     public function updateNewsletterFlag($emailField, $email, $state) {
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
-        $query->getQuerySettings()->setReturnRawQueryResult(true);
+        $query->matching($query->equals($emailField, $email));
+        $subscribers = $query->execute()->toArray();
 
-        $query->statement("
-            UPDATE `fe_users`
-            SET `subscribed_to_newsletter` = " . mysql_real_escape_string($state) . "
-            WHERE `" . $emailField . "` = '" . mysql_real_escape_string($email) . "'"
-        );
-
-        $query->execute();
+        /** @var Tx_T3chimp_Domain_Model_FrontendUser $subscriber */
+        foreach($subscribers as $subscriber) {
+            $subscriber->setSubscribedToNewsletter($state);
+            $this->update($subscriber);
+        }
     }
 }
