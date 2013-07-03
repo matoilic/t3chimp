@@ -141,7 +141,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         $fields = $this->getFieldsFor($listId);
         try {
             $interestGroupings = $this->getInterestGroupingsFor($listId);
-        } catch(Tx_T3chimp_Service_MailChimp_ListInvalidOptionException $ex) {
+        } catch(Tx_T3chimp_Service_MailChimp_ListInvalidOptionException $ex) { //if interest groups are not enabled
             $interestGroupings = array();
         }
 
@@ -180,8 +180,12 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @return array
      */
     public function getInterestGroupingsFor($listId) {
-        $groups = $this->api->listInterestGroupings($listId);
-        $this->checkApi();
+        try {
+            $groups = $this->api->listInterestGroupings($listId);
+            $this->checkApi();
+        } catch(Tx_T3chimp_Service_MailChimp_ListInvalidOptionException $ex) { //if interest groups are not enabled
+            $groups = array();
+        }
 
         return ($groups == null) ? array() : $groups;
     }

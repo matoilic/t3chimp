@@ -26,11 +26,38 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Domain_Repository_CountryRepository extends Tx_Extbase_Persistence_Repository {
-    public function findAllOrdered() {
-        $query = $this->createQuery();
-        $query->setOrderings(array('name' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
+class Tx_T3chimp_Domain_Repository_CountryRepository {
+    const COUNTRY_LIST_PATH = 'EXT:t3chimp/Resources/Private/Language/Countries/';
 
-        return $query->execute();
+    /**
+     * @var array
+     */
+    private static $localized = array();
+
+    /**
+     * @return array
+     */
+    public function findAllOrdered() {
+        return $this->findAllOrderedByLocale($GLOBALS['TSFE']->config['config']['language']);
+    }
+
+    /**
+     * @param string $locale
+     * @return array
+     */
+    public function findAllOrderedByLocale($locale = 'default') {
+        if(!array_key_exists($locale, self::$localized)) {
+            $file = t3lib_div::getFileAbsFileName(self::COUNTRY_LIST_PATH . $locale . '.php');
+            if(!file_exists($file)) {
+                $locale = 'default';
+                $file = t3lib_div::getFileAbsFileName(self::COUNTRY_LIST_PATH . 'default.php');
+            }
+
+            if(!array_key_exists($locale, self::$localized)) {
+                self::$localized[$locale] = require($file);
+            }
+        }
+
+        return self::$localized[$locale];
     }
 }

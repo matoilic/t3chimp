@@ -43,13 +43,6 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     private static $requiredKeys = array('addr1', 'city', 'zip', 'country', 'state');
 
     /**
-     * @param Tx_T3chimp_Domain_Repository_CountryRepository $repo
-     */
-    public function injectStaticCountriesRepository(Tx_T3chimp_Domain_Repository_CountryRepository $repo) {
-        $this->countryRepository = $repo;
-    }
-
-    /**
      * @return string
      */
     public function getAddressLine1() {
@@ -102,11 +95,11 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
         /**
          * @var $country Tx_T3chimp_Domain_Model_Country
          */
-        foreach($countries as $country) {
+        foreach($countries as $iso => $country) {
             $list[] = new Tx_T3chimp_MailChimp_Field_Helper_CountryChoice(
                 $this,
-                $country->getIsoCode(),
-                $country->getName()
+                $iso,
+                $country
             );
         }
 
@@ -134,6 +127,10 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
      */
     public function getZipCode() {
         return $this->getField('zip');
+    }
+
+    public function injectCountryRepository(Tx_T3chimp_Domain_Repository_CountryRepository $repo) {
+        $this->countryRepository = $repo;
     }
 
     /**

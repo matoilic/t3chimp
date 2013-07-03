@@ -16,7 +16,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'category' => 'plugin',
 	'shy' => 0,
 	'version' => '1.0.3',
-	'dependencies' => 'extbase,fluid,static_info_tables',
+	'dependencies' => 'extbase,fluid',
 	'conflicts' => '',
 	'priority' => '',
 	'loadOrder' => '',
@@ -38,7 +38,6 @@ $EM_CONF[$_EXTKEY] = array(
 			'typo3' => '4.5.0-6.1.99',
 			'extbase' => '1.3.0-0.0.0',
 			'fluid' => '1.3.0-0.0.0',
-			'static_info_tables' => '2.3.1-0.0.0',
 		),
 		'conflicts' => array(
 		),
