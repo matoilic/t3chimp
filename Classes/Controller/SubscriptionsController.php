@@ -96,6 +96,8 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
                 }
             } catch(Tx_T3chimp_Service_MailChimp_InvalidEmailException $ex) {
                 $message = $this->translate('t3chimp.exception.invalidEmail');
+            } catch(Tx_T3chimp_Service_MailChimp_ListNotSubscribedException $ex) {
+                $message = $this->translate('t3chimp.exception.notSubscribed');
             } catch(Tx_T3chimp_Service_MailChimp_Exception $ex) {
                 $message = $ex->getMessage();
             }

@@ -31,6 +31,10 @@ plugin.tx_t3chimp {
     }
 }
 
+[browser = msie]
+plugin.tx_t3chimp.ajax.config.additionalHeaders = Content-type:text/plain
+[global]
+
 tx_t3chimp_subscriptions_ajax_page < plugin.tx_t3chimp.ajax
 tx_t3chimp_subscriptions_ajax_page {
     typeNum = 1296728024
