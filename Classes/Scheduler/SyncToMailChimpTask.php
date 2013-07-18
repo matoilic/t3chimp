@@ -124,6 +124,7 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
             $this->addSubscribedUsers($users);
         } catch(Exception $e) {
             t3lib_div::sysLog($e->getMessage(), 't3chimp', 3);
+            t3lib_div::sysLog($e->getTraceAsString(), 't3chimp', 3);
             return false;
         }
 
