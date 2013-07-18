@@ -90,7 +90,12 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
 
         /** @var Tx_Extbase_Reflection_Service $reflectionService */
         $reflectionService = $this->objectManager->get('Tx_Extbase_Reflection_Service');
-        $reflectionService->setDataCache($GLOBALS['typo3CacheManager']->getCache('extbase_reflection'));
+        try {
+            $reflectionService->setDataCache($GLOBALS['typo3CacheManager']->getCache('extbase_reflection'));
+        } catch(Exception $e) { //4.5.x compatibility
+            $reflectionService->setDataCache($GLOBALS['typo3CacheManager']->getCache('tx_extbase_cache_reflection'));
+        }
+
         if (!$reflectionService->isInitialized()) {
             $reflectionService->initialize();
         }
