@@ -54,6 +54,8 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 		$this->registerArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', FALSE, FALSE);
 		$this->registerArgument('selectAllByDefault', 'boolean', 'If specified options are selected if none was set before.', FALSE, FALSE);
 		$this->registerArgument('errorClass', 'string', 'CSS class to set if there are errors for this view helper', FALSE, 'f3-form-error');
+		$this->registerArgument('includeBlank', 'boolean', 'whether or not to show an empty option on top', FALSE, TRUE);
+		$this->registerArgument('blankLabel', 'string', 'the content of the blank option', FALSE, '');
 	}
 
 	/**
@@ -69,7 +71,10 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 		$options = $this->getOptions();
 		if (empty($options)) {
 			$options = array('' => '');
-		}
+		} else if($this->arguments['includeBlank']) {
+            $options = array_merge(array('' => $this->arguments['blankLabel']), $options);
+        }
+
 		$this->tag->setContent($this->renderOptionTags($options));
 
 		$this->setErrorClassAttribute();
@@ -79,6 +84,7 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 		$this->registerFieldNameForFormTokenGeneration($name);
 
 		$content .= $this->tag->render();
+
 		return $content;
 	}
 
