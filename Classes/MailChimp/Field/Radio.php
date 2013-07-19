@@ -68,7 +68,7 @@ class Tx_T3chimp_MailChimp_Field_Radio extends Tx_T3chimp_MailChimp_Field_Abstra
      * @throws Tx_T3chimp_MailChimp_Exception
      */
     public function setValue($value) {
-        if(!in_array($value, $this->validValues)) {
+        if(!empty($value) && !in_array($value, $this->validValues)) {
             throw new Tx_T3chimp_MailChimp_Exception('Invalid choice ' . htmlentities($value) . ' for field ' . $this->getName());
         }
 
