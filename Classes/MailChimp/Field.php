@@ -48,6 +48,12 @@ interface Tx_T3chimp_MailChimp_Field
 
     /**
      * @abstract
+     * @return bool
+     */
+    public function getIsHidden();
+
+    /**
+     * @abstract
      * @return boolean
      */
     public function getIsRequired();

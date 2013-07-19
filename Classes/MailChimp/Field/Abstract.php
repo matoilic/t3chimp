@@ -112,6 +112,13 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
     }
 
     /**
+     * @return bool
+     */
+    public function getIsHidden() {
+        return !$this->definition['public'];
+    }
+
+    /**
      * @return boolean
      */
     public function getIsRequired() {

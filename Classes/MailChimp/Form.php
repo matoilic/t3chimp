@@ -40,7 +40,7 @@ class Tx_T3chimp_MailChimp_Form {
     /**
      * @var array
      */
-    protected $fields = array();
+    protected $hiddenFields = array();
 
     /**
      * @var array
@@ -61,6 +61,11 @@ class Tx_T3chimp_MailChimp_Form {
      * @var Tx_Extbase_Object_ObjectManagerInterface
      */
     protected $objectManager;
+
+    /**
+     * @var array
+     */
+    protected $publicFields = array();
 
     /**
      * @var array
@@ -98,10 +103,15 @@ class Tx_T3chimp_MailChimp_Form {
     }
 
     /**
+     * @param bool $includeHidden whether or not to return hidden fields too
      * @return array
      */
-    public function getFields() {
-        return $this->fields;
+    public function getFields($includeHidden = false) {
+        if(!$includeHidden) {
+            return $this->publicFields;
+        }
+
+        return array_merge($this->publicFields, $this->hiddenFields);
     }
 
     /**
@@ -109,7 +119,7 @@ class Tx_T3chimp_MailChimp_Form {
      * @return Tx_T3chimp_MailChimp_Field|null
      */
     public function getField($name) {
-        foreach($this->getFields() as $field) {
+        foreach($this->getFields(true) as $field) {
             if($field->getName() == $name) {
                 return $field;
             }
@@ -130,16 +140,22 @@ class Tx_T3chimp_MailChimp_Form {
      */
     protected function initializeFields(array $fieldDefinitions) {
         $class = self::$fieldNamespace . 'Action';
-        $this->fields[] = new $class(array(), $this);
+        $this->publicFields[] = new $class(array(), $this);
 
         foreach($fieldDefinitions as $fieldDefinition) {
             $type = $fieldDefinition['field_type'];
             if(in_array($type, self::$supportedTypes)) {
                 $class = self::$fieldNamespace . ucfirst($type);
                 if(TYPO3_version < '6.1.0') {
-                    $this->fields[] = $this->objectManager->create($class, $fieldDefinition, $this);
+                    $field = $this->objectManager->create($class, $fieldDefinition, $this);
                 } else {
-                    $this->fields[] = $this->objectManager->get($class, $fieldDefinition, $this);
+                    $field = $this->objectManager->get($class, $fieldDefinition, $this);
+                }
+
+                if($fieldDefinition['public']) {
+                    $this->publicFields[] = $field;
+                } else {
+                    $this->hiddenFields[] = $field;
                 }
             } else {
                 trigger_error('Tx_T3chimp_MailChimp_Form: unsupported type ' . $type, E_WARNING);
@@ -171,7 +187,7 @@ class Tx_T3chimp_MailChimp_Form {
             throw new Tx_T3chimp_MailChimp_Exception('Can not validate an unbound form');
         }
 
-        foreach($this->getFields() as $field) {
+        foreach($this->getFields(true) as $field) {
             if(!$field->getIsValid()) {
                 return false;
             }
@@ -192,7 +208,7 @@ class Tx_T3chimp_MailChimp_Form {
                 'groupingId' => $grouping['id'],
                 'form_field' => $grouping['form_field']
             );
-            $this->fields[] = new Tx_T3chimp_MailChimp_Field_InterestGrouping($definition, $this);
+            $this->publicFields[] = new Tx_T3chimp_MailChimp_Field_InterestGrouping($definition, $this);
         }
     }
 }

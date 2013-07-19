@@ -104,7 +104,7 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
      */
     private function createSubscriber($form) {
         $subscriber = array();
-        foreach($form->getFields() as $field) {
+        foreach($form->getFields(true) as $field) {
             if(!($field instanceof Tx_T3chimp_MailChimp_Field_Action || $field instanceof Tx_T3chimp_MailChimp_Field_InterestGrouping)) {
                 $subscriber[$field->getTag()] = $field->getApiValue();
             }
@@ -152,7 +152,7 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
     private function logInvalidSubscription($form) {
         $error = 'Could not synchronize user ' . $form->getField('EMAIL')->getValue() . ":\n";
         /** @var Tx_T3chimp_MailChimp_Field $field */
-        foreach($form->getFields() as $field) {
+        foreach($form->getFields(true) as $field) {
             foreach($field->getErrors() as $error) {
                 $error .= $field->getName() . ': ' . $this->translate($error) . "\n";
             }

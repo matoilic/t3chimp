@@ -305,7 +305,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
             $fieldValues = array();
             $selectedGroupings = array();
 
-            foreach($form->getFields() as $field) {
+            foreach($form->getFields(true) as $field) {
                 if($field instanceof Tx_T3chimp_MailChimp_Field_Action) {
                     continue;
                 } elseif($field instanceof Tx_T3chimp_MailChimp_Field_InterestGrouping) {
