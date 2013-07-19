@@ -35,7 +35,7 @@ class Tx_T3chimp_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Per
         $query->getQuerySettings()->setRespectStoragePage(false);
         $query->getQuerySettings()->setReturnRawQueryResult(true);
 
-        $query->matching($query->equals('subscribed_to_newsletter', 1));
+        $query->matching($query->equals('subscribedToNewsletter', 1));
 
         return $query->execute();
     }
