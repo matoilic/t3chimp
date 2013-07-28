@@ -249,7 +249,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @param array $interestGroupings
      * @return array
      */
-    protected function prepareFieldValues($fieldValues, $interestGroupings) {
+    public function prepareFieldValues($fieldValues, $interestGroupings) {
         $mergeVars = array();
         $email = '';
 
@@ -296,30 +296,38 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
 
     /**
      * @param Tx_T3chimp_MailChimp_Form $form
+     * @return array returns field values at index 0 and interest groupings at index 1
+     */
+    public function separateForm(Tx_T3chimp_MailChimp_Form $form) {
+        $fieldValues = array();
+        $selectedGroupings = array();
+
+        foreach($form->getFields(true) as $field) {
+            if($field instanceof Tx_T3chimp_MailChimp_Field_Action) {
+                continue;
+            } elseif($field instanceof Tx_T3chimp_MailChimp_Field_InterestGrouping) {
+                $selectedGroupings[] = array(
+                    'id' => $field->getGroupingId(),
+                    'selection' => $field->getApiValue()
+                );
+            } else {
+                $fieldValues[] = array(
+                    'tag' => $field->getTag(),
+                    'value' => $field->getApiValue()
+                );
+            }
+        }
+
+        return array($fieldValues, $selectedGroupings);
+    }
+
+    /**
+     * @param Tx_T3chimp_MailChimp_Form $form
      * @return int the performed action
      */
     public function saveForm(Tx_T3chimp_MailChimp_Form $form) {
-        $action = 0;
-
         if($form->getField('FORM_ACTION')->getValue() == 'Subscribe') {
-            $fieldValues = array();
-            $selectedGroupings = array();
-
-            foreach($form->getFields(true) as $field) {
-                if($field instanceof Tx_T3chimp_MailChimp_Field_Action) {
-                    continue;
-                } elseif($field instanceof Tx_T3chimp_MailChimp_Field_InterestGrouping) {
-                    $selectedGroupings[] = array(
-                        'id' => $field->getGroupingId(),
-                        'selection' => $field->getApiValue()
-                    );
-                } else {
-                    $fieldValues[] = array(
-                        'tag' => $field->getTag(),
-                        'value' => $field->getApiValue()
-                    );
-                }
-            }
+            list($fieldValues, $selectedGroupings) = $this->separateForm($form);
 
             try {
                 $this->addSubscriber(

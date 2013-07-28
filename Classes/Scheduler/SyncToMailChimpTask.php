@@ -39,8 +39,9 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
 
     /**
      * @param array $users
+     * @param array $interestGroupings
      */
-    private function addSubscribedUsers(array $users) {
+    private function addSubscribedUsers(array $users, array $interestGroupings) {
         $fieldDefinitions = $this->mailChimp->getFieldsFor($this->listId);
         /** @var Tx_T3chimp_MailChimp_Form $form */
         if(TYPO3_version < '6.1.0') {
@@ -48,10 +49,16 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
         } else {
             $form = $this->objectManager->get('Tx_T3chimp_MailChimp_Form', $fieldDefinitions, $this->listId);
         }
+        $form->setInterestGroupings($interestGroupings);
+
+        $groupingFields = array();
+        foreach($interestGroupings as $grouping) {
+            $groupingFields[] = $grouping['name'];
+        }
 
         $usersToSubscribe = array();
         foreach($users as $user) {
-            $form->bindRequest($this->createRequest($user));
+            $form->bindRequest($this->createRequest($user, $groupingFields));
 
             if($form->isValid()) {
                 $usersToSubscribe[] = $this->createSubscriber($form);
@@ -70,9 +77,10 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
 
     /**
      * @param Tx_T3chimp_Domain_Model_FrontendUser $user
+     * @param array $groupingFields
      * @return Tx_T3chimp_Command_Request
      */
-    private function createRequest($user) {
+    private function createRequest($user, array $groupingFields) {
         if(TYPO3_version < '6.1.0') {
             $request = $this->objectManager->create('Tx_T3chimp_Scheduler_Request');
         } else {
@@ -83,6 +91,9 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
         foreach($this->mappings as $tag => $dbField) {
             if(!strpos($tag, '.')) {
                 $subscriber[$tag] = (strlen($dbField) > 0) ? $user[$dbField] : '';
+                if(in_array($tag, $groupingFields)) {
+                    $subscriber[$tag] = explode(';', $subscriber[$tag]);
+                }
             } else { //map multi-part fields, e.g. address fields
                 $tag = explode('.', $tag);
                 if(!array_key_exists($tag[0], $subscriber)) {
@@ -103,12 +114,11 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
      * @return array
      */
     private function createSubscriber($form) {
-        $subscriber = array();
-        foreach($form->getFields(true) as $field) {
-            if(!($field instanceof Tx_T3chimp_MailChimp_Field_Action || $field instanceof Tx_T3chimp_MailChimp_Field_InterestGrouping)) {
-                $subscriber[$field->getTag()] = $field->getApiValue();
-            }
-        }
+        list($fieldValues, $groupings) = $this->mailChimp->separateForm($form);
+
+        $preparedValues = $this->mailChimp->prepareFieldValues($fieldValues, $groupings);
+        $subscriber = $preparedValues['mergeVars'];
+        $subscriber['EMAIL'] = $preparedValues['email'];
 
         return $subscriber;
     }
@@ -118,10 +128,11 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
      */
     public function executeTask() {
         $users = $this->retrieveUsers();
+        $groupings = $this->mailChimp->getInterestGroupingsFor($this->listId);
 
         try {
             $this->removeUnsubscribedUsers($users);
-            $this->addSubscribedUsers($users);
+            $this->addSubscribedUsers($users, $groupings);
         } catch(Exception $e) {
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getMessage());
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getTraceAsString());

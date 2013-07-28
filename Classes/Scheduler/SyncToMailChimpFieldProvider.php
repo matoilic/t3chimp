@@ -118,6 +118,16 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
         return $code . '</select>';
     }
 
+    private function createGroupingField($grouping, $value) {
+        $code = '<strong>' . $grouping['name'] . '</strong><br />';
+        $code .= $this->createFieldSelection(
+            $grouping['name'],
+            $value
+        );
+
+        return $code;
+    }
+
     /**
      * @param string $value
      * @return string
@@ -187,6 +197,12 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
                     $code .= $this->createAddressField($fieldDefinition, $existingMappings);
                 }
 
+                $code .= '<br />';
+            }
+
+            $groupings = $this->mailChimp->getInterestGroupingsFor($task->getListId());
+            foreach($groupings as $grouping) {
+                $code .= $this->createGroupingField($grouping, $existingMappings[$grouping['name']]);
                 $code .= '<br />';
             }
 
