@@ -92,7 +92,14 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
             if(!strpos($tag, '.')) {
                 $subscriber[$tag] = (strlen($dbField) > 0) ? $user[$dbField] : '';
                 if(in_array($tag, $groupingFields)) {
-                    $subscriber[$tag] = explode(';', $subscriber[$tag]);
+                    $values = array();
+                    foreach(explode(';', $subscriber[$tag]) as $value) {
+                        $value = trim($value);
+                        if(strlen($value) > 0) {
+                            $values[] = $value;
+                        }
+                    }
+                    $subscriber[$tag] = $values;
                 }
             } else { //map multi-part fields, e.g. address fields
                 $tag = explode('.', $tag);
