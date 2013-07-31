@@ -43,6 +43,10 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
         return $this->definition['form_field'] == 'radio';
     }
 
+    public function getIsHidden() {
+        return $this->definition['form_field'] == 'hidden';
+    }
+
     public function getTag() {
         return $this->definition['name'];
     }
@@ -53,7 +57,7 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
             return;
         }
 
-        if(!$this->getDisplayAsCheckboxes() && count($value) > 1) {
+        if(!$this->getDisplayAsCheckboxes() && !$this->getIsHidden() && count($value) > 1) {
             throw new Tx_T3chimp_MailChimp_Exception('Interest groupings with a field type other than checkboxes can only have one value');
         }
 
