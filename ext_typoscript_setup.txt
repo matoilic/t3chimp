@@ -29,6 +29,10 @@ plugin.tx_t3chimp {
             metaCharset = utf-8
         }
     }
+
+    settings {
+        countryLists = EXT:t3chimp/Resources/Private/Language/Countries/
+    }
 }
 
 [browser = msie]

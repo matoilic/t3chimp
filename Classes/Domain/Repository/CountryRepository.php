@@ -27,7 +27,7 @@
  ***************************************************************/
 
 class Tx_T3chimp_Domain_Repository_CountryRepository {
-    const COUNTRY_LIST_PATH = 'EXT:t3chimp/Resources/Private/Language/Countries/';
+    private $countryListPath = 'EXT:t3chimp/Resources/Private/Language/Countries/';
 
     /**
      * @var array
@@ -47,10 +47,10 @@ class Tx_T3chimp_Domain_Repository_CountryRepository {
      */
     public function findAllOrderedByLocale($locale = 'default') {
         if(!array_key_exists($locale, self::$localized)) {
-            $file = t3lib_div::getFileAbsFileName(self::COUNTRY_LIST_PATH . $locale . '.php');
+            $file = t3lib_div::getFileAbsFileName($this->countryListPath . '/' . $locale . '.php');
             if(!file_exists($file)) {
                 $locale = 'default';
-                $file = t3lib_div::getFileAbsFileName(self::COUNTRY_LIST_PATH . 'default.php');
+                $file = t3lib_div::getFileAbsFileName($this->countryListPath . '/default.php');
             }
 
             if(!array_key_exists($locale, self::$localized)) {
@@ -59,5 +59,9 @@ class Tx_T3chimp_Domain_Repository_CountryRepository {
         }
 
         return self::$localized[$locale];
+    }
+
+    public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $settings) {
+        $this->countryListPath = $settings->get('countryLists');
     }
 }
