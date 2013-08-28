@@ -31,7 +31,8 @@ plugin.tx_t3chimp {
     }
 
     settings {
-        countryLists = EXT:t3chimp/Resources/Private/Language/Countries/
+        countryLists = EXT:t3chimp/Resources/Private/Language/Countries
+        apiKey = {$plugin.tx_t3chimp.settings.apiKey}
     }
 }
 

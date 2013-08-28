@@ -78,6 +78,16 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
         return $this->settings;
     }
 
+    public function getApiKey() {
+        // check if there is a site specific api key
+        if($this->settings['settings']['apiKey']) {
+            return $this->settings['settings']['apiKey'];
+        }
+
+        // global api key
+        return $this->settings['apiKey'];
+    }
+
     /**
      * @return bool
      */

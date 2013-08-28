@@ -1,0 +1,2 @@
+# cat=T3CHIMP/settings; type=string; label= Site specific Mailchimp API key (overrides the global API key in the extension configuration)
+plugin.tx_t3chimp.settings.apiKey = 0

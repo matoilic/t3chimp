@@ -27,7 +27,7 @@
  ***************************************************************/
 
 class Tx_T3chimp_Domain_Repository_CountryRepository {
-    private $countryListPath = 'EXT:t3chimp/Resources/Private/Language/Countries/';
+    private $countryListPath = 'EXT:t3chimp/Resources/Private/Language/Countries';
 
     /**
      * @var array

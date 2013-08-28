@@ -33,8 +33,18 @@ class Tx_T3chimp_Provider_FlexFormValues {
     private $api;
 
     public function __construct() {
-        $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
-        $this->api = new Tx_T3chimp_MailChimp_Api($globals['apiKey']);
+        /** @var Tx_Extbase_Configuration_BackendConfigurationManager $config */
+        $config = t3lib_div::makeInstance('Tx_Extbase_Configuration_BackendConfigurationManager');
+        $setup = $config->getTypoScriptSetup();
+
+        if($setup['plugin.']['tx_t3chimp.']['settings.']['apiKey']) {
+            $apiKey = $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
+        } else {
+            $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
+            $apiKey = $globals['apiKey'];
+        }
+
+        $this->api = new Tx_T3chimp_MailChimp_Api($apiKey);
     }
 
     /**
