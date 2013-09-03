@@ -80,8 +80,13 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
 
     public function getApiKey() {
         // check if there is a site specific api key
-        if($this->settings['settings']['apiKey']) {
+        if(TYPO3_version >= '6.0.0' && $this->settings['settings']['apiKey']) {
             return $this->settings['settings']['apiKey'];
+        }
+
+        $tsConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->id);
+        if($tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey']) {
+            return $tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
         }
 
         // global api key

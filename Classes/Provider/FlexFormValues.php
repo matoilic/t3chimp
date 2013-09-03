@@ -36,15 +36,40 @@ class Tx_T3chimp_Provider_FlexFormValues {
         /** @var Tx_Extbase_Configuration_BackendConfigurationManager $config */
         $config = t3lib_div::makeInstance('Tx_Extbase_Configuration_BackendConfigurationManager');
         $setup = $config->getTypoScriptSetup();
+        $tsConfig = t3lib_BEfunc::getPagesTSconfig($this->getCurrentPageId());
 
-        if($setup['plugin.']['tx_t3chimp.']['settings.']['apiKey']) {
+        if(TYPO3_version >= '6.0.0' && $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey']) {
             $apiKey = $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
+        } else if($tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey']) {
+            $apiKey = $tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
         } else {
             $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
             $apiKey = $globals['apiKey'];
         }
 
         $this->api = new Tx_T3chimp_MailChimp_Api($apiKey);
+    }
+
+    protected function getCurrentPageId() {
+        $pageId = (integer)t3lib_div::_GP('id');
+        if ($pageId > 0) {
+            return $pageId;
+        }
+
+        // get current site root
+        $rootPages = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', 'pages', 'deleted=0 AND hidden=0 AND is_siteroot=1', '', '', '1');
+        if (count($rootPages) > 0) {
+            return $rootPages[0]['uid'];
+        }
+
+        // get root template
+        $rootTemplates = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('pid', 'sys_template', 'deleted=0 AND hidden=0 AND root=1', '', '', '1');
+        if (count($rootTemplates) > 0) {
+            return $rootTemplates[0]['pid'];
+        }
+
+        // fallback
+        return 0;
     }
 
     /**
