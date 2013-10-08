@@ -53,4 +53,6 @@ class Tx_T3chimp_MailChimp_Field_Action extends Tx_T3chimp_MailChimp_Field_Radio
     public function getTag() {
         return 'FORM_ACTION';
     }
+
+    public function setApiValue($value) { }
 }

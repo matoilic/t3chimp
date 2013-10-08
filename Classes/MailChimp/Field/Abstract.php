@@ -67,6 +67,10 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
         }
     }
 
+    public function setApiValue($value) {
+        $this->setValue($value);
+    }
+
     /**
      * @return mixed
      */

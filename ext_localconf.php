@@ -17,9 +17,9 @@ Tx_Extbase_Utility_Extension::configurePlugin(
     $_EXTKEY,
     'subscription',
     array(
-        'Subscriptions' => 'index,process'
+        'Subscriptions' => 'index,process,edit'
     ),
     array(
-        'Subscriptions' => 'process'
+        'Subscriptions' => 'process,edit'
     )
 );

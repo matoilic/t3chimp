@@ -122,10 +122,20 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
+     * @param string $email if passed, the form will be prefilled with the subscriber's current profile data
      * @return Tx_T3chimp_MailChimp_Form
      */
-    public function getForm() {
-        return $this->getFormFor($this->settingsProvider->get('subscriptionList'));
+    public function getForm($email = null) {
+        $form = $this->getFormFor($this->settingsProvider->get('subscriptionList'));
+
+        if($email != null) {
+            $data = $this->getSubscriptionInfo($email);
+            foreach($form->getFields() as $field) {
+                $field->setApiValue($data[$field->getTag()]);
+            }
+        }
+
+        return $form;
     }
 
     /**
@@ -217,6 +227,25 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         } while(count($subscribers) < $response['total']);
 
         return $subscribers;
+    }
+
+    public function getSubscriptionInfo($email) {
+        $info = $this->api->listMemberInfo($this->settingsProvider->get('subscriptionList'), array($email));
+        $this->checkApi();
+
+        if(count($info['data']) == 0) {
+            return array();
+        }
+
+        $mergeVars = $info['data'][0]['merges'];
+
+        if(array_key_exists('GROUPINGS', $mergeVars)) {
+            foreach($mergeVars['groupings'] as $grouping) {
+                $mergeVars[$grouping['name']] = $grouping;
+            }
+        }
+
+        return $mergeVars;
     }
 
     /**

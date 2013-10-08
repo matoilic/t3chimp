@@ -50,6 +50,18 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
         $this->view->assign('form', $this->mailChimpService->getForm());
     }
 
+    public function editAction() {
+        $info = $this->mailChimpService->getSubscriptionInfo('info@matoilic.ch');
+
+        if($this->settings['debug']) {
+            echo '<!--';
+            var_dump($info);
+            echo '-->';
+        }
+
+        return '';
+    }
+
     /**
      * @param Tx_Extbase_Configuration_ConfigurationManager $configurationManager
      */
