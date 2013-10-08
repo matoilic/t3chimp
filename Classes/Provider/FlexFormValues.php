@@ -38,15 +38,15 @@ class Tx_T3chimp_Provider_FlexFormValues {
         $setup = $config->getTypoScriptSetup();
         $tsConfig = t3lib_BEfunc::getPagesTSconfig($this->getCurrentPageId());
 
-        if(TYPO3_version >= '6.0.0' && $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey']) {
+        if(TYPO3_version >= '6.0.0' && $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey'] && $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey'] != '{$plugin.tx_t3chimp.settings.apiKey}') {
             $apiKey = $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
-        } else if($tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey']) {
+        } else if($tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'] && $tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'] != '{$plugin.tx_t3chimp.settings.apiKey}') {
             $apiKey = $tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
         } else {
             $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
             $apiKey = $globals['apiKey'];
         }
-
+        
         $this->api = new Tx_T3chimp_MailChimp_Api($apiKey);
     }
 
