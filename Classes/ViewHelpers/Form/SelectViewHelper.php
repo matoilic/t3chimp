@@ -169,6 +169,10 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 	 */
 	protected function isSelected($value) {
 		$selectedValue = $this->getSelectedValue();
+        if(is_array($selectedValue)) {
+            $selectedValue = $selectedValue[0];
+        }
+
 		if ($value === $selectedValue || (string)$value === $selectedValue) {
 			return TRUE;
 		}

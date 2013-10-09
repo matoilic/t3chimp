@@ -76,6 +76,15 @@ class Tx_T3chimp_MailChimp_Field_Birthday extends Tx_T3chimp_MailChimp_Field_Abs
         return substr($this->getFormat(), 0, 2) == 'MM';
     }
 
+    public function setApiValue($value) {
+        if(strlen($value) == 0) {
+            return;
+        }
+
+        $parts = explode('/', $value);
+        $this->setValue(array('month' => $parts[0], 'day' => $parts[1]));
+    }
+
     /**
      * @param array $value in the format array('month' => x, 'day' => x)
      * @throws Tx_T3chimp_MailChimp_Exception

@@ -130,8 +130,11 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
 
         if($email != null) {
             $data = $this->getSubscriptionInfo($email);
-            foreach($form->getFields() as $field) {
-                $field->setApiValue($data[$field->getTag()]);
+
+            if($data != NULL) {
+                foreach($form->getFields() as $field) {
+                    $field->setApiValue($data[$field->getTag()]);
+                }
             }
         }
 
@@ -240,8 +243,8 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         $mergeVars = $info['data'][0]['merges'];
 
         if(array_key_exists('GROUPINGS', $mergeVars)) {
-            foreach($mergeVars['groupings'] as $grouping) {
-                $mergeVars[$grouping['name']] = $grouping;
+            foreach($mergeVars['GROUPINGS'] as $grouping) {
+                $mergeVars[$grouping['name']] = $grouping['groups'];
             }
         }
 

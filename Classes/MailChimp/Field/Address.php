@@ -27,6 +27,9 @@
  ***************************************************************/
 
 class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abstract {
+    const TYPE_EXPLODED = 'exploded';
+    const TYPE_TEXT = 'text';
+
     /**
      * @var array all allowed keys in the value array
      */
@@ -41,6 +44,17 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
      * @var array if this field is required, then those keys must be set and not be empty in the value array
      */
     private static $requiredKeys = array('addr1', 'city', 'zip', 'country', 'state');
+
+    /**
+     * @var string
+     */
+    private $type;
+
+    public function __construct(array $definition, Tx_T3chimp_MailChimp_Form $form) {
+        parent::__construct($definition, $form);
+        $this->setType(self::TYPE_EXPLODED);
+    }
+
 
     /**
      * @return string
@@ -116,6 +130,13 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     }
 
     /**
+     * @return bool
+     */
+    public function getIsTextField() {
+        return $this->getType() == self::TYPE_TEXT;
+    }
+
+    /**
      * @return string
      */
     public function getState() {
@@ -125,12 +146,33 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     /**
      * @return string
      */
+    public function getType() {
+        return $this->type;
+    }
+
+    /**
+     * @return string
+     */
     public function getZipCode() {
         return $this->getField('zip');
     }
 
+    /**
+     * @param Tx_T3chimp_Domain_Repository_CountryRepository $repo
+     */
     public function injectCountryRepository(Tx_T3chimp_Domain_Repository_CountryRepository $repo) {
         $this->countryRepository = $repo;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function setApiValue($value) {
+        if(!is_array($value)) {
+            $this->setType(self::TYPE_TEXT);
+        }
+
+        $this->setValue($value);
     }
 
     /**
@@ -139,19 +181,21 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
      * @throws Tx_T3chimp_MailChimp_Exception
      */
     public function setValue($value) {
-        foreach(array_keys($value) as $key) {
-            if(!in_array($key, self::$allowedKeys)) {
-                throw new Tx_T3chimp_MailChimp_Exception('Unallowed key in value ' . htmlentities($key));
+        if(!$this->getIsTextField()) {
+            foreach(array_keys($value) as $key) {
+                if(!in_array($key, self::$allowedKeys)) {
+                    throw new Tx_T3chimp_MailChimp_Exception('Unallowed key in value ' . htmlentities($key));
+                }
             }
-        }
 
-        if(!array_key_exists('country', $value) || empty($value['country'])) {
-            $value['country'] = $this->definition['defaultcountry_cc'];
-        }
+            if(!array_key_exists('country', $value) || empty($value['country'])) {
+                $value['country'] = $this->definition['defaultcountry_cc'];
+            }
 
-        foreach(self::$allowedKeys as $key) {
-            if(!array_key_exists($key, $value)) {
-                $value[$key] = '';
+            foreach(self::$allowedKeys as $key) {
+                if(!array_key_exists($key, $value)) {
+                    $value[$key] = '';
+                }
             }
         }
 
@@ -160,14 +204,28 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
         $this->resetValidation();
     }
 
+    /**
+     * @param string $type
+     */
+    public function setType($type) {
+        $this->type = $type;
+    }
+
+
     protected function validate() {
         $this->isValidated = true;
         $value = $this->getValue();
 
         if($this->getIsRequired()) {
-            foreach(self::$requiredKeys as $key) {
-                if(!array_key_exists($key, $value) || empty($value[$key])) {
-                    $this->errors[] = "t3chimp.error.address.$key.required";
+            if(!$this->getIsTextField()) {
+                foreach(self::$requiredKeys as $key) {
+                    if(!array_key_exists($key, $value) || empty($value[$key])) {
+                        $this->errors[] = "t3chimp.error.address.$key.required";
+                    }
+                }
+            } else {
+                if(strlen($value) == 0) {
+                    $this->errors[] = 't3chimp.error.address.required';
                 }
             }
         }

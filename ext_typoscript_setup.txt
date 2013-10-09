@@ -13,8 +13,6 @@ config.tx_extbase {
 }
 
 plugin.tx_t3chimp {
-    mvc.callDefaultActionIfActionCantBeResolved = 1
-
 	view {
 		defaultPid = auto
 	}

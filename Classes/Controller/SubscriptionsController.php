@@ -51,15 +51,19 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
     }
 
     public function editAction() {
-        $info = $this->mailChimpService->getSubscriptionInfo('info@matoilic.ch');
-
         if($this->settings['debug']) {
+            $info = $this->mailChimpService->getSubscriptionInfo($this->request->getArgument('email'));
             echo '<!--';
             var_dump($info);
             echo '-->';
         }
 
-        return '';
+        $form = $this->mailChimpService->getForm($this->request->getArgument('email'));
+
+        $this->view->assign('language', $GLOBALS['TSFE']->sys_language_uid);
+        $this->view->assign('languageIso', strtolower($GLOBALS['TSFE']->sys_language_isocode));
+        $this->view->assign('pageId', $GLOBALS['TSFE']->id);
+        $this->view->assign('form', $form);
     }
 
     /**

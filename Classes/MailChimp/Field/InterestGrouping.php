@@ -51,6 +51,23 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
         return $this->definition['name'];
     }
 
+    public function setApiValue($value) {
+        if(strlen($value) == 0) {
+            return;
+        }
+
+        if($this->getDisplayAsCheckboxes()) {
+            $values = preg_split('/(?<!\\\\),/', $value);
+            for($i = 0; $i < count($values); $i++) {
+                $values[$i] = trim(str_replace('\,', ',', $values[$i]));
+            }
+
+            $this->setValue($values);
+        } else {
+            $this->setValue($value);
+        }
+    }
+
     public function setValue($value) {
         if($value != null && !is_array($value)) {
             parent::setValue(array($value));
