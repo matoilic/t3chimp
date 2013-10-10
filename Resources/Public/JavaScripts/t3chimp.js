@@ -15,8 +15,7 @@
     }
 
     function onResponse(data, $form) {
-        $('#t3chimp').html(data.html);
-        $form = $('#t3chimp-form');
+        $form.html(data.html);
     }
 
     function prop(name) {
