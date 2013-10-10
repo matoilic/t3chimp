@@ -293,12 +293,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
             }
         }
 
-        $mergeVars['GROUPINGS'] = array();
-        foreach($interestGroupings as $grouping) {
-            //commas in interest group names should be escaped with a backslash
-            $selection = str_replace(',', '\\,', $grouping['selection']);
-            $mergeVars['GROUPINGS'][] = array('id' => $grouping['id'], 'groups' => implode(',', $selection));
-        }
+        $mergeVars['GROUPINGS'] = $interestGroupings;
 
         return array('email' => $email, 'mergeVars' => $mergeVars);
     }
@@ -335,12 +330,12 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         $selectedGroupings = array();
 
         foreach($form->getFields(true) as $field) {
-            if($field instanceof Tx_T3chimp_MailChimp_Field_Action) {
+            if($field->getIsActionField()) {
                 continue;
-            } elseif($field instanceof Tx_T3chimp_MailChimp_Field_InterestGrouping) {
+            } elseif($field->getIsInterestGroup()) {
                 $selectedGroupings[] = array(
                     'id' => $field->getGroupingId(),
-                    'selection' => $field->getApiValue()
+                    'groups' => $field->getApiValue()
                 );
             } else {
                 $fieldValues[] = array(

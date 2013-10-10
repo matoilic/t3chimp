@@ -27,6 +27,13 @@
  ***************************************************************/
 
 class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_Field_Checkboxes {
+    public function getApiValue() {
+        //commas in interest group names should be escaped with a backslash
+        $selection = str_replace(',', '\\,', $this->getValue());
+        return implode(',', $selection);
+    }
+
+
     public function getGroupingId() {
         return $this->definition['groupingId'];
     }
@@ -45,6 +52,10 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
 
     public function getIsHidden() {
         return $this->definition['form_field'] == 'hidden';
+    }
+
+    public function getIsInterestGroup() {
+        return true;
     }
 
     public function getTag() {

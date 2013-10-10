@@ -5,9 +5,9 @@
     </span><br>
     <t:form.errors property="{field.name}" />
     <f:for each="{field.choices}" as="choice">
-        <t:form.checkbox property="{field.name}" id="{choice.id}" value="{choice.value}" checked="{choice.isSelected}" />
+        <t:form.checkbox property="{field.name}" id="{choice.id}" value="{choice.key}" checked="{choice.isSelected}" />
         <label for="{choice.id}">
-            <f:translate key="t3chimp: {choice.value}">{choice.value}</f:translate>
+            {choice.localizedValue}
         </label><br>
     </f:for>
 </p>

@@ -110,6 +110,13 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
     /**
      * @return bool
      */
+    public function getIsActionField() {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
     public function getIsEmpty() {
         $value = $this->getValue();
         return empty($value);
@@ -120,6 +127,13 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
      */
     public function getIsHidden() {
         return !$this->definition['public'];
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsInterestGroup() {
+        return false;
     }
 
     /**

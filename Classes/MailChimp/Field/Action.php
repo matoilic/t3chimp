@@ -46,6 +46,10 @@ class Tx_T3chimp_MailChimp_Field_Action extends Tx_T3chimp_MailChimp_Field_Radio
         return self::$_choices[0];
     }
 
+    public function getIsActionField() {
+        return true;
+    }
+
     public function getLabel() {
         return 'Action';
     }

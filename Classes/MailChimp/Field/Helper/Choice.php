@@ -46,10 +46,15 @@ class Tx_T3chimp_MailChimp_Field_Helper_Choice {
      * @param Tx_T3chimp_MailChimp_Field $parent
      * @param mixed $value
      */
-    public function __construct(Tx_T3chimp_MailChimp_Field $parent, $value) {
+    public function __construct(Tx_T3chimp_MailChimp_Field $parent, $value, $key = NULL) {
         $this->parent = $parent;
         $this->value = $value;
+        $this->key = $key;
         $this->id = strtolower(str_replace(' ', '-', $value));
+    }
+
+    public function getKey() {
+        return ($this->key != NULL) ? $this->key : $this->getValue();
     }
 
     /**
