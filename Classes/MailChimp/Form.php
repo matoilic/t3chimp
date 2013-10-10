@@ -135,31 +135,42 @@ class Tx_T3chimp_MailChimp_Form {
         return $this->listId;
     }
 
+    protected function initializeActionField() {
+        $class = self::$fieldNamespace . 'Action';
+        $this->publicFields[] = new $class(array(), $this);
+    }
+
+    /**
+     * @param array $fieldDefinition
+     */
+    protected function initializeField(array $fieldDefinition) {
+        $type = $fieldDefinition['field_type'];
+        if(in_array($type, self::$supportedTypes)) {
+            $class = self::$fieldNamespace . ucfirst($type);
+            if(TYPO3_version < '6.1.0') {
+                $field = $this->objectManager->create($class, $fieldDefinition, $this);
+            } else {
+                $field = $this->objectManager->get($class, $fieldDefinition, $this);
+            }
+
+            if($fieldDefinition['public']) {
+                $this->publicFields[] = $field;
+            } else {
+                $this->hiddenFields[] = $field;
+            }
+        } else {
+            trigger_error('Tx_T3chimp_MailChimp_Form: unsupported type ' . $type, E_WARNING);
+        }
+    }
+
     /**
      * @param array $fieldDefinitions
      */
     protected function initializeFields(array $fieldDefinitions) {
-        $class = self::$fieldNamespace . 'Action';
-        $this->publicFields[] = new $class(array(), $this);
+        $this->initializeActionField();
 
         foreach($fieldDefinitions as $fieldDefinition) {
-            $type = $fieldDefinition['field_type'];
-            if(in_array($type, self::$supportedTypes)) {
-                $class = self::$fieldNamespace . ucfirst($type);
-                if(TYPO3_version < '6.1.0') {
-                    $field = $this->objectManager->create($class, $fieldDefinition, $this);
-                } else {
-                    $field = $this->objectManager->get($class, $fieldDefinition, $this);
-                }
-
-                if($fieldDefinition['public']) {
-                    $this->publicFields[] = $field;
-                } else {
-                    $this->hiddenFields[] = $field;
-                }
-            } else {
-                trigger_error('Tx_T3chimp_MailChimp_Form: unsupported type ' . $type, E_WARNING);
-            }
+            $this->initializeField($fieldDefinition);
         }
     }
 
