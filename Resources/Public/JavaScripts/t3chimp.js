@@ -1,19 +1,20 @@
 ;(function($) {
-    var $form, $doc = $(document);
+    var $doc = $(document);
 
     function onFormSubmit(event) {
         event.preventDefault();
+        var $form = $(this);
 
         $form.addClass('t3chimp-loading');
 
         $form.ajaxSubmit({
-            success: onResponse,
+            success: function(data) { onResponse(data, $form) },
             iframe: true,
             dataType: 'json'
         });
     }
 
-    function onResponse(data) {
+    function onResponse(data, $form) {
         $('#t3chimp').html(data.html);
         $form = $('#t3chimp-form');
     }
@@ -22,25 +23,25 @@
         return $('meta[name="t3chimp:' + name + '"]').attr('content');
     }
 
-    function setStateSubscribe() {
-        $form.find('p').show();
+    function setStateSubscribe(form) {
+        $(form || this).parents('form').find('p').show();
     }
 
-    function setStateUnsubscribe() {
-        $form.find('p:not(.t3chimp-always)').hide();
+    function setStateUnsubscribe(form) {
+        $(form || this).parents('form').find('p:not(.t3chimp-always)').hide();
     }
 
-    $doc.on('click', '#tx_t3chimp_form_action-subscribe', setStateSubscribe);
-    $doc.on('click', '#tx_t3chimp_form_action-unsubscribe', setStateUnsubscribe);
-    $doc.on('submit', '#t3chimp-form', onFormSubmit);
+    $doc.on('click', '.t3chimp-field-FORM_ACTION input[value="subscribe"]', setStateSubscribe);
+    $doc.on('click', '.t3chimp-field-FORM_ACTION input[value="unsubscribe"]', setStateUnsubscribe);
+    $doc.on('submit', '.t3chimp-form', onFormSubmit);
 
     $(function() {
-        $form = $('#t3chimp-form');
-
-        if($('#tx_t3chimp_form_action-unsubscribe').attr('checked')) {
-            setStateUnsubscribe();
-        } else {
-            setStateSubscribe();
-        }
+        $('.t3chimp-form').each(function() {
+            if($(this).find('.t3chimp-field-FORM_ACTION input[value="unsubscribe"]').attr('checked')) {
+                setStateUnsubscribe(this);
+            } else {
+                setStateSubscribe(this);
+            }
+        });
     });
 })(t3chimpJQuery);

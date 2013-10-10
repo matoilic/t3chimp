@@ -33,17 +33,21 @@ class Tx_T3chimp_Provider_FlexFormValues {
     private $api;
 
     public function __construct() {
+        global $_EXTKEY;
+
         /** @var Tx_Extbase_Configuration_BackendConfigurationManager $config */
         $config = t3lib_div::makeInstance('Tx_Extbase_Configuration_BackendConfigurationManager');
         $setup = $config->getTypoScriptSetup();
+        $setup = $setup['plugin.']['tx_' . $_EXTKEY . '.'];
         $tsConfig = t3lib_BEfunc::getPagesTSconfig($this->getCurrentPageId());
+        $tsConfig = $tsConfig['plugin.']['tx_' . $_EXTKEY . '.'];
 
-        if(TYPO3_version >= '6.0.0' && $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey'] && $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey'] != '{$plugin.tx_t3chimp.settings.apiKey}') {
+        if(TYPO3_version >= '6.0.0' && $setup['settings.']['apiKey'] && $setup['settings.']['apiKey'][0] != '{') {
             $apiKey = $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
-        } else if($tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'] && $tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'] != '{$plugin.tx_t3chimp.settings.apiKey}') {
+        } else if($tsConfig['settings.']['apiKey'] && $tsConfig['settings.']['apiKey'][0] != '{') {
             $apiKey = $tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
         } else {
-            $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
+            $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
             $apiKey = $globals['apiKey'];
         }
         

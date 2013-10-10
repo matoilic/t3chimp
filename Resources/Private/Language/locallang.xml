@@ -46,8 +46,8 @@
             <label index="t3chimp.address.country">Country</label>
 
             <label index="t3chimp: Action">Action</label>
-            <label index="t3chimp: Subscribe">Subscribe</label>
-            <label index="t3chimp: Unsubscribe">Unsubscribe</label>
+            <label index="t3chimp: subscribe">Subscribe</label>
+            <label index="t3chimp: unsubscribe">Unsubscribe</label>
 
             <label index="fe_users.subscribed_to_newsletter">Subscribe to newsletter</label>
 		</languageKey>
@@ -93,8 +93,8 @@
             <label index="t3chimp.address.country">Land</label>
 
             <label index="t3chimp: Action">Anmelden</label>
-            <label index="t3chimp: Subscribe">Anmelden</label>
-            <label index="t3chimp: Unsubscribe">Abmelden</label>
+            <label index="t3chimp: subscribe">Anmelden</label>
+            <label index="t3chimp: unsubscribe">Abmelden</label>
 
             <label index="fe_users.subscribed_to_newsletter">Newsletter abonnieren</label>
         </languageKey>

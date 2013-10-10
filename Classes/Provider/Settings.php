@@ -26,11 +26,16 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
+class Tx_T3chimp_Provider_Settings {
     /**
      * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
      */
     private $configurationManager;
+
+    /**
+     * @var string
+     */
+    private $extKey;
 
     /**
      * @var Tx_T3chimp_Session_Provider
@@ -40,7 +45,18 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
     /**
      * @var array
      */
-    private $settings = array();
+    private $settings;
+
+    /**
+     * @var array
+     */
+    private static $settingsCache = array();
+
+    public function __construct() {
+        global $_EXTKEY;
+        $this->extKey = $_EXTKEY;
+        $this->settings = self::$settingsCache[$this->extKey];
+    }
 
     /**
      * @param mixed $settings
@@ -79,14 +95,17 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
     }
 
     public function getApiKey() {
+        global $_EXTKEY;
+
         // check if there is a site specific api key
-        if(TYPO3_version >= '6.0.0' && $this->settings['settings']['apiKey'] && $this->settings['settings']['apiKey'] != '{$plugin.tx_t3chimp.settings.apiKey}') {
+        if(TYPO3_version >= '6.0.0' && $this->settings['settings']['apiKey'] && $this->settings['settings']['apiKey'][0] != '{') {
             return $this->settings['settings']['apiKey'];
         }
 
         $tsConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->id);
-        if($tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'] && $tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'] != '{$plugin.tx_t3chimp.settings.apiKey}') {
-            return $tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
+        $tsConfig = $tsConfig['plugin.']['tx_' . $_EXTKEY . '.'];
+        if($tsConfig['settings.']['apiKey'] && $tsConfig['settings.']['apiKey'][0] != '{') {
+            return $tsConfig['settings.']['apiKey'];
         }
 
         // global api key
@@ -115,23 +134,7 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
      */
     private function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $manager) {
         $this->configurationManager = $manager;
-
-        $this->settings = $manager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
-        if($this->settings == NULL) {
-            $this->settings = array();
-        }
-
-        //read session stored settings for ajax requests
-        if(array_key_exists('type', $_GET) && $this->session->settings != null) {
-            $this->settings = $this->session->settings;
-        } else {
-            $this->session->settings = $this->settings;
-        }
-
-        $this->settings = array_merge($this->settings, $manager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));
-        $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
-        $global = $this->cleanSettingKeys($global);
-        $this->settings = array_merge($this->settings, $global);
+        $this->loadConfiguration();
     }
 
     /**
@@ -139,5 +142,33 @@ class Tx_T3chimp_Provider_Settings implements t3lib_Singleton {
      */
     private function injectSessionProvider(Tx_T3chimp_Provider_Session $provider) {
         $this->session = $provider;
+    }
+
+    private function loadConfiguration() {
+        if(!array_key_exists($this->extKey, self::$settingsCache)) {
+            $this->settings = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
+            if($this->settings == NULL) {
+                $this->settings = array();
+            }
+
+            //read session stored settings for ajax requests
+            if(array_key_exists('type', $_GET) && $this->session->settings != null) {
+                $this->settings = $this->session->settings;
+            } else {
+                $this->session->settings = $this->settings;
+            }
+
+            $this->settings = array_merge($this->settings, $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));
+            $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]);
+            $global = $this->cleanSettingKeys($global);
+            self::$settingsCache[$this->extKey] = array_merge($this->settings, $global);
+        }
+
+        $this->settings = self::$settingsCache[$this->extKey];
+    }
+
+    public function setContext($context) {
+        $this->extKey = strtolower($context);
+        $this->loadConfiguration();
     }
 }

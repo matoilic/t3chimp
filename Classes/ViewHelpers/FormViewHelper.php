@@ -27,7 +27,11 @@
  ***************************************************************/
 
 class Tx_T3chimp_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormViewHelper {
-    protected static $typeNum = 1296728024;
+    public function initializeArguments() {
+        parent::initializeArguments();
+        $this->registerTagAttribute('pageType', 'Page type for AJAX requests', true);
+    }
+
 
     /**
      * Render the form.
@@ -56,10 +60,9 @@ class Tx_T3chimp_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormVie
         $this->viewHelperVariableContainer->add('Tx_T3chimp_ViewHelpers_FormViewHelper', 'renderedProperties', array());
 
         $this->arguments = new Tx_T3chimp_ViewHelpers_WritableArguments($this->arguments);
-        $this->arguments['pageType'] = self::$typeNum;
 
-        $this->tag->addAttribute('id', 't3chimp-form');
+        $this->tag->addAttribute('id', 't3chimp-form-' . $object->getListId());
 
-        return parent::render($action, $arguments, $controller, $extensionName, $pluginName, $pageUid, $object, self::$typeNum, $noCache, $noCacheHash, $section, $format, $additionalParams, $absolute, $addQueryString, $argumentsToBeExcludedFromQueryString, $fieldNamePrefix, $actionUri, $objectName);
+        return parent::render($action, $arguments, $controller, $extensionName, $pluginName, $pageUid, $object, $this->arguments['pageType'], $noCache, $noCacheHash, $section, $format, $additionalParams, $absolute, $addQueryString, $argumentsToBeExcludedFromQueryString, $fieldNamePrefix, $actionUri, $objectName);
     }
 }

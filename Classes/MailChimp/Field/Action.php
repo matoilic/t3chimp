@@ -30,7 +30,7 @@ class Tx_T3chimp_MailChimp_Field_Action extends Tx_T3chimp_MailChimp_Field_Radio
     /**
      * @var array
      */
-    protected static $_choices = array('Subscribe', 'Unsubscribe');
+    protected static $_choices = array('subscribe', 'unsubscribe');
 
     /**
      * @param array $definition

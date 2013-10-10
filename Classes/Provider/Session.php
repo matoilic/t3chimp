@@ -30,6 +30,11 @@ class Tx_T3chimp_Provider_Session implements t3lib_Singleton {
     const KEY = 'tx_t3chimp';
 
     /**
+     * @var string
+     */
+    private $context;
+
+    /**
      * @var tslib_feUserAuth
      */
     private $feUser;
@@ -40,6 +45,9 @@ class Tx_T3chimp_Provider_Session implements t3lib_Singleton {
     private $sessionData = array();
 
     public function __construct() {
+        global $_EXTKEY;
+        $this->context = $_EXTKEY;
+
         $this->feUser = $GLOBALS['TSFE']->fe_user;
         $data = (is_object($this->feUser)) ? $this->feUser->getKey('ses', self::KEY) : array();
 
@@ -49,15 +57,18 @@ class Tx_T3chimp_Provider_Session implements t3lib_Singleton {
     }
 
     public function __get($key) {
-        return $this->sessionData[$key];
+        $this->ensureDataArray();
+        return $this->sessionData[$this->context][$key];
     }
 
     public function __isset($key) {
-        return isset($this->sessionData[$key]);
+        $this->ensureDataArray();
+        return isset($this->sessionData[$this->context][$key]);
     }
 
     public function __set($key, $value) {
-        $this->sessionData[$key] = $value;
+        $this->ensureDataArray();
+        $this->sessionData[$this->context][$key] = $value;
         if(is_object($this->feUser)) {
             $this->feUser->setKey('ses', self::KEY, serialize($this->sessionData));
             $this->feUser->storeSessionData();
@@ -65,6 +76,17 @@ class Tx_T3chimp_Provider_Session implements t3lib_Singleton {
     }
 
     public function __unset($key) {
-        unset($this->sessionData[$key]);
+        $this->ensureDataArray();
+        unset($this->sessionData[$this->context][$key]);
+    }
+
+    private function ensureDataArray() {
+        if(!array_key_exists($this->context, $this->sessionData)) {
+            $this->sessionData[$this->context] = array();
+        }
+    }
+
+    public function setContext($context) {
+        $this->context = $context;
     }
 }
