@@ -15,7 +15,7 @@
     }
 
     function onResponse(data, $form) {
-        $form.html(data.html);
+        $form.parent().html(data.html);
     }
 
     function prop(name) {
