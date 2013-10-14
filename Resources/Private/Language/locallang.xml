@@ -92,7 +92,7 @@
             <label index="t3chimp.address.zipCode">PLZ</label>
             <label index="t3chimp.address.country">Land</label>
 
-            <label index="t3chimp: Action">Anmelden</label>
+            <label index="t3chimp: Action">Aktion</label>
             <label index="t3chimp: subscribe">Anmelden</label>
             <label index="t3chimp: unsubscribe">Abmelden</label>
 
