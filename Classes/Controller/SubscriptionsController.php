@@ -152,7 +152,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
             return $value;
         }
 
-        $value = Tx_Extbase_Utility_Localization::translate($key, 'T3Chimp', $arguments);
+        $value = Tx_Extbase_Utility_Localization::translate($key, 't3chimp', $arguments);
 
         return ($value != NULL) ? $value : $default;
     }

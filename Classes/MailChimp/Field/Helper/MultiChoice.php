@@ -31,6 +31,6 @@ class Tx_T3chimp_MailChimp_Field_Helper_MultiChoice extends Tx_T3chimp_MailChimp
      * @return bool
      */
     public function getIsSelected() {
-        return in_array($this->getValue(), $this->parent->getValue());
+        return in_array($this->getKey(), $this->parent->getValue());
     }
 }
