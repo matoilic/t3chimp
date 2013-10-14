@@ -360,7 +360,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @return int the performed action
      */
     public function saveForm(Tx_T3chimp_MailChimp_Form $form) {
-        if($form->getField('FORM_ACTION')->getValue() == 'Subscribe') {
+        if($form->getField('FORM_ACTION')->getValue() == 'subscribe') {
             list($fieldValues, $selectedGroupings) = $this->separateForm($form);
 
             try {

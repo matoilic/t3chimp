@@ -43,9 +43,9 @@ class Tx_T3chimp_Provider_FlexFormValues {
         $tsConfig = $tsConfig['plugin.']['tx_' . $_EXTKEY . '.'];
 
         if(TYPO3_version >= '6.0.0' && $setup['settings.']['apiKey'] && $setup['settings.']['apiKey'][0] != '{') {
-            $apiKey = $setup['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
+            $apiKey = $setup['settings.']['apiKey'];
         } else if($tsConfig['settings.']['apiKey'] && $tsConfig['settings.']['apiKey'][0] != '{') {
-            $apiKey = $tsConfig['plugin.']['tx_t3chimp.']['settings.']['apiKey'];
+            $apiKey = $tsConfig['settings.']['apiKey'];
         } else {
             $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
             $apiKey = $globals['apiKey'];

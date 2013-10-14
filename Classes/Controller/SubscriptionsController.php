@@ -57,9 +57,8 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
         $this->mailChimpService->setContext($this->extensionName);
 
         if($this->settings['debug']) {
-            $info = $this->mailChimpService->getSubscriptionInfo($this->request->getArgument('email'));
             echo '<!--';
-            var_dump($info);
+            var_dump($this->mailChimpService->getSubscriptionInfo($this->request->getArgument('email')));
             echo '-->';
         }
 
@@ -104,6 +103,7 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
      * @return void
      */
     public function processAction() {
+        $this->mailChimpService->setContext($this->extensionName);
         $form = $this->mailChimpService->getFormFor($this->request->getArgument('list'));
         $form->bindRequest($this->request);
 
@@ -146,7 +146,13 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
      */
     protected function translate($key, $arguments = null, $default = 'MISSING TRANSLATION') {
         $extensionName = $this->request->getControllerExtensionName();
+
         $value = Tx_Extbase_Utility_Localization::translate($key, $extensionName, $arguments);
+        if($value != NULL) {
+            return $value;
+        }
+
+        $value = Tx_Extbase_Utility_Localization::translate($key, 'T3Chimp', $arguments);
 
         return ($value != NULL) ? $value : $default;
     }
