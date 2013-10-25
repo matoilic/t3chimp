@@ -128,7 +128,7 @@ class Tx_T3chimp_Provider_Settings {
             $this->extKey = $listType[0];
         } else { //initialized via typoscript USER_INT
             $config = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-            $this->extKey = $config['extensionName'];
+            $this->extKey = array_key_exists('extensionName',  $config) ? $config['extensionName'] : 't3chimp';
         }
 
         $this->extKey = strtolower($this->extKey);

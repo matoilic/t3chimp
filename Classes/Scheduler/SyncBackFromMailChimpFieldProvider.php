@@ -36,6 +36,7 @@ class Tx_T3chimp_Scheduler_SyncBackFromMailChimpFieldProvider implements tx_sche
         /** @var Tx_Extbase_Object_ObjectManager $objectManager */
         $objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
         $this->mailChimp = $objectManager->get('Tx_T3chimp_Service_MailChimp');
+        $this->mailChimp->initialize();
     }
 
     /**
