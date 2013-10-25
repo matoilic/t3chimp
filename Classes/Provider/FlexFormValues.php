@@ -32,25 +32,23 @@ class Tx_T3chimp_Provider_FlexFormValues {
      */
     private $api;
 
-    public function __construct() {
-        global $_EXTKEY;
-
+    protected function initialize($extKey) {
         /** @var Tx_Extbase_Configuration_BackendConfigurationManager $config */
         $config = t3lib_div::makeInstance('Tx_Extbase_Configuration_BackendConfigurationManager');
         $setup = $config->getTypoScriptSetup();
-        $setup = $setup['plugin.']['tx_' . $_EXTKEY . '.'];
+        $setup = $setup['plugin.']['tx_' . $extKey . '.'];
         $tsConfig = t3lib_BEfunc::getPagesTSconfig($this->getCurrentPageId());
-        $tsConfig = $tsConfig['plugin.']['tx_' . $_EXTKEY . '.'];
+        $tsConfig = $tsConfig['plugin.']['tx_' . $extKey . '.'];
 
         if(TYPO3_version >= '6.0.0' && $setup['settings.']['apiKey'] && $setup['settings.']['apiKey'][0] != '{') {
             $apiKey = $setup['settings.']['apiKey'];
         } else if($tsConfig['settings.']['apiKey'] && $tsConfig['settings.']['apiKey'][0] != '{') {
             $apiKey = $tsConfig['settings.']['apiKey'];
         } else {
-            $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
+            $globals = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey]);
             $apiKey = $globals['apiKey'];
         }
-        
+
         $this->api = new Tx_T3chimp_MailChimp_Api($apiKey);
     }
 
@@ -81,6 +79,8 @@ class Tx_T3chimp_Provider_FlexFormValues {
      * @return array
      */
     public function getLists($config) {
+        $listType = explode('_', $config['row']['list_type']);
+        $this->initialize($listType[0]);
         $result = $this->api->lists();
 
         foreach($result['data'] as $list) {

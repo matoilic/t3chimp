@@ -36,8 +36,6 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
      * @return void
      */
     public function indexAction() {
-        $this->mailChimpService->setContext($this->extensionName);
-
         if($this->settings['debug']) {
             echo '<!--';
             var_dump($this->mailChimpService->getFieldsFor($this->settings['subscriptionList']));
@@ -53,9 +51,13 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
         $this->view->assign('pageType', $this->getPageType());
     }
 
-    public function editAction() {
-        $this->mailChimpService->setContext($this->extensionName);
+    protected function initializeAction() {
+        $this->mailChimpService->initialize();
+        parent::initializeAction();
+    }
 
+
+    public function editAction() {
         if($this->settings['debug']) {
             echo '<!--';
             var_dump($this->mailChimpService->getSubscriptionInfo($this->request->getArgument('email')));
@@ -88,14 +90,13 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
      */
     public function injectMailChimpService(Tx_T3chimp_Service_MailChimp $service) {
         $this->mailChimpService = $service;
-        $this->mailChimpService->setContext($this->extensionName);
     }
 
     /**
      * @param Tx_T3chimp_Provider_Settings $provider
      */
     public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $provider) {
-        $provider->setContext($this->extensionName);
+        $provider->initialize($this->extensionName);
         $this->settings = $provider->getAll();
     }
 
@@ -103,7 +104,6 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
      * @return void
      */
     public function processAction() {
-        $this->mailChimpService->setContext($this->extensionName);
         $form = $this->mailChimpService->getFormFor($this->request->getArgument('list'));
         $form->bindRequest($this->request);
 

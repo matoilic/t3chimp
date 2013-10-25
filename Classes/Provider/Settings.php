@@ -52,12 +52,6 @@ class Tx_T3chimp_Provider_Settings {
      */
     private static $settingsCache = array();
 
-    public function __construct() {
-        global $_EXTKEY;
-        $this->extKey = $_EXTKEY;
-        $this->settings = self::$settingsCache[$this->extKey];
-    }
-
     /**
      * @param mixed $settings
      * @return array
@@ -113,6 +107,13 @@ class Tx_T3chimp_Provider_Settings {
     }
 
     /**
+     * @return string
+     */
+    public function getExtKey() {
+        return $this->extKey;
+    }
+
+    /**
      * @return bool
      */
     public function getIsCacheDisabled() {
@@ -121,12 +122,19 @@ class Tx_T3chimp_Provider_Settings {
         return array_key_exists('no_cache', $config['config.']) && $config['config.']['no_cache'] == '1';
     }
 
+    public function initialize() {
+        $listType = explode('_', $this->configurationManager->getContentObject()->data['list_type']);
+        $this->extKey = strtolower($listType[0]);
+        $this->loadConfiguration();
+    }
+
     /**
      * @param Tx_Extbase_Object_ObjectManager $manager
      */
     public function injectObjectManager(Tx_Extbase_Object_ObjectManager $manager) {
         $this->injectSessionProvider($manager->get('Tx_T3chimp_Provider_Session'));
         $this->injectConfigurationManager($manager->get('Tx_Extbase_Configuration_ConfigurationManagerInterface'));
+        $this->initialize();
     }
 
     /**
@@ -165,10 +173,5 @@ class Tx_T3chimp_Provider_Settings {
         }
 
         $this->settings = self::$settingsCache[$this->extKey];
-    }
-
-    public function setContext($context) {
-        $this->extKey = strtolower($context);
-        $this->loadConfiguration();
     }
 }

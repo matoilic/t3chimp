@@ -251,6 +251,11 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         return $mergeVars;
     }
 
+    public function initialize() {
+        $this->settingsProvider->initialize();
+        $this->api = new Tx_T3chimp_MailChimp_Api($this->settingsProvider->getApiKey(), $this->settingsProvider->get('secureConnection'));
+    }
+
     /**
      * @param Tx_Extbase_Object_ObjectManager $objectManager
      */
@@ -345,14 +350,6 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         }
 
         return array($fieldValues, $selectedGroupings);
-    }
-
-    /**
-     * @param string $context
-     */
-    public function setContext($context) {
-        $this->settingsProvider->setContext($context);
-        $this->api = new Tx_T3chimp_MailChimp_Api($this->settingsProvider->getApiKey(), $this->settingsProvider->get('secureConnection'));
     }
 
     /**
