@@ -100,6 +100,8 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
             $reflectionService->initialize();
         }
 
+        $this->mailChimp->initialize();
+
         $state = $this->executeTask();
 
         /** @var Tx_Extbase_Persistence_Manager $persistenceManager */

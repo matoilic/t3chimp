@@ -41,6 +41,7 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
         /** @var Tx_Extbase_Object_ObjectManager $objectManager */
         $objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
         $this->mailChimp = $objectManager->get('Tx_T3chimp_Service_MailChimp');
+        $this->mailChimp->initialize();
     }
 
     private function createAddressField($fieldDefinition, $values) {
