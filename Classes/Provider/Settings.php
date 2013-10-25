@@ -124,7 +124,14 @@ class Tx_T3chimp_Provider_Settings {
 
     public function initialize() {
         $listType = explode('_', $this->configurationManager->getContentObject()->data['list_type']);
-        $this->extKey = strtolower($listType[0]);
+        if(strlen($listType[0]) > 0) {
+            $this->extKey = $listType[0];
+        } else { //initialized via typoscript USER_INT
+            $config = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+            $this->extKey = $config['extensionName'];
+        }
+
+        $this->extKey = strtolower($this->extKey);
         $this->loadConfiguration();
     }
 
