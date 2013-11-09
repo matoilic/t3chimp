@@ -89,15 +89,13 @@ class Tx_T3chimp_Provider_Settings {
     }
 
     public function getApiKey() {
-        global $_EXTKEY; //TODO don't use $_EXTKEY
-
         // check if there is a site specific api key
         if(TYPO3_version >= '6.0.0' && $this->settings['settings']['apiKey'] && $this->settings['settings']['apiKey'][0] != '{') {
             return $this->settings['settings']['apiKey'];
         }
 
         $tsConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->id);
-        $tsConfig = $tsConfig['plugin.']['tx_' . $_EXTKEY . '.'];
+        $tsConfig = $tsConfig['plugin.']['tx_' . $this->extKey . '.'];
         if($tsConfig['settings.']['apiKey'] && $tsConfig['settings.']['apiKey'][0] != '{') {
             return $tsConfig['settings.']['apiKey'];
         }
