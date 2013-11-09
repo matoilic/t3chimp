@@ -54,7 +54,7 @@ class Tx_T3chimp_Scheduler_Request implements Tx_Extbase_MVC_RequestInterface {
      * @api
      */
     public function isDispatched() {
-        return false;
+        return FALSE;
     }
 
     /**
@@ -66,7 +66,7 @@ class Tx_T3chimp_Scheduler_Request implements Tx_Extbase_MVC_RequestInterface {
      * @api
      */
     public function getControllerObjectName() {
-        return null;
+        return NULL;
     }
 
     /**

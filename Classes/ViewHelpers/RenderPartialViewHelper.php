@@ -63,6 +63,6 @@ class Tx_T3chimp_ViewHelpers_RenderPartialViewHelper extends Tx_Fluid_Core_ViewH
             }
         }
 
-        return $renderer->render(null, $name, $arguments);
+        return $renderer->render(NULL, $name, $arguments);
     }
 }

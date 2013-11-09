@@ -70,7 +70,7 @@ class Tx_T3chimp_MailChimp_Field_Helper_Choice {
             'T3chimp'
         );
 
-        return ($value !== null) ? $value : $this->getValue();
+        return ($value !== NULL) ? $value : $this->getValue();
     }
 
     /**

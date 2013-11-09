@@ -45,8 +45,8 @@ class Tx_T3chimp_ViewHelpers_WritableArguments extends Tx_Fluid_Core_ViewHelper_
     }
 
     public function hasArgument($argumentName) {
-        if(array_key_exists($argumentName, $this->overriddenValues) && $this->overriddenValues[$argumentName] !== null) {
-            return true;
+        if(array_key_exists($argumentName, $this->overriddenValues) && $this->overriddenValues[$argumentName] !== NULL) {
+            return TRUE;
         }
 
         return (
@@ -54,13 +54,13 @@ class Tx_T3chimp_ViewHelpers_WritableArguments extends Tx_Fluid_Core_ViewHelper_
                 (is_array($this->parent) && array_key_exists($argumentName, $this->parent)) ||
                 (is_object($this->parent) && $this->parent->hasArgument($argumentName)) //4.5.x compatibility
             ) &&
-            $this->parent[$argumentName] !== null
+            $this->parent[$argumentName] !== NULL
         );
     }
 
     public function offsetExists($key) {
         if(array_key_exists($key, $this->overriddenValues)) {
-            return true;
+            return TRUE;
         }
 
         return (

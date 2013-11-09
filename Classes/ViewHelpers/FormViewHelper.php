@@ -29,7 +29,7 @@
 class Tx_T3chimp_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormViewHelper {
     public function initializeArguments() {
         parent::initializeArguments();
-        $this->registerTagAttribute('pageType', 'Page type for AJAX requests', true);
+        $this->registerTagAttribute('pageType', 'Page type for AJAX requests', TRUE);
     }
 
 

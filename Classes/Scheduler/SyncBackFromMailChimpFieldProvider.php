@@ -51,7 +51,7 @@ class Tx_T3chimp_Scheduler_SyncBackFromMailChimpFieldProvider implements tx_sche
         $codeListId = '<select name="tx_scheduler[listId]">';
 
         foreach($this->mailChimp->getLists() as $list) {
-            $selected = ($task != null && $list['id'] == $task->getListId()) ? ' selected="selected"' : '';
+            $selected = ($task != NULL && $list['id'] == $task->getListId()) ? ' selected="selected"' : '';
             $codeListId .= '<option value="' . $list['id'] . '"' . $selected . '>' . htmlentities($list['name']) . '</option>';
         }
 
@@ -67,7 +67,7 @@ class Tx_T3chimp_Scheduler_SyncBackFromMailChimpFieldProvider implements tx_sche
                 $label = substr($label, 0, strlen($label) - 1);
             }
 
-            $selected = ($task != null && $column == $task->getEmailField()) ? ' selected="selected"' : '';
+            $selected = ($task != NULL && $column == $task->getEmailField()) ? ' selected="selected"' : '';
             $codeMailField .= '<option value="' . $column . '"' . $selected . '>' . $label . ' (' . $column . ')</option>';
         }
 
@@ -107,6 +107,6 @@ class Tx_T3chimp_Scheduler_SyncBackFromMailChimpFieldProvider implements tx_sche
      * @return boolean TRUE if validation was ok (or selected class is not relevant), FALSE otherwise
      */
     public function validateAdditionalFields(array &$submittedData, tx_scheduler_Module $schedulerModule) {
-        return true;
+        return TRUE;
     }
 }

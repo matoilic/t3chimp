@@ -4,22 +4,22 @@ class Tx_T3chimp_MailChimp_Api {
     var $version = "1.3";
     var $errorMessage;
     var $errorCode;
-    
+
     /**
      * Cache the information on the API location on the server
      */
     var $apiUrl;
-    
+
     /**
      * Default to a 300 second timeout on server calls
      */
-    var $timeout = 300; 
-    
+    var $timeout = 300;
+
     /**
      * Default to a 8K chunk size
      */
     var $chunkSize = 8192;
-    
+
     /**
      * Cache the user api_key so we only have to log in once per client instantiation
      */
@@ -28,15 +28,15 @@ class Tx_T3chimp_MailChimp_Api {
     /**
      * Cache the user api_key so we only have to log in once per client instantiation
      */
-    var $secure = false;
-    
+    var $secure = FALSE;
+
     /**
      * Connect to the MailChimp API for a given list.
-     * 
+     *
      * @param string $apikey Your MailChimp apikey
      * @param string $secure Whether or not this should use a secure connection
      */
-    function Tx_T3chimp_MailChimp_Api($apikey, $secure=false) {
+    function Tx_T3chimp_MailChimp_Api($apikey, $secure=FALSE) {
         $this->secure = $secure;
         $this->apiUrl = parse_url("http://api.mailchimp.com/" . $this->version . "/?output=php");
         $this->api_key = $apikey;
@@ -45,7 +45,7 @@ class Tx_T3chimp_MailChimp_Api {
     function setTimeout($seconds){
         if (is_int($seconds)){
             $this->timeout = $seconds;
-            return true;
+            return TRUE;
         }
     }
 
@@ -53,13 +53,13 @@ class Tx_T3chimp_MailChimp_Api {
         return $this->timeout;
     }
     function useSecure($val){
-        if ($val===true){
-            $this->secure = true;
+        if ($val===TRUE){
+            $this->secure = TRUE;
         } else {
-            $this->secure = false;
+            $this->secure = FALSE;
         }
     }
-    
+
     /**
      * Unschedule a campaign that is scheduled to be sent in the future
      *
@@ -68,7 +68,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @example xml-rpc_campaignUnschedule.php
      *
      * @param string $cid the id of the campaign to unschedule
-     * @return boolean true on success
+     * @return boolean TRUE on success
      */
     function campaignUnschedule($cid) {
         $params = array();
@@ -86,7 +86,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @param string $cid the id of the campaign to schedule
      * @param string $schedule_time the time to schedule the campaign. For A/B Split "schedule" campaigns, the time for Group A - in YYYY-MM-DD HH:II:SS format in <strong>GMT</strong>
      * @param string $schedule_time_b optional -the time to schedule Group B of an A/B Split "schedule" campaign - in YYYY-MM-DD HH:II:SS format in <strong>GMT</strong>
-     * @return boolean true on success
+     * @return boolean TRUE on success
      */
     function campaignSchedule($cid, $schedule_time, $schedule_time_b=NULL) {
         $params = array();
@@ -102,7 +102,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @section Campaign  Related
      *
      * @param string $cid the id of the campaign to pause
-     * @return boolean true on success
+     * @return boolean TRUE on success
      */
     function campaignResume($cid) {
         $params = array();
@@ -116,7 +116,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @section Campaign  Related
      *
      * @param string $cid the id of the campaign to pause
-     * @return boolean true on success
+     * @return boolean TRUE on success
      */
     function campaignPause($cid) {
         $params = array();
@@ -133,7 +133,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @example xml-rpc_campaignSendNow.php
      *
      * @param string $cid the id of the campaign to send
-     * @return boolean true on success
+     * @return boolean TRUE on success
      */
     function campaignSendNow($cid) {
         $params = array();
@@ -151,8 +151,8 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @param string $cid the id of the campaign to test
      * @param array $test_emails an array of email address to receive the test message
-     * @param string $send_type optional by default (null) both formats are sent - "html" or "text" send just that format
-     * @return boolean true on success
+     * @param string $send_type optional by default (NULL) both formats are sent - "html" or "text" send just that format
+     * @return boolean TRUE on success
      */
     function campaignSendTest($cid, $test_emails=array (
 ), $send_type=NULL) {
@@ -171,70 +171,70 @@ class Tx_T3chimp_MailChimp_Api {
      * @example xml-rpc_campaignSegmentTest.php
      *
      * @param string $list_id the list to test segmentation on - get lists using lists()
-     * @param array $options with 2 keys:  
+     * @param array $options with 2 keys:
              string "match" controls whether to use AND or OR when applying your options - expects "<strong>any</strong>" (for OR) or "<strong>all</strong>" (for AND)
              array "conditions" - up to 10 different criteria to apply while segmenting. Each criteria row must contain 3 keys - "<strong>field</strong>", "<strong>op</strong>", and "<strong>value</strong>" - and possibly a fourth, "<strong>extra</strong>", based on these definitions:
-    
+
             Field = "<strong>date</strong>" : Select based on signup date
                 Valid Op(eration): <strong>eq</strong> (is) / <strong>gt</strong> (after) / <strong>lt</strong> (before)
-                Valid Values: 
+                Valid Values:
                 string last_campaign_sent  uses the date of the last campaign sent
                 string campaign_id - uses the send date of the campaign that carriers the Id submitted - see campaigns()
                 string YYYY-MM-DD - any date in the form of YYYY-MM-DD - <em>note:</em> anything that appears to start with YYYY will be treated as a date
-                          
+
             Field = "<strong>interests-X</strong>": where X is the Grouping Id from listInterestGroupings()
-                Valid Op(erations): <strong>one</strong> / <strong>none</strong> / <strong>all</strong> 
+                Valid Op(erations): <strong>one</strong> / <strong>none</strong> / <strong>all</strong>
                 Valid Values: a comma delimited of interest groups for the list - see listInterestGroupings()
-        
+
             Field = "<strong>aim</strong>"
                 Valid Op(erations): <strong>open</strong> / <strong>noopen</strong> / <strong>click</strong> / <strong>noclick</strong>
                 Valid Values: "<strong>any</strong>" or a valid AIM-enabled Campaign that has been sent
-    
+
             Field = "<strong>rating</strong>" : allows matching based on list member ratings
                 Valid Op(erations):  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;)
                 Valid Values: a number between 0 and 5
-    
+
             Field = "<strong>ecomm_prod</strong>" or "<strong>ecomm_prod</strong>": allows matching product and category names from purchases
-                Valid Op(erations): 
+                Valid Op(erations):
                  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;) / <strong>like</strong> (like '%blah%') / <strong>nlike</strong> (not like '%blah%') / <strong>starts</strong> (like 'blah%') / <strong>ends</strong> (like '%blah')
                 Valid Values: any string
-    
+
             Field = "<strong>ecomm_spent_one</strong>" or "<strong>ecomm_spent_all</strong>" : allows matching purchase amounts on a single order or all orders
                 Valid Op(erations): <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;)
                 Valid Values: a number
-    
+
             Field = "<strong>ecomm_date</strong>" : allow matching based on order dates
                 Valid Op(eration): <strong>eq</strong> (is) / <strong>gt</strong> (after) / <strong>lt</strong> (before)
-                Valid Values: 
+                Valid Values:
                 string YYYY-MM-DD - any date in the form of YYYY-MM-DD
-                
+
             Field = "<strong>social_gender</strong>" : allows matching against the gender acquired from SocialPro
                 Valid Op(eration): <strong>eq</strong> (is) / <strong>ne</strong> (is not)
                 Valid Values: male, female
-                
+
             Field = "<strong>social_age</strong>" : allows matching against the age acquired from SocialPro
                 Valid Op(erations):  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;)
                 Valid Values: any number
-    
+
             Field = "<strong>social_influence</strong>" : allows matching against the influence acquired from SocialPro
                 Valid Op(erations):  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;)
                 Valid Values: a number between 0 and 5
-    
-            Field = "<strong>social_network</strong>" : 
+
+            Field = "<strong>social_network</strong>" :
                 Valid Op(erations):  <strong>member</strong> (is a member of) / <strong>notmember</strong> (is not a member of)
                 Valid Values: twitter, facebook, myspace, linkedin, flickr
-    
-            Field = "<strong>static_segment</strong>" : 
+
+            Field = "<strong>static_segment</strong>" :
                 Valid Op(eration): <strong>eq</strong> (is in) / <strong>ne</strong> (is not in)
                 Valid Values: an int - get from listStaticSegments()
-    
+
             Field = An <strong>Address</strong> Merge Var. Use <strong>Merge0-Merge30</strong> or the <strong>Custom Tag</strong> you've setup for your merge field - see listMergeVars(). Note, Address fields can still be used with the default operations below - this section is broken out solely to highlight the differences in using the geolocation routines.
                 Valid Op(erations): <strong>geoin</strong>
                 Valid Values: The number of miles an address should be within
                 Extra Value: The Zip Code to be used as the center point
-        
+
             Default Field = A Merge Var. Use <strong>Merge0-Merge30</strong> or the <strong>Custom Tag</strong> you've setup for your merge field - see listMergeVars()
-                Valid Op(erations): 
+                Valid Op(erations):
                  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;) / <strong>like</strong> (like '%blah%') / <strong>nlike</strong> (not like '%blah%') / <strong>starts</strong> (like 'blah%') / <strong>ends</strong> (like '%blah')
                 Valid Values: any string
      * @return int total The total number of subscribers matching your segmentation options
@@ -265,35 +265,35 @@ class Tx_T3chimp_MailChimp_Api {
             int template_id optional - use this user-created template to generate the HTML content of the campaign (takes precendence over other template options)
             int gallery_template_id optional - use a template from the public gallery to generate the HTML content of the campaign (takes precendence over base template options)
             int base_template_id optional - use this a base/start-from-scratch template to generate the HTML content of the campaign
-            int folder_id optional - automatically file the new campaign in the folder_id passed. Get using folders() - note that Campaigns and Autoresponders have separate folder setupsn 
+            int folder_id optional - automatically file the new campaign in the folder_id passed. Get using folders() - note that Campaigns and Autoresponders have separate folder setupsn
             array tracking optional - set which recipient actions will be tracked, as a struct of boolean values with the following keys: "opens", "html_clicks", and "text_clicks".  By default, opens and HTML clicks will be tracked. Click tracking can not be disabled for Free accounts.
             string title optional - an internal name to use for this campaign.  By default, the campaign subject will be used.
-            boolean authenticate optional - set to true to enable SenderID, DomainKeys, and DKIM authentication, defaults to false.
+            boolean authenticate optional - set to TRUE to enable SenderID, DomainKeys, and DKIM authentication, defaults to FALSE.
             array analytics optional - if provided, use a struct with "service type" as a key and the "service tag" as a value. For Google, this should be "google"=>"your_google_analytics_key_here". Note that only "google" is currently supported - a Google Analytics tags will be added to all links in the campaign with this string attached. Others may be added in the future
             boolean auto_footer optional Whether or not we should auto-generate the footer for your content. Mostly useful for content from URLs or Imports
-            boolean inline_css optional Whether or not css should be automatically inlined when this campaign is sent, defaults to false.
-            boolean generate_text optional Whether of not to auto-generate your Text content from the HTML content. Note that this will be ignored if the Text part of the content passed is not empty, defaults to false.
-            boolean auto_tweet optional If set, this campaign will be auto-tweeted when it is sent - defaults to false. Note that if a Twitter account isn't linked, this will be silently ignored.
-            boolean timewarp optional If set, this campaign must be scheduled 24 hours in advance of sending - default to false. Only valid for "regular" campaigns and "absplit" campaigns that split on schedule_time.
+            boolean inline_css optional Whether or not css should be automatically inlined when this campaign is sent, defaults to FALSE.
+            boolean generate_text optional Whether of not to auto-generate your Text content from the HTML content. Note that this will be ignored if the Text part of the content passed is not empty, defaults to FALSE.
+            boolean auto_tweet optional If set, this campaign will be auto-tweeted when it is sent - defaults to FALSE. Note that if a Twitter account isn't linked, this will be silently ignored.
+            boolean timewarp optional If set, this campaign must be scheduled 24 hours in advance of sending - default to FALSE. Only valid for "regular" campaigns and "absplit" campaigns that split on schedule_time.
             boolean ecomm360 optional If set, our <a href="http://www.mailchimp.com/blog/ecommerce-tracking-plugin/" target="_blank">Ecommerce360 tracking</a> will be enabled for links in the campaign
-    
-    * @param array $content the content for this campaign - use a struct with the following keys: 
+
+    * @param array $content the content for this campaign - use a struct with the following keys:
                 string html for pasted HTML content
                 string text for the plain-text version
                 string url to have us pull in content from a URL. Note, this will override any other content options - for lists with Email Format options, you'll need to turn on generate_text as well
                 string archive to send a Base64 encoded archive file for us to import all media from. Note, this will override any other content options - for lists with Email Format options, you'll need to turn on generate_text as well
                 string archive_type optional - only necessary for the "archive" option. Supported formats are: zip, tar.gz, tar.bz2, tar, tgz, tbz . If not included, we will default to zip
-                
+
                 If you chose a template instead of pasting in your HTML content, then use "html_" followed by the template sections as keys - for example, use a key of "html_MAIN" to fill in the "MAIN" section of a template. Supported template sections include: "html_HEADER", "html_MAIN", "html_SIDECOLUMN", and "html_FOOTER"
     * @param array $segment_opts optional - if you wish to do Segmentation with this campaign this array should contain: see campaignSegmentTest(). It's suggested that you test your options against campaignSegmentTest(). Also, "trans" campaigns <strong>do not</strong> support segmentation.
-    * @param array $type_opts optional - 
+    * @param array $type_opts optional -
             For RSS Campaigns this, array should contain:
                 string url the URL to pull RSS content from - it will be verified and must exist
                 string schedule optional one of "daily", "weekly", "monthly" - defaults to "daily"
                 string schedule_hour optional an hour between 0 and 24 - default to 4 (4am <em>local time</em>) - applies to all schedule types
                 string schedule_weekday optional for "weekly" only, a number specifying the day of the week to send: 0 (Sunday) - 6 (Saturday) - defaults to 1 (Monday)
                 string schedule_monthday optional for "monthly" only, a number specifying the day of the month to send (1 - 28) or "last" for the last day of a given month. Defaults to the 1st day of the month
-             
+
             For A/B Split campaigns, this array should contain:
                 string split_test The values to segment based on. Currently, one of: "subject", "from_name", "schedule". NOTE, for "schedule", you will need to call campaignSchedule() separately!
                 string pick_winner How the winner will be picked, one of: "opens" (by the open_rate), "clicks" (by the click rate), "manual" (you pick manually)
@@ -306,14 +306,14 @@ class Tx_T3chimp_MailChimp_Api {
                 string from_email_b optional sort of, required when split_test is "from_name"
                 string subject_a optional sort of, required when split_test is "subject"
                 string subject_b optional sort of, required when split_test is "subject"
-                
+
             For AutoResponder campaigns, this array should contain:
                 string offset-units one of "day", "week", "month", "year" - required
                 string offset-time optional, sort of - the number of units must be a number greater than 0 for signup based autoresponders
                 string offset-dir either "before" or "after"
                 string event optional "signup" (default) to base this on double-optin signup, "date" or "annual" to base this on merge field in the list
                 string event-datemerge optional sort of, this is required if the event is "date" or "annual"
-    
+
      *
      * @return string the ID for the created campaign
      */
@@ -328,8 +328,8 @@ class Tx_T3chimp_MailChimp_Api {
     }
 
     /** Update just about any setting for a campaign that has <em>not</em> been sent. See campaignCreate() for details.
-     *   
-     *  
+     *
+     *
      *  Caveats:<br/><ul>
      *        <li>If you set list_id, all segmentation options will be deleted and must be re-added.</li>
      *        <li>If you set template_id, you need to follow that up by setting it's 'content'</li>
@@ -344,7 +344,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @param string $cid the Campaign Id to update
      * @param string $name the parameter name ( see campaignCreate() ). For items in the <strong>options</strong> array, this will be that parameter's name (subject, from_email, etc.). Additional parameters will be that option name  (content, segment_opts). "type_opts" will be the name of the type - rss, auto, trans, etc.
      * @param mixed  $value an appropriate value for the parameter ( see campaignCreate() ). For items in the <strong>options</strong> array, this will be that parameter's value. For additional parameters, this is the same value passed to them.
-     * @return boolean true if the update succeeds, otherwise an error will be thrown
+     * @return boolean TRUE if the update succeeds, otherwise an error will be thrown
      */
     function campaignUpdate($cid, $name, $value) {
         $params = array();
@@ -376,7 +376,7 @@ class Tx_T3chimp_MailChimp_Api {
     * @example mcapi_campaignDelete.php
     *
     * @param string $cid the Campaign Id to delete
-    * @return boolean true if the delete succeeds, otherwise an error will be thrown
+    * @return boolean TRUE if the delete succeeds, otherwise an error will be thrown
     */
     function campaignDelete($cid) {
         $params = array();
@@ -404,7 +404,7 @@ class Tx_T3chimp_MailChimp_Api {
             string  subject optional - only show campaigns that have this subject
             string  sendtime_start optional - only show campaigns that have been sent since this date/time (in GMT) - format is YYYY-MM-DD HH:mm:ss (24hr)
             string  sendtime_end optional - only show campaigns that have been sent before this date/time (in GMT) - format is YYYY-MM-DD HH:mm:ss (24hr)
-            boolean exact optional - flag for whether to filter on exact values when filtering, or search within content for filter values - defaults to true. Using this disables the use of any filters that accept multiples.
+            boolean exact optional - flag for whether to filter on exact values when filtering, or search within content for filter values - defaults to TRUE. Using this disables the use of any filters that accept multiples.
      * @param int $start optional - control paging of campaigns, start results at this campaign #, defaults to 1st page of data  (page 0)
      * @param int $limit optional - control paging of campaigns, number of campaigns to return with each call, defaults to 25 (max=1000)
      * @return array an array containing a count of all matching campaigns and the specific ones for the current page (see Returned Fields for description)
@@ -438,7 +438,7 @@ class Tx_T3chimp_MailChimp_Api {
             boolean timewarp Whether or not the campaign used Timewarp
             boolean timewarp_schedule The time, in GMT, that the Timewarp campaign is being sent. For A/B Split campaigns, this is blank and is instead in their schedule_a and schedule_b in the type_opts array
             array tracking containing "text_clicks", "html_clicks", and "opens" as boolean values representing whether or not they were enabled
-            string segment_text a string marked-up with HTML explaining the segment used for the campaign in plain English 
+            string segment_text a string marked-up with HTML explaining the segment used for the campaign in plain English
             array segment_opts the segment used for the campaign - can be passed to campaignSegmentTest() or campaignCreate()
             array type_opts the type-specific options for the campaign - can be passed to campaignCreate()
      */
@@ -498,7 +498,7 @@ class Tx_T3chimp_MailChimp_Api {
             int unique_opens the unique clicks for this timezone
             int bounces the total bounces for this timezone
             int total the total number of members sent to in this timezone
-            int sent the total number of members delivered to in this timezone        
+            int sent the total number of members delivered to in this timezone
      */
     function campaignStats($cid) {
         $params = array();
@@ -528,7 +528,7 @@ class Tx_T3chimp_MailChimp_Api {
     /**
      * Get the top 5 performing email domains for this campaign. Users want more than 5 should use campaign campaignEmailStatsAIM()
      * or campaignEmailStatsAIMAll() and generate any additional stats they require.
-     * 
+     *
      * @section Campaign  Stats
      *
      * @example mcapi_campaignEmailDomainPerformance.php
@@ -547,7 +547,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @returnf int bounces_pct Percentage of bounces from this domain (whole number)
      * @returnf int opens_pct Percentage of opens from this domain (whole number)
      * @returnf int clicks_pct Percentage of clicks from this domain (whole number)
-     * @returnf int unsubs_pct Percentage of unsubs from this domain (whole number) 
+     * @returnf int unsubs_pct Percentage of unsubs from this domain (whole number)
      */
     function campaignEmailDomainPerformance($cid) {
         $params = array();
@@ -583,7 +583,7 @@ class Tx_T3chimp_MailChimp_Api {
 
     /**
      * <strong>DEPRECATED</strong> Get all email addresses with Hard Bounces for a given campaign
-     * 
+     *
      * @deprecated See campaignMembers() for a replacement
      *
      * @section Campaign  Stats
@@ -635,7 +635,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @param string $cid the campaign id to pull bounces for (can be gathered using campaigns())
      * @param int    $start optional for large data sets, the page number to start at - defaults to 1st page of data  (page 0)
      * @param int    $limit optional for large data sets, the number of results to return - defaults to 1000, upper limit set at 15000
-     * @return array email addresses that unsubscribed from this campaign along with reasons, if given 
+     * @return array email addresses that unsubscribed from this campaign along with reasons, if given
      * @return array a total of all unsubscribed emails and the specific emails for this page
      * @returnf int total   the total number of unsubscribes for the campaign
      * @returnf array data  the full email addresses that unsubscribed
@@ -724,7 +724,7 @@ class Tx_T3chimp_MailChimp_Api {
 
     /**
      * Retrieve the countries and number of opens tracked for each. Email address are not returned.
-     * 
+     *
      * @section Campaign  Stats
      *
      *
@@ -743,13 +743,13 @@ class Tx_T3chimp_MailChimp_Api {
 
     /**
      * Retrieve the regions and number of opens tracked for a certain country. Email address are not returned.
-     * 
+     *
      * @section Campaign  Stats
      *
      *
      * @param string $cid the campaign id to pull bounces for (can be gathered using campaigns())
      * @param string $code An ISO3166 2 digit country code
-     * @return array regions an array of regions within the provided country where opens occurred. 
+     * @return array regions an array of regions within the provided country where opens occurred.
      * @returnf string code An internal code for the region. When this is blank, it indicates we know the country, but not the region
      * @returnf string name The name of the region, if we have one. For blank "code" values, this will be "Rest of Country"
      * @returnf int opens The total number of opens that occurred in the country
@@ -763,7 +763,7 @@ class Tx_T3chimp_MailChimp_Api {
 
     /**
      * Retrieve the tracked eepurl mentions on Twitter
-     * 
+     *
      * @section Campaign  Stats
      *
      *
@@ -795,10 +795,10 @@ class Tx_T3chimp_MailChimp_Api {
     }
 
     /**
-     * Retrieve the most recent full bounce message for a specific email address on the given campaign. 
+     * Retrieve the most recent full bounce message for a specific email address on the given campaign.
      * Messages over 30 days old are subject to being removed
-     * 
-     * 
+     *
+     *
      * @section Campaign  Stats
      *
      * @param string $cid the campaign id to pull bounces for (can be gathered using campaigns())
@@ -819,7 +819,7 @@ class Tx_T3chimp_MailChimp_Api {
      * Retrieve the full bounce messages for the given campaign. Note that this can return very large amounts
      * of data depending on how large the campaign was and how much cruft the bounce provider returned. Also,
      * message over 30 days old are subject to being removed
-     * 
+     *
      * @section Campaign  Stats
      *
      * @example mcapi_campaignBounceMessages.php
@@ -846,7 +846,7 @@ class Tx_T3chimp_MailChimp_Api {
 
     /**
      * Retrieve the Ecommerce Orders tracked by campaignEcommOrderAdd()
-     * 
+     *
      * @section Campaign  Stats
      *
      * @param string $cid the campaign id to pull bounces for (can be gathered using campaigns())
@@ -884,8 +884,8 @@ class Tx_T3chimp_MailChimp_Api {
      * @param array  $opts optional various parameters which can be used to configure the shared report
             string  header_type optional - "text" or "image', defaults to "text'
             string  header_data optional - if "header_type" is text, the text to display. if "header_type" is "image" a valid URL to an image file. Note that images will be resized to be no more than 500x150. Defaults to the Accounts Company Name.
-            boolean    secure optional - whether to require a password for the shared report. defaults to "true"
-            string  password optional - if secure is true and a password is not included, we will generate one. It is always returned.
+            boolean    secure optional - whether to require a password for the shared report. defaults to "TRUE"
+            string  password optional - if secure is TRUE and a password is not included, we will generate one. It is always returned.
             string  to_email optional - optional, email address to share the report with - no value means an email will not be sent
             array   theme  optional - an array containing either 3 or 6 character color code values for: "bg_color", "header_color", "current_tab", "current_tab_text", "normal_tab", "normal_tab_text", "hover_tab", "hover_tab_text"
             string  css_url    optional - a link to an external CSS file to be included after our default CSS (http://vip-reports.net/css/vip.css) <strong>only if</strong> loaded via the "secure_url" - max 255 bytes
@@ -909,12 +909,12 @@ class Tx_T3chimp_MailChimp_Api {
      * @section Campaign  Related
      *
      * @param string $cid the campaign id to get content for (can be gathered using campaigns())
-     * @param bool   $for_archive optional controls whether we return the Archive version (true) or the Raw version (false), defaults to true
+     * @param bool   $for_archive optional controls whether we return the Archive version (TRUE) or the Raw version (FALSE), defaults to TRUE
      * @return struct Struct containing all content for the campaign (see Returned Fields for details
      * @returnf string html The HTML content used for the campgain with merge tags intact
      * @returnf string text The Text content used for the campgain with merge tags intact
      */
-    function campaignContent($cid, $for_archive=true) {
+    function campaignContent($cid, $for_archive=TRUE) {
         $params = array();
         $params["cid"] = $cid;
         $params["for_archive"] = $for_archive;
@@ -923,12 +923,12 @@ class Tx_T3chimp_MailChimp_Api {
 
     /**
      * Get the HTML template content sections for a campaign. Note that this <strong>will</strong> return very jagged, non-standard results based on the template
-     * a campaign is using. You only want to use this if you want to allow editing template sections in your applicaton. 
-     * 
+     * a campaign is using. You only want to use this if you want to allow editing template sections in your applicaton.
+     *
      * @section Campaign  Related
      *
      * @param string $cid the campaign id to get content for (can be gathered using campaigns())
-     * @return array array containing all content section for the campaign - 
+     * @return array array containing all content section for the campaign -
      */
     function campaignTemplateContent($cid) {
         $params = array();
@@ -1027,7 +1027,7 @@ class Tx_T3chimp_MailChimp_Api {
     }
 
     /**
-     * Given a campaign and correct paging limits, return the entire click and open history with timestamps, ordered by time, 
+     * Given a campaign and correct paging limits, return the entire click and open history with timestamps, ordered by time,
      * for every user a campaign was delivered to.
      *
      * @section Campaign Report Data
@@ -1052,7 +1052,7 @@ class Tx_T3chimp_MailChimp_Api {
     }
 
     /**
-     * Attach Ecommerce Order Information to a Campaign. This will generall be used by ecommerce package plugins 
+     * Attach Ecommerce Order Information to a Campaign. This will generall be used by ecommerce package plugins
      * <a href="/plugins/ecomm360.phtml">that we provide</a> or by 3rd part system developers.
      * @section Campaign  Related
      *
@@ -1070,14 +1070,14 @@ class Tx_T3chimp_MailChimp_Api {
                 array items the individual line items for an order using these keys:
                 <div style="padding-left:30px"><table><tr><td colspan=*>
                     int line_num optional the line number of the item on the order. We will generate these if they are not passed
-                    int product_id the store's internal Id for the product. Lines that do no contain this will be skipped 
+                    int product_id the store's internal Id for the product. Lines that do no contain this will be skipped
                     string product_name the product name for the product_id associated with this item. We will auto update these as they change (based on product_id)
                     int category_id the store's internal Id for the (main) category associated with this product. Our testing has found this to be a "best guess" scenario
                     string category_name the category name for the category_id this product is in. Our testing has found this to be a "best guess" scenario. Our plugins walk the category heirarchy up and send "Root - SubCat1 - SubCat4", etc.
                     double qty the quantity of the item ordered
                     double cost the cost of a single item (ie, not the extended cost of the line)
                 </td></tr></table></div>
-     * @return bool true if the data is saved, otherwise an error is thrown.
+     * @return bool TRUE if the data is saved, otherwise an error is thrown.
      */
     function campaignEcommOrderAdd($order) {
         $params = array();
@@ -1100,12 +1100,12 @@ class Tx_T3chimp_MailChimp_Api {
             string from_subject optional - only lists that have a default from email matching this
             string created_before optional - only show lists that were created before this date/time (in GMT) - format is YYYY-MM-DD HH:mm:ss (24hr)
             string created_after optional - only show lists that were created since this date/time (in GMT) - format is YYYY-MM-DD HH:mm:ss (24hr)
-            boolean exact optional - flag for whether to filter on exact values when filtering, or search within content for filter values - defaults to true
+            boolean exact optional - flag for whether to filter on exact values when filtering, or search within content for filter values - defaults to TRUE
      * @param int $start optional - control paging of lists, start results at this list #, defaults to 1st page of data  (page 0)
      * @param int $limit optional - control paging of lists, number of lists to return with each call, defaults to 25 (max=100)
      * @return array an array with keys listed in Returned Fields below
      * @returnf int total the total number of lists which matched the provided filters
-     * @returnf array data the lists which matched the provided filters, including the following for 
+     * @returnf array data the lists which matched the provided filters, including the following for
              string id The list id for this list. This will be used for all other list management functions.
              int web_id The list id used in our web app, allows you to create a link directly to it
              string name The name of the list.
@@ -1127,7 +1127,7 @@ class Tx_T3chimp_MailChimp_Api {
                  int campaign_count The number of campaigns in any status that use this list
                  int grouping_count The number of Interest Groupings for this list
                  int group_count The number of Interest Groups (regardless of grouping) for this list
-                 int merge_var_count The number of merge vars for this list (not including the required EMAIL one) 
+                 int merge_var_count The number of merge vars for this list (not including the required EMAIL one)
                  int avg_sub_rate the average number of subscribe per month for the list (empty value if we haven't calculated this yet)
                  int avg_unsub_rate the average number of unsubscribe per month for the list (empty value if we haven't calculated this yet)
                  int target_sub_rate the target subscription rate for the list to keep it growing (empty value if we haven't calculated this yet)
@@ -1153,7 +1153,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @param string $id the list id to connect to. Get by calling lists()
      * @return array list of merge tags for the list
      * @returnf string name Name of the merge field
-     * @returnf bool req Denotes whether the field is required (true) or not (false)
+     * @returnf bool req Denotes whether the field is required (TRUE) or not (FALSE)
      * @returnf string field_type The "data type" of this merge var. One of: email, text, number, radio, dropdown, date, address, phone, url, imageurl
      * @returnf bool public Whether or not this field is visible to list subscribers
      * @returnf bool show Whether the list owner has this field displayed on their list dashboard
@@ -1180,13 +1180,13 @@ class Tx_T3chimp_MailChimp_Api {
      * @param string $name The long description of the tag being added, used for user displays
      * @param array $options optional Various options for this merge var. <em>note:</em> for historical purposes this can also take a "boolean"
                     string field_type optional one of: text, number, radio, dropdown, date, address, phone, url, imageurl - defaults to text
-                    boolean req optional indicates whether the field is required - defaults to false
-                    boolean public optional indicates whether the field is displayed in public - defaults to true
-                    boolean show optional indicates whether the field is displayed in the app's list member view - defaults to true
+                    boolean req optional indicates whether the field is required - defaults to FALSE
+                    boolean public optional indicates whether the field is displayed in public - defaults to TRUE
+                    boolean show optional indicates whether the field is displayed in the app's list member view - defaults to TRUE
                     string default_value optional the default value for the field. See listSubscribe() for formatting info. Defaults to blank
                     array choices optional kind of - an array of strings to use as the choices for radio and dropdown type fields
-    
-     * @return bool true if the request succeeds, otherwise an error will be thrown
+
+     * @return bool TRUE if the request succeeds, otherwise an error will be thrown
      */
     function listMergeVarAdd($id, $tag, $name, $options=array (
 )) {
@@ -1206,7 +1206,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $tag The merge tag to update
      * @param array $options The options to change for a merge var. See listMergeVarAdd() for valid options
-     * @return bool true if the request succeeds, otherwise an error will be thrown
+     * @return bool TRUE if the request succeeds, otherwise an error will be thrown
      */
     function listMergeVarUpdate($id, $tag, $options) {
         $params = array();
@@ -1217,7 +1217,7 @@ class Tx_T3chimp_MailChimp_Api {
     }
 
     /**
-     * Delete a merge tag from a given list and all its members. Seriously - the data is removed from all members as well! 
+     * Delete a merge tag from a given list and all its members. Seriously - the data is removed from all members as well!
      * Note that on large lists this method may seem a bit slower than calls you typically make.
      *
      * @section List Related
@@ -1225,7 +1225,7 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $tag The merge tag to delete
-     * @return bool true if the request succeeds, otherwise an error will be thrown
+     * @return bool TRUE if the request succeeds, otherwise an error will be thrown
      */
     function listMergeVarDel($id, $tag) {
         $params = array();
@@ -1258,11 +1258,11 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupAdd.php
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $group_name the interest group to add - group names must be unique within a grouping
      * @param int optional $grouping_id The grouping to add the new group to - get using listInterestGrouping() . If not supplied, the first grouping on the list is used.
-     * @return bool true if the request succeeds, otherwise an error will be thrown
+     * @return bool TRUE if the request succeeds, otherwise an error will be thrown
      */
     function listInterestGroupAdd($id, $group_name, $grouping_id=NULL) {
         $params = array();
@@ -1276,11 +1276,11 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupDel.php
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $group_name the interest group to delete
      * @param int $grouping_id The grouping to delete the group from - get using listInterestGrouping() . If not supplied, the first grouping on the list is used.
-     * @return bool true if the request succeeds, otherwise an error will be thrown
+     * @return bool TRUE if the request succeeds, otherwise an error will be thrown
      */
     function listInterestGroupDel($id, $group_name, $grouping_id=NULL) {
         $params = array();
@@ -1293,12 +1293,12 @@ class Tx_T3chimp_MailChimp_Api {
     /** Change the name of an Interest Group
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $old_name the interest group name to be changed
      * @param string $new_name the new interest group name to be set
      * @param int optional $grouping_id The grouping to delete the group from - get using listInterestGrouping() . If not supplied, the first grouping on the list is used.
-     * @return bool true if the request succeeds, otherwise an error will be thrown
+     * @return bool TRUE if the request succeeds, otherwise an error will be thrown
      */
     function listInterestGroupUpdate($id, $old_name, $new_name, $grouping_id=NULL) {
         $params = array();
@@ -1314,7 +1314,7 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupingAdd.php
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $name the interest grouping to add - grouping names must be unique
      * @param string $type The type of the grouping to add - one of "checkboxes", "hidden", "dropdown", "radio"
@@ -1334,11 +1334,11 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupingUpdate.php
-     * 
+     *
      * @param int $grouping_id the interest grouping id - get from listInterestGroupings()
      * @param string $name The name of the field to update - either "name" or "type". Groups with in the grouping should be manipulated using the standard listInterestGroup* methods
-     * @param string $value The new value of the field. Grouping names must be unique - only "hidden" and "checkboxes" grouping types can be converted between each other. 
-     * @return bool true if the request succeeds, otherwise an error will be thrown
+     * @param string $value The new value of the field. Grouping names must be unique - only "hidden" and "checkboxes" grouping types can be converted between each other.
+     * @return bool TRUE if the request succeeds, otherwise an error will be thrown
      */
     function listInterestGroupingUpdate($grouping_id, $name, $value) {
         $params = array();
@@ -1352,9 +1352,9 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupingDel.php
-     * 
+     *
      * @param int $grouping_id the interest grouping id - get from listInterestGroupings()
-     * @return bool true if the request succeeds, otherwise an error will be thrown
+     * @return bool TRUE if the request succeeds, otherwise an error will be thrown
      */
     function listInterestGroupingDel($grouping_id) {
         $params = array();
@@ -1365,7 +1365,7 @@ class Tx_T3chimp_MailChimp_Api {
     /** Return the Webhooks configured for the given list
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @return array list of webhooks
      * @returnf string url the URL for this Webhook
@@ -1381,20 +1381,20 @@ class Tx_T3chimp_MailChimp_Api {
     /** Add a new Webhook URL for the given list
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $url a valid URL for the Webhook - it will be validated. note that a url may only exist on a list once.
      * @param array $actions optional a hash of actions to fire this Webhook for
-            boolean subscribe optional as subscribes occur, defaults to true
-            boolean unsubscribe optional as subscribes occur, defaults to true
-            boolean profile optional as profile updates occur, defaults to true
-            boolean cleaned optional as emails are cleaned from the list, defaults to true
-            boolean upemail optional when  subscribers change their email address, defaults to true
+            boolean subscribe optional as subscribes occur, defaults to TRUE
+            boolean unsubscribe optional as subscribes occur, defaults to TRUE
+            boolean profile optional as profile updates occur, defaults to TRUE
+            boolean cleaned optional as emails are cleaned from the list, defaults to TRUE
+            boolean upemail optional when  subscribers change their email address, defaults to TRUE
      * @param array $sources optional a hash of sources to fire this Webhook for
-            boolean user optional user/subscriber initiated actions, defaults to true
-            boolean admin optional admin actions in our web app, defaults to true
-            boolean api optional actions that happen via API calls, defaults to false
-     * @return bool true if the call succeeds, otherwise an exception will be thrown
+            boolean user optional user/subscriber initiated actions, defaults to TRUE
+            boolean admin optional admin actions in our web app, defaults to TRUE
+            boolean api optional actions that happen via API calls, defaults to FALSE
+     * @return bool TRUE if the call succeeds, otherwise an exception will be thrown
      */
     function listWebhookAdd($id, $url, $actions=array (
 ), $sources=array (
@@ -1410,10 +1410,10 @@ class Tx_T3chimp_MailChimp_Api {
     /** Delete an existing Webhook URL from a given list
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $url the URL of a Webhook on this list
-     * @return boolean true if the call succeeds, otherwise an exception will be thrown
+     * @return boolean TRUE if the call succeeds, otherwise an exception will be thrown
      */
     function listWebhookDel($id, $url) {
         $params = array();
@@ -1425,7 +1425,7 @@ class Tx_T3chimp_MailChimp_Api {
     /** Retrieve all of the Static Segments for a list.
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @return array an array of parameters for each static segment
      * @returnf int id the id of the segment
@@ -1442,12 +1442,12 @@ class Tx_T3chimp_MailChimp_Api {
     }
 
     /** Save a segment against a list for later use. There is no limit to the number of segments which can be saved. Static Segments <strong>are not</strong> tied
-     *  to any merge data, interest groups, etc. They essentially allow you to configure an unlimited number of custom segments which will have standard performance. 
+     *  to any merge data, interest groups, etc. They essentially allow you to configure an unlimited number of custom segments which will have standard performance.
      *  When using proper segments, Static Segments are one of the available options for segmentation just as if you used a merge var (and they can be used with other segmentation
      *  options), though performance may degrade at that point.
-     * 
+     *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $name a unique name per list for the segment - 50 byte maximum length, anything longer will throw an error
      * @return int the id of the new segment, otherwise an error will be thrown.
@@ -1462,10 +1462,10 @@ class Tx_T3chimp_MailChimp_Api {
     /** Resets a static segment - removes <strong>all</strong> members from the static segment. Note: does not actually affect list member data
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param int $seg_id the id of the static segment to reset  - get from listStaticSegments()
-     * @return bool true if it worked, otherwise an error is thrown.
+     * @return bool TRUE if it worked, otherwise an error is thrown.
      */
     function listStaticSegmentReset($id, $seg_id) {
         $params = array();
@@ -1477,10 +1477,10 @@ class Tx_T3chimp_MailChimp_Api {
     /** Delete a static segment. Note that this will, of course, remove any member affiliations with the segment
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param int $seg_id the id of the static segment to delete - get from listStaticSegments()
-     * @return bool true if it worked, otherwise an error is thrown.
+     * @return bool TRUE if it worked, otherwise an error is thrown.
      */
     function listStaticSegmentDel($id, $seg_id) {
         $params = array();
@@ -1493,7 +1493,7 @@ class Tx_T3chimp_MailChimp_Api {
      *  in order to be included - this <strong>will not</strong> subscribe them to the list!
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param int $seg_id the id of the static segment to modify - get from listStaticSegments()
      * @param array $batch an array of email addresses and/or unique_ids to add to the segment
@@ -1513,7 +1513,7 @@ class Tx_T3chimp_MailChimp_Api {
      *  in order to be removed - this <strong>will not</strong> unsubscribe them from the list!
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param int $seg_id the id of the static segment to delete - get from listStaticSegments()
      * @param array $batch an array of email addresses and/or unique_ids to remove from the segment
@@ -1535,7 +1535,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @section List Related
      *
      * @example mcapi_listSubscribe.php
-     * @example json_listSubscribe.php        
+     * @example json_listSubscribe.php
      * @example xml-rpc_listSubscribe.php
      *
      * @param string $id the list id to connect to. Get by calling lists()
@@ -1545,12 +1545,12 @@ class Tx_T3chimp_MailChimp_Api {
                         array GROUPINGS Set Interest Groups by Grouping. Each element in this array should be an array containing the "groups" parameter which contains a comma delimited list of Interest Groups to add. Commas in Interest Group names should be escaped with a backslash. ie, "," =&gt; "\," and either an "id" or "name" parameter to specify the Grouping - get from listInterestGroupings()
                         string OPTINIP Set the Opt-in IP fields. <em>Abusing this may cause your account to be suspended.</em> We do validate this and it must not be a private IP address.
                         array MC_LOCATION Set the members geographic location. By default if this merge field exists, we'll update using the optin_ip if it exists. If the array contains LATITUDE and LONGITUDE keys, they will be used. NOTE - this will slow down each subscribe call a bit, especially for lat/lng pairs in sparsely populated areas. Currently our automated background processes can and will overwrite this based on opens and clicks.
-                        
+
                         <strong>Handling Field Data Types</strong> - most fields you can just pass a string and all is well. For some, though, that is not the case...
                         Field values should be formatted as follows:
                         string address For the string version of an Address, the fields should be delimited by <strong>2</strong> spaces. Address 2 can be skipped. The Country should be a 2 character ISO-3166-1 code and will default to your default country if not set
                         array address For the array version of an Address, the requirements for Address 2 and Country are the same as with the string version. Then simply pass us an array with the keys <strong>addr1</strong>, <strong>addr2</strong>, <strong>city</strong>, <strong>state</strong>, <strong>zip</strong>, <strong>country</strong> and appropriate values for each
-    
+
                         string date use YYYY-MM-DD to be safe. Generally, though, anything strtotime() understands we'll understand - <a href="http://us2.php.net/strtotime" target="_blank">http://us2.php.net/strtotime</a>
                         string dropdown can be a normal string - we <em>will</em> validate that the value is a valid option
                         string image must be a valid, existing url. we <em>will</em> check its existence
@@ -1558,15 +1558,15 @@ class Tx_T3chimp_MailChimp_Api {
                         double number pass in a valid number - anything else will turn in to zero (0). Note, this will be rounded to 2 decimal places
                         string phone If your account has the US Phone numbers option set, this <em>must</em> be in the form of NPA-NXX-LINE (404-555-1212). If not, we assume an International number and will simply set the field with what ever number is passed in.
                         string website This is a standard string, but we <em>will</em> verify that it looks like a valid URL
-    
+
      * @param string $email_type optional email type preference for the email (html, text, or mobile defaults to html)
-     * @param bool $double_optin optional flag to control whether a double opt-in confirmation message is sent, defaults to true. <em>Abusing this may cause your account to be suspended.</em>
-     * @param bool $update_existing optional flag to control whether a existing subscribers should be updated instead of throwing and error, defaults to false
-     * @param bool $replace_interests optional flag to determine whether we replace the interest groups with the groups provided, or we add the provided groups to the member's interest groups (optional, defaults to true)
-     * @param bool $send_welcome optional if your double_optin is false and this is true, we will send your lists Welcome Email if this subscribe succeeds - this will *not* fire if we end up updating an existing subscriber. If double_optin is true, this has no effect. defaults to false.
-     * @return boolean true on success, false on failure. When using MCAPI.class.php, the value can be tested and error messages pulled from the MCAPI object (see below)
+     * @param bool $double_optin optional flag to control whether a double opt-in confirmation message is sent, defaults to TRUE. <em>Abusing this may cause your account to be suspended.</em>
+     * @param bool $update_existing optional flag to control whether a existing subscribers should be updated instead of throwing and error, defaults to FALSE
+     * @param bool $replace_interests optional flag to determine whether we replace the interest groups with the groups provided, or we add the provided groups to the member's interest groups (optional, defaults to TRUE)
+     * @param bool $send_welcome optional if your double_optin is FALSE and this is TRUE, we will send your lists Welcome Email if this subscribe succeeds - this will *not* fire if we end up updating an existing subscriber. If double_optin is TRUE, this has no effect. defaults to FALSE.
+     * @return boolean TRUE on success, FALSE on failure. When using MCAPI.class.php, the value can be tested and error messages pulled from the MCAPI object (see below)
      */
-    function listSubscribe($id, $email_address, $merge_vars=NULL, $email_type='html', $double_optin=true, $update_existing=false, $replace_interests=true, $send_welcome=false) {
+    function listSubscribe($id, $email_address, $merge_vars=NULL, $email_type='html', $double_optin=TRUE, $update_existing=FALSE, $replace_interests=TRUE, $send_welcome=FALSE) {
         $params = array();
         $params["id"] = $id;
         $params["email_address"] = $email_address;
@@ -1588,12 +1588,12 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $email_address the email address to unsubscribe  OR the email "id" returned from listMemberInfo, Webhooks, and Campaigns
-     * @param boolean $delete_member flag to completely delete the member from your list instead of just unsubscribing, default to false
-     * @param boolean $send_goodbye flag to send the goodbye email to the email address, defaults to true
-     * @param boolean $send_notify flag to send the unsubscribe notification email to the address defined in the list email notification settings, defaults to true
-     * @return boolean true on success, false on failure. When using MCAPI.class.php, the value can be tested and error messages pulled from the MCAPI object (see below)
+     * @param boolean $delete_member flag to completely delete the member from your list instead of just unsubscribing, default to FALSE
+     * @param boolean $send_goodbye flag to send the goodbye email to the email address, defaults to TRUE
+     * @param boolean $send_notify flag to send the unsubscribe notification email to the address defined in the list email notification settings, defaults to TRUE
+     * @return boolean TRUE on success, FALSE on failure. When using MCAPI.class.php, the value can be tested and error messages pulled from the MCAPI object (see below)
      */
-    function listUnsubscribe($id, $email_address, $delete_member=false, $send_goodbye=true, $send_notify=true) {
+    function listUnsubscribe($id, $email_address, $delete_member=FALSE, $send_goodbye=TRUE, $send_notify=TRUE) {
         $params = array();
         $params["id"] = $id;
         $params["email_address"] = $email_address;
@@ -1604,7 +1604,7 @@ class Tx_T3chimp_MailChimp_Api {
     }
 
     /**
-     * Edit the email address, merge fields, and interest groups for a list member. If you are doing a batch update on lots of users, 
+     * Edit the email address, merge fields, and interest groups for a list member. If you are doing a batch update on lots of users,
      * consider using listBatchSubscribe() with the update_existing and possible replace_interests parameter.
      *
      * @section List Related
@@ -1614,10 +1614,10 @@ class Tx_T3chimp_MailChimp_Api {
      * @param string $email_address the current email address of the member to update OR the "id" for the member returned from listMemberInfo, Webhooks, and Campaigns
      * @param array $merge_vars array of new field values to update the member with.  See merge_vars in listSubscribe() for details.
      * @param string $email_type change the email type preference for the member ("html", "text", or "mobile").  Leave blank to keep the existing preference (optional)
-     * @param boolean $replace_interests flag to determine whether we replace the interest groups with the updated groups provided, or we add the provided groups to the member's interest groups (optional, defaults to true)
-     * @return boolean true on success, false on failure. When using MCAPI.class.php, the value can be tested and error messages pulled from the MCAPI object
+     * @param boolean $replace_interests flag to determine whether we replace the interest groups with the updated groups provided, or we add the provided groups to the member's interest groups (optional, defaults to TRUE)
+     * @return boolean TRUE on success, FALSE on failure. When using MCAPI.class.php, the value can be tested and error messages pulled from the MCAPI object
      */
-    function listUpdateMember($id, $email_address, $merge_vars, $email_type='', $replace_interests=true) {
+    function listUpdateMember($id, $email_address, $merge_vars, $email_type='', $replace_interests=TRUE) {
         $params = array();
         $params["id"] = $id;
         $params["email_address"] = $email_address;
@@ -1638,10 +1638,10 @@ class Tx_T3chimp_MailChimp_Api {
      * @example xml-rpc_listBatchSubscribe.php
      *
      * @param string $id the list id to connect to. Get by calling lists()
-     * @param array $batch an array of structs for each address to import with two special keys: "EMAIL" for the email address, and "EMAIL_TYPE" for the email type option (html, text, or mobile) 
-     * @param boolean $double_optin flag to control whether to send an opt-in confirmation email - defaults to true
-     * @param boolean $update_existing flag to control whether to update members that are already subscribed to the list or to return an error, defaults to false (return error)
-     * @param boolean $replace_interests flag to determine whether we replace the interest groups with the updated groups provided, or we add the provided groups to the member's interest groups (optional, defaults to true)
+     * @param array $batch an array of structs for each address to import with two special keys: "EMAIL" for the email address, and "EMAIL_TYPE" for the email type option (html, text, or mobile)
+     * @param boolean $double_optin flag to control whether to send an opt-in confirmation email - defaults to TRUE
+     * @param boolean $update_existing flag to control whether to update members that are already subscribed to the list or to return an error, defaults to FALSE (return error)
+     * @param boolean $replace_interests flag to determine whether we replace the interest groups with the updated groups provided, or we add the provided groups to the member's interest groups (optional, defaults to TRUE)
      * @return struct Array of result counts and any errors that occurred
      * @returnf int add_count Number of email addresses that were succesfully added
      * @returnf int update_count Number of email addresses that were succesfully updated
@@ -1651,7 +1651,7 @@ class Tx_T3chimp_MailChimp_Api {
             string message the full error message
             string email the email address being processed
      */
-    function listBatchSubscribe($id, $batch, $double_optin=true, $update_existing=false, $replace_interests=true) {
+    function listBatchSubscribe($id, $batch, $double_optin=TRUE, $update_existing=FALSE, $replace_interests=TRUE) {
         $params = array();
         $params["id"] = $id;
         $params["batch"] = $batch;
@@ -1669,15 +1669,15 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param array $emails array of email addresses to unsubscribe
-     * @param boolean $delete_member flag to completely delete the member from your list instead of just unsubscribing, default to false
-     * @param boolean $send_goodbye flag to send the goodbye email to the email addresses, defaults to true
-     * @param boolean $send_notify flag to send the unsubscribe notification email to the address defined in the list email notification settings, defaults to false
+     * @param boolean $delete_member flag to completely delete the member from your list instead of just unsubscribing, default to FALSE
+     * @param boolean $send_goodbye flag to send the goodbye email to the email addresses, defaults to TRUE
+     * @param boolean $send_notify flag to send the unsubscribe notification email to the address defined in the list email notification settings, defaults to FALSE
      * @return struct Array of result counts and any errors that occurred
      * @returnf int success_count Number of email addresses that were succesfully added/updated
      * @returnf int error_count Number of email addresses that failed during addition/updating
      * @returnf array errors Array of error structs. Each error struct will contain "code", "message", and "email"
      */
-    function listBatchUnsubscribe($id, $emails, $delete_member=false, $send_goodbye=true, $send_notify=false) {
+    function listBatchUnsubscribe($id, $emails, $delete_member=FALSE, $send_goodbye=TRUE, $send_notify=FALSE) {
         $params = array();
         $params["id"] = $id;
         $params["emails"] = $emails;
@@ -1735,7 +1735,7 @@ class Tx_T3chimp_MailChimp_Api {
             string email_type The type of emails this customer asked to get: html, text, or mobile
             array merges An associative array of all the merge tags and the data for those tags for this email address. <em>Note</em>: Interest Groups are returned as comma delimited strings - if a group name contains a comma, it will be escaped with a backslash. ie, "," =&gt; "\,". Groupings will be returned with their "id" and "name" as well as a "groups" field formatted just like Interest Groups
             string status The subscription status for this email address, either pending, subscribed, unsubscribed, or cleaned
-            string ip_opt IP Address this address opted in from. 
+            string ip_opt IP Address this address opted in from.
             string ip_signup IP Address this address signed up from.
             int member_rating the rating of the subscriber. This will be 1 - 5 as described <a href="http://eepurl.com/f-2P" target="_blank">here</a>
             string campaign_id If the user is unsubscribed and they unsubscribed from a specific campaign, that campaign_id will be listed, otherwise this is not returned.
@@ -1761,7 +1761,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @example xml-rpc_listMemberInfo.php
      *
      * @param string $id the list id to connect to. Get by calling lists()
-     * @param array $email_address an array of up to 50 email addresses to get information for OR the "id"(s) for the member returned from listMembers, Webhooks, and Campaigns. 
+     * @param array $email_address an array of up to 50 email addresses to get information for OR the "id"(s) for the member returned from listMembers, Webhooks, and Campaigns.
      * @return array array of data and success/error counts
      * @returnf int success the number of subscribers successfully found on the list
      * @returnf int errors the number of subscribers who were not found on the list
@@ -1815,7 +1815,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @example mcapi_listGrowthHistory.php
      *
      * @param string $id the list id to connect to. Get by calling lists()
-     * @return array array of months and growth 
+     * @return array array of months and growth
      * @returnf string month The Year and Month in question using YYYY-MM format
      * @returnf int existing number of existing subscribers to start the month
      * @returnf int imports number of subscribers imported during the month
@@ -1899,13 +1899,13 @@ class Tx_T3chimp_MailChimp_Api {
      * @example xml-rpc_templates.php
      *
      * @param array $types optional the types of templates to return
-                        boolean user    Customer template for this user account. Defaults to true.
-                        boolean gallery Templates from our Gallery. Note that some templates that require extra configuration are withheld. (eg, the Etsy template). Defaults to false.
+                        boolean user    Customer template for this user account. Defaults to TRUE.
+                        boolean gallery Templates from our Gallery. Note that some templates that require extra configuration are withheld. (eg, the Etsy template). Defaults to FALSE.
                         boolean base    Our "start from scratch" extremely basic templates
      * @param string $category optional for Gallery templates only, limit to a specific template category
      * @param array $inactives optional options to control how inactive templates are returned, if at all
-                        boolean include user templates are not deleted, only set inactive. defaults to false.
-                        boolean only    only include inactive templates. defaults to false.
+                        boolean include user templates are not deleted, only set inactive. defaults to FALSE.
+                        boolean only    only include inactive templates. defaults to FALSE.
      * @return array An array of structs, one for each template (see Returned Fields for details)
      * @returnf int id Id of the template
      * @returnf string name Name of the template
@@ -1971,8 +1971,8 @@ class Tx_T3chimp_MailChimp_Api {
      * @param array  $values the values to updates - while both are optional, at least one should be provided. Both can be updated at the same time.
             string name optional the name for the template - names must be unique and a max of 50 bytes
             string html optional a string specifying the entire template to be created. This is <strong>NOT</strong> campaign content. They are intended to utilize our <a href="http://www.mailchimp.com/resources/email-template-language/" target="_blank">template language</a>.
-        
-     * @return boolean true if the template was updated, otherwise an error will be thrown
+
+     * @return boolean TRUE if the template was updated, otherwise an error will be thrown
      */
     function templateUpdate($id, $values) {
         $params = array();
@@ -1987,7 +1987,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @section Template  Related
      *
      * @param int $id the id of the user template to delete
-     * @return boolean true if the template was deleted, otherwise an error will be thrown
+     * @return boolean TRUE if the template was deleted, otherwise an error will be thrown
      */
     function templateDel($id) {
         $params = array();
@@ -2001,7 +2001,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @section Template  Related
      *
      * @param int $id the id of the user template to reactivate
-     * @return boolean true if the template was deleted, otherwise an error will be thrown
+     * @return boolean TRUE if the template was deleted, otherwise an error will be thrown
      */
     function templateUndel($id) {
         $params = array();
@@ -2012,7 +2012,7 @@ class Tx_T3chimp_MailChimp_Api {
     /**
      * Retrieve lots of account information including payments made, plan info, some account stats, installed modules,
      * contact info, and more. No private information like Credit Card numbers is available.
-     * 
+     *
      * @section Helper
      *
      * @return array containing the details for the account tied to this API Key
@@ -2092,10 +2092,10 @@ class Tx_T3chimp_MailChimp_Api {
      * @example xml-rpc_inlineCss.php
      *
      * @param string $html Your HTML content
-     * @param bool $strip_css optional Whether you want the CSS &lt;style&gt; tags stripped from the returned document. Defaults to false.
+     * @param bool $strip_css optional Whether you want the CSS &lt;style&gt; tags stripped from the returned document. Defaults to FALSE.
      * @return string Your HTML content with all CSS inlined, just like if we sent it.
      */
-    function inlineCss($html, $strip_css=false) {
+    function inlineCss($html, $strip_css=FALSE) {
         $params = array();
         $params["html"] = $html;
         $params["strip_css"] = $strip_css;
@@ -2148,7 +2148,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @param int $fid the folder id to update - retrieve from folders()
      * @param string $name a new, unique name for the folder (max 100 bytes)
      * @param string $type optional the type of folder to create - either "campaign" or "autoresponder". Defaults to "campaign"
-     * @return bool true if the update worked, otherwise an exception is thrown
+     * @return bool TRUE if the update worked, otherwise an exception is thrown
      */
     function folderUpdate($fid, $name, $type='campaign') {
         $params = array();
@@ -2165,7 +2165,7 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @param int $fid the folder id to update - retrieve from folders()
      * @param string $type optional the type of folder to create - either "campaign" or "autoresponder". Defaults to "campaign"
-     * @return bool true if the delete worked, otherwise an exception is thrown
+     * @return bool TRUE if the delete worked, otherwise an exception is thrown
      */
     function folderDel($fid, $type='campaign') {
         $params = array();
@@ -2176,7 +2176,7 @@ class Tx_T3chimp_MailChimp_Api {
 
     /**
      * Retrieve the Ecommerce Orders for an account
-     * 
+     *
      * @section Ecommerce
      *
      * @param int $start optional for large data sets, the page number to start at - defaults to 1st page of data  (page 0)
@@ -2204,14 +2204,14 @@ class Tx_T3chimp_MailChimp_Api {
     }
 
     /**
-     * Import Ecommerce Order Information to be used for Segmentation. This will generally be used by ecommerce package plugins 
+     * Import Ecommerce Order Information to be used for Segmentation. This will generally be used by ecommerce package plugins
      * <a href="/plugins/ecomm360.phtml">that we provide</a> or by 3rd part system developers.
      * @section Ecommerce
      *
      * @param array $order an array of information pertaining to the order that has completed. Use the following keys:
                 string id the Order Id
                 string email_id optional (kind of) the Email Id of the subscriber we should attach this order to (see the "mc_eid" query string variable a campaign passes) - either this or <strong>email</strong> is required. If both are provided, email_id takes precedence
-                string email optional (kind of) the Email Address we should attach this order to - either this or <strong>email_id</strong> is required. If both are provided, email_id takes precedence 
+                string email optional (kind of) the Email Address we should attach this order to - either this or <strong>email_id</strong> is required. If both are provided, email_id takes precedence
                 double total The Order Total (ie, the full amount the customer ends up paying)
                 string order_date optional the date of the order - if this is not provided, we will default the date to now
                 double shipping optional the total paid for Shipping Fees
@@ -2223,14 +2223,14 @@ class Tx_T3chimp_MailChimp_Api {
                 array items the individual line items for an order using these keys:
                 <div style="padding-left:30px"><table><tr><td colspan=*>
                     int line_num optional the line number of the item on the order. We will generate these if they are not passed
-                    int product_id the store's internal Id for the product. Lines that do no contain this will be skipped 
+                    int product_id the store's internal Id for the product. Lines that do no contain this will be skipped
                     string product_name the product name for the product_id associated with this item. We will auto update these as they change (based on product_id)
                     int category_id the store's internal Id for the (main) category associated with this product. Our testing has found this to be a "best guess" scenario
                     string category_name the category name for the category_id this product is in. Our testing has found this to be a "best guess" scenario. Our plugins walk the category heirarchy up and send "Root - SubCat1 - SubCat4", etc.
                     double qty the quantity of the item ordered
                     double cost the cost of a single item (ie, not the extended cost of the line)
                 </td></tr></table></div>
-     * @return bool true if the data is saved, otherwise an error is thrown.
+     * @return bool TRUE if the data is saved, otherwise an error is thrown.
      */
     function ecommOrderAdd($order) {
         $params = array();
@@ -2239,13 +2239,13 @@ class Tx_T3chimp_MailChimp_Api {
     }
 
     /**
-     * Delete Ecommerce Order Information used for segmentation. This will generally be used by ecommerce package plugins 
+     * Delete Ecommerce Order Information used for segmentation. This will generally be used by ecommerce package plugins
      * <a href="/plugins/ecomm360.phtml">that we provide</a> or by 3rd part system developers.
      * @section Ecommerce
      *
      * @param string $store_id the store id the order belongs to
      * @param string $order_id the order id (generated by the store) to delete
-     * @return bool true if an order is deleted, otherwise an error is thrown.
+     * @return bool TRUE if an order is deleted, otherwise an error is thrown.
      */
     function ecommOrderDel($store_id, $order_id) {
         $params = array();
@@ -2258,7 +2258,7 @@ class Tx_T3chimp_MailChimp_Api {
      * Retrieve all List Ids a member is subscribed to.
      *
      * @section Helper
-     * 
+     *
      * @param string $email_address the email address to check OR the email "id" returned from listMemberInfo, Webhooks, and Campaigns
      * @return array An array of list_ids the member is subscribed to.
      */
@@ -2272,7 +2272,7 @@ class Tx_T3chimp_MailChimp_Api {
      * Retrieve all Campaigns Ids a member was sent
      *
      * @section Helper
-     * 
+     *
      * @param string $email_address the email address to unsubscribe  OR the email "id" returned from listMemberInfo, Webhooks, and Campaigns
      * @return array An array of campaign_ids the member received
      */
@@ -2286,7 +2286,7 @@ class Tx_T3chimp_MailChimp_Api {
      * Return the current Chimp Chatter messages for an account.
      *
      * @section Helper
-     * 
+     *
      * @return array An array of chatter messages and properties
      * @returnf string message The chatter message
      * @returnf string type The type of the message - one of lists:new-subscriber, lists:unsubscribes, lists:profile-updates, campaigns:facebook-likes, campaigns:facebook-comments, campaigns:forward-to-friend, lists:imports, or campaigns:inbox-inspections
@@ -2306,16 +2306,16 @@ class Tx_T3chimp_MailChimp_Api {
      * @section Security Related
      * @example xml-rpc_apikeyAdd.php
      * @example mcapi_apikeyAdd.php
-     * 
+     *
      * @param string $username Your MailChimp user name
      * @param string $password Your MailChimp password
-     * @param boolean $expired optional - whether or not to include expired keys, defaults to false
+     * @param boolean $expired optional - whether or not to include expired keys, defaults to FALSE
      * @return array an array of API keys including:
      * @returnf string apikey The api key that can be used
      * @returnf string created_at The date the key was created
      * @returnf string expired_at The date the key was expired
      */
-    function apikeys($username, $password, $expired=false) {
+    function apikeys($username, $password, $expired=FALSE) {
         $params = array();
         $params["username"] = $username;
         $params["password"] = $password;
@@ -2342,9 +2342,9 @@ class Tx_T3chimp_MailChimp_Api {
 
     /**
      * Expire a Specific API Key. Note that if you expire all of your keys, just visit <a href="http://admin.mailchimp.com/account/api" target="_blank">your API dashboard</a>
-     * to create a new one. If you are trying to shut off access to your account for an old developer, change your 
-     * MailChimp password, then expire all of the keys they had access to. Note that this takes effect immediately, so make 
-     * sure you replace the keys in any working application before expiring them! Consider yourself warned... 
+     * to create a new one. If you are trying to shut off access to your account for an old developer, change your
+     * MailChimp password, then expire all of the keys they had access to. Note that this takes effect immediately, so make
+     * sure you replace the keys in any working application before expiring them! Consider yourself warned...
      *
      * @section Security Related
      * @example mcapi_apikeyExpire.php
@@ -2352,7 +2352,7 @@ class Tx_T3chimp_MailChimp_Api {
      *
      * @param string $username Your MailChimp user name
      * @param string $password Your MailChimp password
-     * @return boolean true if it worked, otherwise an error is thrown.
+     * @return boolean TRUE if it worked, otherwise an error is thrown.
      */
     function apikeyExpire($username, $password) {
         $params = array();
@@ -2385,7 +2385,7 @@ class Tx_T3chimp_MailChimp_Api {
         $params = array();
         return $this->callServer("callMethod", $params);
     }
-    
+
     /**
      * Actually connect to the server and call the requested methods, parsing the result
      * You should never have to call this function manually
@@ -2401,10 +2401,10 @@ class Tx_T3chimp_MailChimp_Api {
 
         $this->errorMessage = "";
         $this->errorCode = "";
-        $sep_changed = false;
+        $sep_changed = FALSE;
         //sigh, apparently some distribs change this to &amp; by default
         if (ini_get("arg_separator.output")!="&"){
-            $sep_changed = true;
+            $sep_changed = TRUE;
             $orig_sep = ini_get("arg_separator.output");
             ini_set("arg_separator.output", "&");
         }
@@ -2412,7 +2412,7 @@ class Tx_T3chimp_MailChimp_Api {
         if ($sep_changed){
             ini_set("arg_separator.output", $orig_sep);
         }
-        
+
         $payload = "POST " . $this->apiUrl["path"] . "?" . $this->apiUrl["query"] . "&method=" . $method . " HTTP/1.0\r\n";
         $payload .= "Host: " . $host . "\r\n";
         $payload .= "User-Agent: MCAPI/" . $this->version ."\r\n";
@@ -2420,7 +2420,7 @@ class Tx_T3chimp_MailChimp_Api {
         $payload .= "Content-length: " . strlen($post_vars) . "\r\n";
         $payload .= "Connection: close \r\n\r\n";
         $payload .= $post_vars;
-        
+
         ob_start();
         if ($this->secure){
             $sock = fsockopen("ssl://".$host, 443, $errno, $errstr, 30);
@@ -2431,9 +2431,9 @@ class Tx_T3chimp_MailChimp_Api {
             $this->errorMessage = "Could not connect (ERR $errno: $errstr)";
             $this->errorCode = "-99";
             ob_end_clean();
-            return false;
+            return FALSE;
         }
-        
+
         $response = "";
         fwrite($sock, $payload);
         stream_set_timeout($sock, $this->timeout);
@@ -2447,24 +2447,24 @@ class Tx_T3chimp_MailChimp_Api {
         if ($info["timed_out"]) {
             $this->errorMessage = "Could not read response (timed out)";
             $this->errorCode = -98;
-            return false;
+            return FALSE;
         }
 
         list($headers, $response) = explode("\r\n\r\n", $response, 2);
         $headers = explode("\r\n", $headers);
-        $errored = false;
+        $errored = FALSE;
         foreach($headers as $h){
             if (substr($h,0,26)==="X-MailChimp-API-Error-Code"){
-                $errored = true;
+                $errored = TRUE;
                 $error_code = trim(substr($h,27));
                 break;
             }
         }
-        
+
         if(ini_get("magic_quotes_runtime")) $response = stripslashes($response);
-        
+
         $serial = unserialize($response);
-        if($response && $serial === false) {
+        if($response && $serial === FALSE) {
         	$response = array("error" => "Bad Response.  Got This: " . $response, "code" => "-99");
         } else {
         	$response = $serial;
@@ -2472,13 +2472,13 @@ class Tx_T3chimp_MailChimp_Api {
         if($errored && is_array($response) && isset($response["error"])) {
             $this->errorMessage = $response["error"];
             $this->errorCode = $response["code"];
-            return false;
+            return FALSE;
         } elseif($errored){
             $this->errorMessage = "No error message was found";
             $this->errorCode = $error_code;
-            return false;
+            return FALSE;
         }
-        
+
         return $response;
     }
 

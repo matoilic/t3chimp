@@ -47,7 +47,7 @@ class Tx_T3chimp_MailChimp_Field_Checkboxes extends Tx_T3chimp_MailChimp_Field_R
      * @throws Tx_T3chimp_MailChimp_Exception
      */
     public function setValue($value) {
-        if($value == null) {
+        if($value == NULL) {
             $this->value = array();
             return;
         }
@@ -71,7 +71,7 @@ class Tx_T3chimp_MailChimp_Field_Checkboxes extends Tx_T3chimp_MailChimp_Field_R
      * @return void
      */
     protected function validate() {
-        $this->isValidated = true;
+        $this->isValidated = TRUE;
         $value = $this->getValue();
         if($this->getIsRequired() && count($value) == 0) {
             $this->errors[] = 't3chimp.error.required';

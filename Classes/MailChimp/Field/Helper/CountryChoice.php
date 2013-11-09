@@ -48,7 +48,7 @@ class Tx_T3chimp_MailChimp_Field_Helper_CountryChoice extends Tx_T3chimp_MailChi
             'T3chimp'
         );
 
-        return ($value !== null) ? $value : $this->label;
+        return ($value !== NULL) ? $value : $this->label;
     }
 
     public function getIsSelected() {

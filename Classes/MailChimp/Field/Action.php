@@ -38,7 +38,7 @@ class Tx_T3chimp_MailChimp_Field_Action extends Tx_T3chimp_MailChimp_Field_Radio
      */
     public function __construct(array $definition, Tx_T3chimp_MailChimp_Form $form) {
         $definition['choices'] = self::$_choices;
-        $definition['req'] = true;
+        $definition['req'] = TRUE;
         parent::__construct($definition, $form);
     }
 
@@ -47,7 +47,7 @@ class Tx_T3chimp_MailChimp_Field_Action extends Tx_T3chimp_MailChimp_Field_Radio
     }
 
     public function getIsActionField() {
-        return true;
+        return TRUE;
     }
 
     public function getLabel() {

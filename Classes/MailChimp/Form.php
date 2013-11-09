@@ -50,7 +50,7 @@ class Tx_T3chimp_MailChimp_Form {
     /**
      * @var bool
      */
-    protected $isBound = false;
+    protected $isBound = FALSE;
 
     /**
      * @var string
@@ -99,14 +99,14 @@ class Tx_T3chimp_MailChimp_Form {
             $field->bindRequest($request);
         }
 
-        $this->isBound = true;
+        $this->isBound = TRUE;
     }
 
     /**
      * @param bool $includeHidden whether or not to return hidden fields too
      * @return array
      */
-    public function getFields($includeHidden = false) {
+    public function getFields($includeHidden = FALSE) {
         if(!$includeHidden) {
             return $this->publicFields;
         }
@@ -116,16 +116,16 @@ class Tx_T3chimp_MailChimp_Form {
 
     /**
      * @param string $name
-     * @return Tx_T3chimp_MailChimp_Field|null
+     * @return Tx_T3chimp_MailChimp_Field|NULL
      */
     public function getField($name) {
-        foreach($this->getFields(true) as $field) {
+        foreach($this->getFields(TRUE) as $field) {
             if($field->getName() == $name) {
                 return $field;
             }
         }
 
-        return null;
+        return NULL;
     }
 
     /**
@@ -198,13 +198,13 @@ class Tx_T3chimp_MailChimp_Form {
             throw new Tx_T3chimp_MailChimp_Exception('Can not validate an unbound form');
         }
 
-        foreach($this->getFields(true) as $field) {
+        foreach($this->getFields(TRUE) as $field) {
             if(!$field->getIsValid()) {
-                return false;
+                return FALSE;
             }
         }
 
-        return true;
+        return TRUE;
     }
 
     /**

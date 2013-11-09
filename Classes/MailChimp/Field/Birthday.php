@@ -27,7 +27,7 @@
  ***************************************************************/
 
 class Tx_T3chimp_MailChimp_Field_Birthday extends Tx_T3chimp_MailChimp_Field_Abstract {
-    static $daysInMonth = array(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+    protected static $daysInMonth = array(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 
     /**
      * @return int
@@ -105,7 +105,7 @@ class Tx_T3chimp_MailChimp_Field_Birthday extends Tx_T3chimp_MailChimp_Field_Abs
     }
 
     protected function validate() {
-        $this->isValidated = true;
+        $this->isValidated = TRUE;
 
         $value = $this->getValue();
 

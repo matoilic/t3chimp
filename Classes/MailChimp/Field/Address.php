@@ -213,7 +213,7 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
 
 
     protected function validate() {
-        $this->isValidated = true;
+        $this->isValidated = TRUE;
         $value = $this->getValue();
 
         if($this->getIsRequired()) {

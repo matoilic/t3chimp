@@ -45,16 +45,16 @@ class Tx_T3chimp_MailChimp_Field_Imageurl extends Tx_T3chimp_MailChimp_Field_Abs
             $file = $this->uploadService->processUploadedFile($this->getName());
             $this->setValue($file);
         } catch(Tx_T3chimp_Service_FileUpload_InvalidExtensionException $ex) {
-            $this->setValue(null);
+            $this->setValue(NULL);
             $this->errors[] = 't3chimp.error.unsupportedImageFormat';
         } catch(Tx_T3chimp_Service_FileUpload_FileTooLargeException $ex) {
-            $this->setValue(null);
+            $this->setValue(NULL);
             $this->errors[] = 't3chimp.error.fileTooLarge';
         } catch(Tx_T3chimp_Service_FileUpload_FilePartiallyUploadedException $ex) {
-            $this->setValue(null);
+            $this->setValue(NULL);
             $this->errors[] = 't3chimp.error.filePartiallyUploaded';
         } catch(Tx_T3chimp_Service_FileUpload_NoFileUploadedException $ex) {
-            $this->setValue(null);
+            $this->setValue(NULL);
         }
     }
 

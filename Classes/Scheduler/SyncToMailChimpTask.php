@@ -144,10 +144,10 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getMessage());
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getTraceAsString());
 
-            return false;
+            return FALSE;
         }
 
-        return true;
+        return TRUE;
     }
 
     /**
@@ -170,7 +170,7 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
     private function logInvalidSubscription($form) {
         $error = 'Could not synchronize user ' . $form->getField('EMAIL')->getValue() . ":\n";
         /** @var Tx_T3chimp_MailChimp_Field $field */
-        foreach($form->getFields(true) as $field) {
+        foreach($form->getFields(TRUE) as $field) {
             foreach($field->getErrors() as $error) {
                 $error .= $field->getName() . ': ' . $this->translate($error) . "\n";
             }

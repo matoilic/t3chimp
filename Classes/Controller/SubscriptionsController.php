@@ -140,11 +140,11 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
 
     /**
      * @param $key the key for the label
-     * @param null|array $arguments
+     * @param NULL|array $arguments
      * @param string $default
      * @return string
      */
-    protected function translate($key, $arguments = null, $default = 'MISSING TRANSLATION') {
+    protected function translate($key, $arguments = NULL, $default = 'MISSING TRANSLATION') {
         $extensionName = $this->request->getControllerExtensionName();
 
         $value = Tx_Extbase_Utility_Localization::translate($key, $extensionName, $arguments);

@@ -89,7 +89,7 @@ class Tx_T3chimp_Provider_Settings {
     }
 
     public function getApiKey() {
-        global $_EXTKEY;
+        global $_EXTKEY; //TODO don't use $_EXTKEY
 
         // check if there is a site specific api key
         if(TYPO3_version >= '6.0.0' && $this->settings['settings']['apiKey'] && $this->settings['settings']['apiKey'][0] != '{') {
@@ -128,7 +128,7 @@ class Tx_T3chimp_Provider_Settings {
             $this->extKey = $listType[0];
         } else { //initialized via typoscript USER_INT
             $config = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-            $this->extKey = array_key_exists('extensionName',  $config) ? $config['extensionName'] : 't3chimp';
+            $this->extKey = array_key_exists('extensionName', $config) ? $config['extensionName'] : 't3chimp';
         }
 
         $this->extKey = strtolower($this->extKey);
@@ -167,7 +167,7 @@ class Tx_T3chimp_Provider_Settings {
             }
 
             //read session stored settings for ajax requests
-            if(array_key_exists('type', $_GET) && $this->session->settings != null) {
+            if(array_key_exists('type', $_GET) && $this->session->settings != NULL) {
                 $this->settings = $this->session->settings;
             } else {
                 $this->session->settings = $this->settings;

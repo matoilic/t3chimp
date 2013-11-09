@@ -51,10 +51,10 @@ class Tx_T3chimp_Scheduler_SyncBackFromMailChimpTask extends Tx_T3chimp_Schedule
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getMessage());
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getTraceAsString());
 
-            return false;
+            return FALSE;
         }
 
-        return true;
+        return TRUE;
     }
 
     /**

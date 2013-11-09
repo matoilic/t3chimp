@@ -55,7 +55,7 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
     }
 
     public function getIsInterestGroup() {
-        return true;
+        return TRUE;
     }
 
     public function getTag() {
@@ -69,7 +69,7 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
 
         if($this->getDisplayAsCheckboxes()) {
             $values = preg_split('/(?<!\\\\),/', $value);
-            for($i = 0; $i < count($values); $i++) {
+            for($i = 0, $n = count($values); $i < $n; $i++) {
                 $values[$i] = trim(str_replace('\,', ',', $values[$i]));
             }
 
@@ -80,7 +80,7 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
     }
 
     public function setValue($value) {
-        if($value != null && !is_array($value)) {
+        if($value != NULL && !is_array($value)) {
             parent::setValue(array($value));
             return;
         }

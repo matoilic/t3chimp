@@ -45,13 +45,10 @@ class Tx_T3chimp_Provider_Session implements t3lib_Singleton {
     private $sessionData = array();
 
     public function __construct() {
-        global $_EXTKEY;
-        $this->context = $_EXTKEY;
-
         $this->feUser = $GLOBALS['TSFE']->fe_user;
-        $data = (is_object($this->feUser)) ? $this->feUser->getKey('ses', self::KEY) : array();
+        $data = (is_object($this->feUser)) ? $this->feUser->getKey('ses', 't3chimp') : array();
 
-        if($data != null) {
+        if($data != NULL) {
             $this->sessionData = unserialize($data);
         }
     }

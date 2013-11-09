@@ -45,12 +45,12 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
     /**
      * @var bool
      */
-    protected $isValidated = false;
+    protected $isValidated = FALSE;
 
     /**
      * @var mixed
      */
-    protected $value = null;
+    protected $value = NULL;
 
     /**
      * @param array $definition
@@ -111,7 +111,7 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
      * @return bool
      */
     public function getIsActionField() {
-        return false;
+        return FALSE;
     }
 
     /**
@@ -133,7 +133,7 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
      * @return bool
      */
     public function getIsInterestGroup() {
-        return false;
+        return FALSE;
     }
 
     /**
@@ -190,7 +190,7 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
 
     protected function resetValidation() {
         $this->errors = array();
-        $this->isValidated = false;
+        $this->isValidated = FALSE;
     }
 
     /**
@@ -205,7 +205,7 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
      * @return void
      */
     protected function validate() {
-        $this->isValidated = true;
+        $this->isValidated = TRUE;
         $value = $this->getValue();
         if($this->getIsRequired() && empty($value)) {
             $this->errors[] = 't3chimp.error.required';

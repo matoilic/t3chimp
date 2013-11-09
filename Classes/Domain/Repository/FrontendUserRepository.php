@@ -32,8 +32,8 @@ class Tx_T3chimp_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Per
      */
     public function findSubscribedUsers() {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setRespectStoragePage(false);
-        $query->getQuerySettings()->setReturnRawQueryResult(true);
+        $query->getQuerySettings()->setRespectStoragePage(FALSE);
+        $query->getQuerySettings()->setReturnRawQueryResult(TRUE);
 
         $query->matching($query->equals('subscribedToNewsletter', 1));
 
@@ -47,7 +47,7 @@ class Tx_T3chimp_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Per
      */
     public function updateNewsletterFlag($emailField, $email, $state) {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->getQuerySettings()->setRespectStoragePage(FALSE);
         $query->matching($query->equals($emailField, $email));
         $subscribers = $query->execute()->toArray();
 

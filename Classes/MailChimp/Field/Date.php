@@ -30,15 +30,15 @@ class Tx_T3chimp_MailChimp_Field_Date extends Tx_T3chimp_MailChimp_Field_Pattern
     /**
      * @var string
      */
-    private $apiValue = null;
+    private $apiValue = NULL;
 
     /**
      * Changes the format of the value to YYYY-MM-DD
      *
-     * @return string|null
+     * @return string|NULL
      */
     public function getApiValue() {
-        if(!$this->getIsValid()) return null;
+        if(!$this->getIsValid()) return NULL;
 
         if(empty($this->apiValue)) {
             $matches = array();
@@ -46,15 +46,15 @@ class Tx_T3chimp_MailChimp_Field_Date extends Tx_T3chimp_MailChimp_Field_Pattern
 
             if($this->getFormat() == 'DD/MM/YYYY') {
                 if(!empty($matches[1])) {
-                    $this->apiValue = sprintf("%s-%s-%s", $matches[3], $matches[2], $matches[1]);
+                    $this->apiValue = sprintf('%s-%s-%s', $matches[3], $matches[2], $matches[1]);
                 } else {
-                    $this->apiValue = sprintf("%s-%s-%s", $matches[6], $matches[5], $matches[4]);
+                    $this->apiValue = sprintf('%s-%s-%s', $matches[6], $matches[5], $matches[4]);
                 }
             } else {
                 if(!empty($matches[1])) {
-                    $this->apiValue = sprintf("%s-%s-%s", $matches[3], $matches[1], $matches[2]);
+                    $this->apiValue = sprintf('%s-%s-%s', $matches[3], $matches[1], $matches[2]);
                 } else {
-                    $this->apiValue = sprintf("%s-%s-%s", $matches[6], $matches[4], $matches[5]);
+                    $this->apiValue = sprintf('%s-%s-%s', $matches[6], $matches[4], $matches[5]);
                 }
             }
         }
@@ -90,7 +90,7 @@ class Tx_T3chimp_MailChimp_Field_Date extends Tx_T3chimp_MailChimp_Field_Pattern
 
     public function setValue($value) {
         parent::setValue($value);
-        $this->apiValue = null;
+        $this->apiValue = NULL;
     }
 
 

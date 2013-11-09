@@ -115,7 +115,7 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
     /**
      * @return boolean Returns TRUE on successful execution, FALSE on error
      */
-    abstract function executeTask();
+    public abstract function executeTask();
 
     /**
      * @param string $listId
@@ -132,11 +132,11 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
 
     /**
      * @param $key the key for the label
-     * @param null|array $arguments
+     * @param NULL|array $arguments
      * @param string $default
      * @return string
      */
-    protected function translate($key, $arguments = null, $default = 'MISSING TRANSLATION') {
+    protected function translate($key, $arguments = NULL, $default = 'MISSING TRANSLATION') {
         $value = Tx_Extbase_Utility_Localization::translate($key, 'T3chimp', $arguments);
 
         return ($value != NULL) ? $value : $default;

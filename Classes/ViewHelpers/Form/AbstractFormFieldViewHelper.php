@@ -30,12 +30,12 @@ abstract class Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper extends T
     /**
      * @var Tx_T3chimp_MailChimp_Field
      */
-    protected $field = null;
+    protected $field = NULL;
 
     /**
      * @var Tx_T3chimp_MailChimp_Form
      */
-    private $form = null;
+    private $form = NULL;
 
     /**
      * @return array
@@ -46,7 +46,7 @@ abstract class Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper extends T
 
         foreach($errors as $error) {
             $value = Tx_Extbase_Utility_Localization::translate($error, 'T3chimp');
-            $localizedErrors[] = ($value !== null) ? $value : $this->getValue();
+            $localizedErrors[] = ($value !== NULL) ? $value : $this->getValue();
         }
 
         return $localizedErrors;
@@ -58,9 +58,9 @@ abstract class Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper extends T
      * @throws Exception
      */
     protected function getField() {
-        if($this->field === null) {
+        if($this->field === NULL) {
             $this->field = $this->getForm()->getField($this->arguments['property']);
-            if($this->field === null) {
+            if($this->field === NULL) {
                 throw new Exception('Unknown field ' . htmlentities($this->arguments['property']) . ' referenced in template');
             }
         }
@@ -72,7 +72,7 @@ abstract class Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper extends T
      * @return Tx_T3chimp_MailChimp_Form
      */
     protected function getForm() {
-        if($this->form === null) {
+        if($this->form === NULL) {
             if(class_exists('TYPO3\CMS\Fluid\ViewHelpers\FormViewHelper')) {
                 $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
             } else { // <6.0 compatibility

@@ -80,7 +80,7 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
      * @return string
      */
     private function createFieldOptions() {
-        if($this->fieldOptions == null) {
+        if($this->fieldOptions == NULL) {
             $this->fieldOptions = '<option value=""></option>';
             foreach($GLOBALS['TCA']['fe_users']['columns'] as $column => $config) {
                 $label = $GLOBALS['LANG']->sL($config['label']);
@@ -177,15 +177,14 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
      */
     public function getAdditionalFields(array &$taskInfo, $task, tx_scheduler_Module $schedulerModule) {
         $fields = array();
-        $listId = ($task != null) ? $task->getListId() : null;
+        $listId = ($task != NULL) ? $task->getListId() : NULL;
 
         $fields['listId'] = array(
             'code' => $this->createListSelection($listId),
             'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncToMailChimpTask.label.listId'
         );
 
-
-        if($task != null && strlen($task->getListId()) > 0) {
+        if($task != NULL && strlen($task->getListId()) > 0) {
             $code = '';
 
             $fieldDefinitions = $this->mailChimp->getFieldsFor($task->getListId());
@@ -230,7 +229,7 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
 
         if(array_key_exists('mappings', $submittedData)) {
             $task->setMappings($submittedData['mappings']);
-            t3lib_div::devLog('T3Chimp List ID ' . print_r($submittedData['mappings'], true), 't3chimp');
+            t3lib_div::devLog('T3Chimp List ID ' . print_r($submittedData['mappings'], TRUE), 't3chimp');
         }
     }
 
@@ -242,6 +241,6 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
      * @return boolean TRUE if validation was ok (or selected class is not relevant), FALSE otherwise
      */
     public function validateAdditionalFields(array &$submittedData, tx_scheduler_Module $schedulerModule) {
-        return true;
+        return TRUE;
     }
 }

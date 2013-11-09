@@ -83,12 +83,12 @@ class Tx_T3chimp_Service_FileUpload implements t3lib_Singleton {
 
     /**
      * @param string $fieldName
-     * @return null|string
+     * @return NULL|string
      * @throws Exception
      */
     public function processUploadedFile($fieldName) {
         if(!array_key_exists($fieldName, $this->files)) {
-            return null;
+            return NULL;
         }
 
         $file = $this->files[$fieldName];
@@ -106,7 +106,7 @@ class Tx_T3chimp_Service_FileUpload implements t3lib_Singleton {
         }
 
         if(!$this->isAllowed($file['name'])) {
-            throw new Tx_T3chimp_Service_FileUpload_InvalidExtensionException('invalid file extension', 0, null, $this->allowedExtensions);
+            throw new Tx_T3chimp_Service_FileUpload_InvalidExtensionException('invalid file extension', 0, NULL, $this->allowedExtensions);
         }
 
         $basicFileFunctions = t3lib_div::makeInstance('t3lib_basicFileFunctions');

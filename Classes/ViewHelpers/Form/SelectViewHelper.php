@@ -51,7 +51,7 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 		$this->registerArgument('options', 'array', 'Associative array with internal IDs as key, and the values are displayed in the select box', TRUE);
 		$this->registerArgument('optionValueField', 'string', 'If specified, will call the appropriate getter on each object to determine the value.');
 		$this->registerArgument('optionLabelField', 'string', 'If specified, will call the appropriate getter on each object to determine the label.');
-		$this->registerArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', FALSE, FALSE);
+		$this->registerArgument('sortByOptionLabel', 'boolean', 'If TRUE, List will be sorted by label.', FALSE, FALSE);
 		$this->registerArgument('selectAllByDefault', 'boolean', 'If specified options are selected if none was set before.', FALSE, FALSE);
 		$this->registerArgument('errorClass', 'string', 'CSS class to set if there are errors for this view helper', FALSE, 'f3-form-error');
 		$this->registerArgument('includeBlank', 'boolean', 'whether or not to show an empty option on top', FALSE, TRUE);
@@ -126,7 +126,7 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 						if (method_exists($key, '__toString')) {
 							$key = (string)$key;
 						} else {
-							throw new Tx_Fluid_Core_ViewHelper_Exception('Identifying value for object of class "' . get_class($value) . '" was an object.' , 1247827428);
+							throw new Tx_Fluid_Core_ViewHelper_Exception('Identifying value for object of class "' . get_class($value) . '" was an object.', 1247827428);
 						}
 					}
 				} elseif ($this->persistenceManager->getBackend()->getIdentifierByObject($value) !== NULL) {
@@ -134,7 +134,7 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 				} elseif (method_exists($value, '__toString')) {
 					$key = (string)$value;
 				} else {
-					throw new Tx_Fluid_Core_ViewHelper_Exception('No identifying value for object of class "' . get_class($value) . '" found.' , 1247826696);
+					throw new Tx_Fluid_Core_ViewHelper_Exception('No identifying value for object of class "' . get_class($value) . '" found.', 1247826696);
 				}
 
 				if ((is_array($this->arguments) && array_key_exists('optionLabelField', $this->arguments)) ||
@@ -144,7 +144,7 @@ class Tx_T3chimp_ViewHelpers_Form_SelectViewHelper extends Tx_T3chimp_ViewHelper
 						if (method_exists($value, '__toString')) {
 							$value = (string)$value;
 						} else {
-							throw new Tx_Fluid_Core_ViewHelper_Exception('Label value for object of class "' . get_class($value) . '" was an object without a __toString() method.' , 1247827553);
+							throw new Tx_Fluid_Core_ViewHelper_Exception('Label value for object of class "' . get_class($value) . '" was an object without a __toString() method.', 1247827553);
 						}
 					}
 				} elseif (method_exists($value, '__toString')) {

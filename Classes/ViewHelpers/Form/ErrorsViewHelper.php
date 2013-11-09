@@ -30,12 +30,12 @@ class Tx_T3chimp_ViewHelpers_Form_ErrorsViewHelper extends Tx_Fluid_Core_ViewHel
     /**
      * @var Tx_T3chimp_MailChimp_Field
      */
-    protected $field = null;
+    protected $field = NULL;
 
     /**
      * @var Tx_T3chimp_MailChimp_Form
      */
-    private $form = null;
+    private $form = NULL;
 
     /**
      * @param string $property
@@ -43,9 +43,9 @@ class Tx_T3chimp_ViewHelpers_Form_ErrorsViewHelper extends Tx_Fluid_Core_ViewHel
      * @throws Exception
      */
     protected function getField($property) {
-        if($this->field === null) {
+        if($this->field === NULL) {
             $this->field = $this->getForm()->getField($property);
-            if($this->field === null) {
+            if($this->field === NULL) {
                 throw new Exception('Unknown field ' . htmlentities($property) . ' referenced in template');
             }
         }
@@ -57,7 +57,7 @@ class Tx_T3chimp_ViewHelpers_Form_ErrorsViewHelper extends Tx_Fluid_Core_ViewHel
      * @return Tx_T3chimp_MailChimp_Form
      */
     protected function getForm() {
-        if($this->form === null) {
+        if($this->form === NULL) {
             if(class_exists('TYPO3\CMS\Fluid\ViewHelpers\FormViewHelper')) {
                 $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
             } else { // <6.0 compatibility
@@ -89,7 +89,7 @@ class Tx_T3chimp_ViewHelpers_Form_ErrorsViewHelper extends Tx_Fluid_Core_ViewHel
                 }
             }
 
-            return $renderer->render(null, 'Errors', array('errors' => $errors));
+            return $renderer->render(NULL, 'Errors', array('errors' => $errors));
         }
 
         return '';
