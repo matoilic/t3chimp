@@ -30,6 +30,14 @@
                             </config>
                         </TCEforms>
                     </settings.doubleOptIn>
+                    <settings.disableWelcomeEmail>
+                        <TCEforms>
+                            <label>Disable welcome email</label>
+                            <config>
+                                <type>check</type>
+                            </config>
+                        </TCEforms>
+                    </settings.disableWelcomeEmail>
                     <settings.secureConnection>
                         <TCEforms>
                             <label>Use secure connection</label>

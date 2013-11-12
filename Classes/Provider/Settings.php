@@ -167,6 +167,7 @@ class Tx_T3chimp_Provider_Settings {
             }
 
             //read session stored settings for ajax requests
+            $this->session->setContext($this->extKey);
             if(array_key_exists('type', $_GET) && $this->session->settings != null) {
                 $this->settings = $this->session->settings;
             } else {
