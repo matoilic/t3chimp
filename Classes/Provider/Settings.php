@@ -174,10 +174,15 @@ class Tx_T3chimp_Provider_Settings {
                 $this->session->settings = $this->settings;
             }
 
-            $this->settings = array_merge($this->settings, $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));
+            $this->settings = array_merge($this->settings, $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));            
             $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]);
-            $global = $this->cleanSettingKeys($global);
-            self::$settingsCache[$this->extKey] = array_merge($this->settings, $global);
+            
+            if(is_array($global)) {
+                $global = $this->cleanSettingKeys($global);
+                self::$settingsCache[$this->extKey] = array_merge($this->settings, $global);
+            } else {
+                self::$settingsCache[$this->extKey] = $this->settings;
+            }
         }
 
         $this->settings = self::$settingsCache[$this->extKey];
