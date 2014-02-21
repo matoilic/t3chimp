@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,9 +26,22 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
+namespace MatoIlic\T3Chimp\Scheduler;
+
+use MatoIlic\T3Chimp\Domain\Repository\FrontendUserRepository;
+use MatoIlic\T3Chimp\Service\MailChimp;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Reflection\ReflectionService;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
+
+abstract class Base extends AbstractTask {
     /**
-     * @var Tx_Extbase_Configuration_ConfigurationManager
+     * @var ConfigurationManager
      */
     private $configurationManager;
 
@@ -38,17 +51,17 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
     protected $extConf;
 
     /**
-     * @var Tx_T3chimp_Service_MailChimp
+     * @var MailChimp
      */
     protected $mailChimp;
 
     /**
-     * @var Tx_Extbase_Object_ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var Tx_T3chimp_Domain_Repository_FrontendUserRepository
+     * @var FrontendUserRepository
      */
     protected $userRepo;
 
@@ -70,16 +83,16 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
     public function execute() {
         $this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['t3chimp']);
 
-        /** @var Tx_Extbase_Object_ObjectManager $objectManager */
-        $this->objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-        $this->configurationManager = $this->objectManager->get('Tx_Extbase_Configuration_ConfigurationManager');
-        $this->mailChimp = $this->objectManager->get('Tx_T3chimp_Service_MailChimp');
-        $this->userRepo = $this->objectManager->get('Tx_T3chimp_Domain_Repository_FrontendUserRepository');
+        /** @var ObjectManager $objectManager */
+        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->configurationManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+        $this->mailChimp = $this->objectManager->get('MatoIlic\\T3Chimp\\Service\\MailChimp');
+        $this->userRepo = $this->objectManager->get('MatoIlic\\T3Chimp\\Domain\\Repository\\FrontendUserRepository');
 
         $this->configurationManager->setConfiguration(array('extensionName' => 'T3chimp'));
-        $typoScriptSetup = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $typoScriptSetup = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         if (isset($typoScriptSetup['config.']['tx_extbase.']['objects.'])) {
-            $objectContainer = t3lib_div::makeInstance('Tx_Extbase_Object_Container_Container');
+            $objectContainer = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\Container\\Container');
             foreach ($typoScriptSetup['config.']['tx_extbase.']['objects.'] as $classNameWithDot => $classConfiguration) {
                 if (isset($classConfiguration['className'])) {
                     $originalClassName = rtrim($classNameWithDot, '.');
@@ -88,8 +101,8 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
             }
         }
 
-        /** @var Tx_Extbase_Reflection_Service $reflectionService */
-        $reflectionService = $this->objectManager->get('Tx_Extbase_Reflection_Service');
+        /** @var ReflectionService $reflectionService */
+        $reflectionService = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Reflection\\ReflectionService');
         try {
             $reflectionService->setDataCache($GLOBALS['typo3CacheManager']->getCache('extbase_reflection'));
         } catch(Exception $e) { //4.5.x compatibility
@@ -104,8 +117,8 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
 
         $state = $this->executeTask();
 
-        /** @var Tx_Extbase_Persistence_Manager $persistenceManager */
-        $persistenceManager = $this->objectManager->get('Tx_Extbase_Persistence_Manager');
+        /** @var PersistenceManager $persistenceManager */
+        $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
         $persistenceManager->persistAll();
         $reflectionService->shutdown();
 
@@ -137,7 +150,7 @@ abstract class Tx_T3chimp_Scheduler_Base extends Tx_Scheduler_Task {
      * @return string
      */
     protected function translate($key, $arguments = NULL, $default = 'MISSING TRANSLATION') {
-        $value = Tx_Extbase_Utility_Localization::translate($key, 'T3chimp', $arguments);
+        $value = LocalizationUtility::translate($key, 'T3chimp', $arguments);
 
         return ($value != NULL) ? $value : $default;
     }

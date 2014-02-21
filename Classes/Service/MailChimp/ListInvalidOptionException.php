@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,6 +26,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Service_MailChimp_ListInvalidOptionException extends Tx_T3chimp_Service_MailChimp_Exception {
+namespace MatoIlic\T3Chimp\Service\MailChimp;
+
+class ListInvalidOptionException extends MailChimpServiceException {
 
 }

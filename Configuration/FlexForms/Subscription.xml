@@ -16,7 +16,7 @@
                             <config>
                                 <type>select</type>
                                 <items></items>
-                                <itemsProcFunc>Tx_T3chimp_Provider_FlexFormValues->getLists</itemsProcFunc>
+                                <itemsProcFunc>MatoIlic\T3Chimp\Provider\FlexFormValues->getLists</itemsProcFunc>
                                 <maxitems>1</maxitems>
 								<size>1</size>
                             </config>

@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormViewHelper {
+namespace MatoIlic\T3Chimp\ViewHelpers;
+
+class FormViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\FormViewHelper {
     public function initializeArguments() {
         parent::initializeArguments();
         $this->registerTagAttribute('pageType', 'Page type for AJAX requests', TRUE);
@@ -57,9 +59,9 @@ class Tx_T3chimp_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormVie
      * @return string rendered form
      */
     public function render($action = NULL, array $arguments = array(), $controller = NULL, $extensionName = NULL, $pluginName = NULL, $pageUid = NULL, $object = NULL, $noCache = FALSE, $noCacheHash = FALSE, $section = '', $format = '', array $additionalParams = array(), $absolute = FALSE, $addQueryString = FALSE, array $argumentsToBeExcludedFromQueryString = array(), $fieldNamePrefix = NULL, $actionUri = NULL, $objectName = NULL) {
-        $this->viewHelperVariableContainer->add('Tx_T3chimp_ViewHelpers_FormViewHelper', 'renderedProperties', array());
+        $this->viewHelperVariableContainer->add('MatoIlic\\T3Chimp\\ViewHelpers\\FormViewHelper', 'renderedProperties', array());
 
-        $this->arguments = new Tx_T3chimp_ViewHelpers_WritableArguments($this->arguments);
+        $this->arguments = new WritableArguments($this->arguments);
 
         $this->tag->addAttribute('id', 't3chimp-form-' . $object->getListId());
 

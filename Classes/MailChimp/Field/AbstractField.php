@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,13 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChimp_Field {
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+use MatoIlic\T3Chimp\MailChimp\Field;
+use MatoIlic\T3Chimp\MailChimp\Form;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
+
+abstract class AbstractField implements Field {
     /**
      * @var array
      */
@@ -38,7 +44,7 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
     protected $errors = array();
 
     /**
-     * @var Tx_T3chimp_MailChimp_Form
+     * @var Form
      */
     protected $form;
 
@@ -54,14 +60,14 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
 
     /**
      * @param array $definition
-     * @param Tx_T3chimp_MailChimp_Form $form
+     * @param Form $form
      */
-    public function __construct(array $definition, Tx_T3chimp_MailChimp_Form $form) {
+    public function __construct(array $definition, Form $form) {
         $this->definition = $definition;
         $this->form = $form;
     }
 
-    public function bindRequest(Tx_Extbase_MVC_RequestInterface $request) {
+    public function bindRequest(RequestInterface $request) {
         if($request->hasArgument($this->getName())) {
             $this->setValue($request->getArgument($this->getName()));
         }
@@ -175,7 +181,7 @@ abstract class Tx_T3chimp_MailChimp_Field_Abstract implements Tx_T3chimp_MailChi
      * @return string
      */
     public function getTemplate() {
-        $tmp = explode('_', get_class($this));
+        $tmp = explode('\\', get_class($this));
         $fieldName = $tmp[count($tmp) - 1];
 
         return $fieldName . 'Field';

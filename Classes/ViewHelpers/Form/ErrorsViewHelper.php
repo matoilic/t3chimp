@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,27 +26,34 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_ViewHelpers_Form_ErrorsViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+namespace MatoIlic\T3Chimp\ViewHelpers\Form;
+
+use MatoIlic\T3Chimp\MailChimp\Field;
+use MatoIlic\T3Chimp\MailChimp\Form;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\ViewHelpers\RenderViewHelper;
+
+class ErrorsViewHelper extends AbstractViewHelper {
     /**
-     * @var Tx_T3chimp_MailChimp_Field
+     * @var Field
      */
     protected $field = NULL;
 
     /**
-     * @var Tx_T3chimp_MailChimp_Form
+     * @var Form
      */
     private $form = NULL;
 
     /**
      * @param string $property
-     * @return Tx_T3chimp_MailChimp_Field
-     * @throws Exception
+     * @return Field
+     * @throws \Exception
      */
     protected function getField($property) {
         if($this->field === NULL) {
             $this->field = $this->getForm()->getField($property);
             if($this->field === NULL) {
-                throw new Exception('Unknown field ' . htmlentities($property) . ' referenced in template');
+                throw new \Exception('Unknown field ' . htmlentities($property) . ' referenced in template');
             }
         }
 
@@ -54,11 +61,11 @@ class Tx_T3chimp_ViewHelpers_Form_ErrorsViewHelper extends Tx_Fluid_Core_ViewHel
     }
 
     /**
-     * @return Tx_T3chimp_MailChimp_Form
+     * @return Form
      */
     protected function getForm() {
         if($this->form === NULL) {
-            if(class_exists('TYPO3\CMS\Fluid\ViewHelpers\FormViewHelper')) {
+            if(class_exists('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper')) {
                 $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
             } else { // <6.0 compatibility
                 $this->form = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
@@ -76,7 +83,7 @@ class Tx_T3chimp_ViewHelpers_Form_ErrorsViewHelper extends Tx_Fluid_Core_ViewHel
         $errors = $this->getField($property)->getErrors();
 
         if(count($errors) > 0) {
-            $renderer = new Tx_Fluid_ViewHelpers_RenderViewHelper();
+            $renderer = new RenderViewHelper();
 
             if(method_exists($this, 'setControllerContext')) { //4.5.x compatibility
                 $renderer->setControllerContext($this->controllerContext);

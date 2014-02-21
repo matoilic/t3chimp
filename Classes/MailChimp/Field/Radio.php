@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,13 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Radio extends Tx_T3chimp_MailChimp_Field_Abstract {
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+use MatoIlic\T3Chimp\MailChimp\MailChimpException;
+use MatoIlic\T3Chimp\MailChimp\Field\Helper\Choice;
+use MatoIlic\T3Chimp\MailChimp\Form;
+
+class Radio extends AbstractField {
     /**
      * @var array
      */
@@ -39,9 +45,9 @@ class Tx_T3chimp_MailChimp_Field_Radio extends Tx_T3chimp_MailChimp_Field_Abstra
 
     /**
      * @param array $definition
-     * @param Tx_T3chimp_MailChimp_Form $form
+     * @param Form $form
      */
-    public function __construct(array $definition, Tx_T3chimp_MailChimp_Form $form) {
+    public function __construct(array $definition, Form $form) {
         parent::__construct($definition, $form);
         $this->initializeChoices($this->definition['choices']);
     }
@@ -58,18 +64,18 @@ class Tx_T3chimp_MailChimp_Field_Radio extends Tx_T3chimp_MailChimp_Field_Abstra
      */
     protected function initializeChoices(array $choices) {
         foreach($choices as $choice) {
-            $this->choices[] = new Tx_T3chimp_MailChimp_Field_Helper_Choice($this, $choice);
+            $this->choices[] = new Choice($this, $choice);
             $this->validValues[] = $choice;
         }
     }
 
     /**
      * @param mixed $value
-     * @throws Tx_T3chimp_MailChimp_Exception
+     * @throws MailChimpException
      */
     public function setValue($value) {
         if(!empty($value) && !in_array($value, $this->validValues)) {
-            throw new Tx_T3chimp_MailChimp_Exception('Invalid choice ' . htmlentities($value) . ' for field ' . $this->getName());
+            throw new MailChimpException('Invalid choice ' . htmlentities($value) . ' for field ' . $this->getName());
         }
 
         parent::setValue($value);

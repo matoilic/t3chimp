@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_Field_Checkboxes {
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+use MatoIlic\T3Chimp\MailChimp\MailChimpException;
+
+class InterestGrouping extends Checkboxes {
     public function getApiValue() {
         //commas in interest group names should be escaped with a backslash
         $selection = str_replace(',', '\\,', $this->getValue());
@@ -86,7 +90,7 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
         }
 
         if(!$this->getDisplayAsCheckboxes() && !$this->getIsHidden() && count($value) > 1) {
-            throw new Tx_T3chimp_MailChimp_Exception('Interest groupings with a field type other than checkboxes can only have one value');
+            throw new MailChimpException('Interest groupings with a field type other than checkboxes can only have one value');
         }
 
         parent::setValue($value);

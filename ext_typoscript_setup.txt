@@ -3,7 +3,7 @@ config.tx_extbase {
 		enableAutomaticCacheClearing = 1
 		updateReferenceIndex = 0
 		classes {
-			Tx_T3chimp_Domain_Model_FrontendUser {
+			MatoIlic\T3Chimp\Domain\Model\FrontendUser {
 				mapping {
 					tableName = fe_users
 				}
@@ -40,21 +40,21 @@ tx_t3chimp_subscriptions_ajax_page < plugin.tx_t3chimp.ajax
 tx_t3chimp_subscriptions_ajax_page {
     typeNum = 1296728024
 
-    settings =< plugin.tx_t3chimp.settings
-
     10 = USER_INT
     10 {
-        userFunc = tx_t3chimp_core_bootstrap->run
-        pluginName = subscription
+        userFunc = MatoIlic\T3Chimp\Core\Bootstrap->run
+        vendorName = MatoIlic
         extensionName = T3chimp
+        pluginName = subscription
         settings =< plugin.tx_t3chimp.settings
         persistence =< plugin.tx_t3chimp.persistence
         view =< plugin.tx_t3chimp.view
+        update =< plugin.tx_t3chimp.update
 
         switchableControllerActions {
-            Subscriptions {
-                1 = process
-            }
+          Subscriptions {
+            1 = process
+          }
         }
     }
 }

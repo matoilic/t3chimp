@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,12 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Persistence_Repository {
+namespace MatoIlic\T3Chimp\Domain\Repository;
+
+use MatoIlic\T3Chimp\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Persistence\Repository;
+
+class FrontendUserRepository extends Repository {
     /**
      * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
@@ -51,7 +56,7 @@ class Tx_T3chimp_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Per
         $query->matching($query->equals($emailField, $email));
         $subscribers = $query->execute()->toArray();
 
-        /** @var Tx_T3chimp_Domain_Model_FrontendUser $subscriber */
+        /** @var FrontendUser $subscriber */
         foreach($subscribers as $subscriber) {
             $subscriber->setSubscribedToNewsletter($state);
             $this->update($subscriber);

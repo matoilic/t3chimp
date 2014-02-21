@@ -1,6 +1,8 @@
 <?php
 
-class Tx_T3chimp_MailChimp_Api {
+namespace MatoIlic\T3Chimp\MailChimp;
+
+class Api {
     var $version = "1.3";
     var $errorMessage;
     var $errorCode;
@@ -36,7 +38,7 @@ class Tx_T3chimp_MailChimp_Api {
      * @param string $apikey Your MailChimp apikey
      * @param string $secure Whether or not this should use a secure connection
      */
-    function Tx_T3chimp_MailChimp_Api($apikey, $secure=FALSE) {
+    function __construct($apikey, $secure=FALSE) {
         $this->secure = $secure;
         $this->apiUrl = parse_url("http://api.mailchimp.com/" . $this->version . "/?output=php");
         $this->api_key = $apikey;

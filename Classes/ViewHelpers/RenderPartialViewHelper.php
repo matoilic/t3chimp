@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,16 +26,22 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_ViewHelpers_RenderPartialViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+namespace MatoIlic\T3Chimp\ViewHelpers;
+
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\ViewHelpers\RenderViewHelper;
+
+class RenderPartialViewHelper extends AbstractViewHelper {
     /**
-     * @var Tx_Extbase_Object_ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @param Tx_Extbase_Object_ObjectManagerInterface $manager
+     * @param ObjectManagerInterface $manager
      */
-    public function injectObjectManager(Tx_Extbase_Object_ObjectManagerInterface $manager) {
+    public function injectObjectManager(ObjectManagerInterface $manager) {
         $this->objectManager = $manager;
     }
 
@@ -47,11 +53,11 @@ class Tx_T3chimp_ViewHelpers_RenderPartialViewHelper extends Tx_Fluid_Core_ViewH
     public function render($name, $arguments = NULL) {
         if($arguments === NULL) $arguments = $this->templateVariableContainer->getAll(); //4.5.x compatibility
 
-        /* @var Tx_Fluid_ViewHelpers_RenderViewHelper $renderer */
+        /* @var RenderViewHelper $renderer */
         if(TYPO3_version < '6.1.0') {
-            $renderer = $this->objectManager->create('Tx_Fluid_ViewHelpers_RenderViewHelper');
+            $renderer = $this->objectManager->create('TYPO3\\CMS\\Fluid\\ViewHelpers\\RenderViewHelper');
         } else {
-            $renderer = $this->objectManager->get('Tx_Fluid_ViewHelpers_RenderViewHelper');
+            $renderer = $this->objectManager->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\RenderViewHelper');
         }
 
         if(method_exists($this, 'setControllerContext')) { //4.5.x compatibility

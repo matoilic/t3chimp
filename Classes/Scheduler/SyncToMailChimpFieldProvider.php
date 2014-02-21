@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,21 +26,29 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_AdditionalFieldProvider {
+namespace MatoIlic\T3Chimp\Scheduler;
+
+use MatoIlic\T3Chimp\Service\MailChimp;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
+use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
+
+class SyncToMailChimpFieldProvider implements AdditionalFieldProviderInterface {
     /**
      * @var string
      */
     private $fieldOptions;
 
     /**
-     * @var Tx_T3chimp_Service_MailChimp
+     * @var MailChimp
      */
     private $mailChimp;
 
     public function __construct() {
-        /** @var Tx_Extbase_Object_ObjectManager $objectManager */
-        $objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-        $this->mailChimp = $objectManager->get('Tx_T3chimp_Service_MailChimp');
+        /** @var ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->mailChimp = $objectManager->get('MatoIlic\\T3Chimp\\Service\\MailChimp');
         $this->mailChimp->initialize();
     }
 
@@ -171,11 +179,11 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
      * Gets additional fields to render in the form to add/edit a task
      *
      * @param array $taskInfo Values of the fields from the add/edit task form
-     * @param Tx_T3chimp_Scheduler_SyncToMailChimpTask $task The task object being edited. Null when adding a task!
-     * @param tx_scheduler_Module $schedulerModule Reference to the scheduler backend module
+     * @param SyncToMailChimpTask $task The task object being edited. Null when adding a task!
+     * @param SchedulerModuleController $schedulerModule Reference to the scheduler backend module
      * @return array A two dimensional array, array('Identifier' => array('fieldId' => array('code' => '', 'label' => '', 'cshKey' => '', 'cshLabel' => ''))
      */
-    public function getAdditionalFields(array &$taskInfo, $task, tx_scheduler_Module $schedulerModule) {
+    public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule) {
         $fields = array();
         $listId = ($task != NULL) ? $task->getListId() : NULL;
 
@@ -219,17 +227,17 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
      * Takes care of saving the additional fields' values in the task's object
      *
      * @param array $submittedData An array containing the data submitted by the add/edit task form
-     * @param tx_scheduler_Task $task Reference to the scheduler backend module
+     * @param AbstractTask $task Reference to the scheduler backend module
      * @return void
      */
-    public function saveAdditionalFields(array $submittedData, tx_scheduler_Task $task) {
-        /** @var Tx_T3chimp_Scheduler_SyncToMailChimpTask $task */
+    public function saveAdditionalFields(array $submittedData, AbstractTask $task) {
+        /** @var SyncToMailChimpTask $task */
         $task->setListId($submittedData['listId']);
-        t3lib_div::devLog('T3Chimp List ID ' . $submittedData['listId'], 't3chimp');
+        GeneralUtility::devLog('T3Chimp List ID ' . $submittedData['listId'], 't3chimp');
 
         if(array_key_exists('mappings', $submittedData)) {
             $task->setMappings($submittedData['mappings']);
-            t3lib_div::devLog('T3Chimp List ID ' . print_r($submittedData['mappings'], TRUE), 't3chimp');
+            GeneralUtility::devLog('T3Chimp List ID ' . print_r($submittedData['mappings'], TRUE), 't3chimp');
         }
     }
 
@@ -237,10 +245,10 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpFieldProvider implements tx_scheduler_
      * Validates the additional fields' values
      *
      * @param array $submittedData An array containing the data submitted by the add/edit task form
-     * @param tx_scheduler_Module $schedulerModule Reference to the scheduler backend module
+     * @param SchedulerModuleController $schedulerModule Reference to the scheduler backend module
      * @return boolean TRUE if validation was ok (or selected class is not relevant), FALSE otherwise
      */
-    public function validateAdditionalFields(array &$submittedData, tx_scheduler_Module $schedulerModule) {
+    public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule) {
         return TRUE;
     }
 }

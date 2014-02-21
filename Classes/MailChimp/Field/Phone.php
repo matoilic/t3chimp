@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Phone extends Tx_T3chimp_MailChimp_Field_Abstract {
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+class Phone extends AbstractField {
     public function getFormat() {
         return $this->definition['format'];
     }

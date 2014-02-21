@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,14 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Scheduler_Request implements Tx_Extbase_MVC_RequestInterface {
+namespace MatoIlic\T3Chimp\Scheduler;
+
+use TYPO3\CMS\Extbase\Mvc\Exception\InvalidActionNameException;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchControllerException;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
+
+class Request implements RequestInterface {
     /**
      * @var array
      */
@@ -62,7 +69,7 @@ class Tx_T3chimp_Scheduler_Request implements Tx_Extbase_MVC_RequestInterface {
      * controller name
      *
      * @return string The controller's Object Name
-     * @throws Tx_Extbase_MVC_Exception_NoSuchController if the controller does not exist
+     * @throws NoSuchControllerException if the controller does not exist
      * @api
      */
     public function getControllerObjectName() {
@@ -98,7 +105,7 @@ class Tx_T3chimp_Scheduler_Request implements Tx_Extbase_MVC_RequestInterface {
      *
      * @param string $argumentName Name of the argument
      * @return string Value of the argument
-     * @throws Tx_Extbase_MVC_Exception_NoSuchArgument if such an argument does not exist
+     * @throws NoSuchArgumentException if such an argument does not exist
      * @api
      */
     public function getArgument($argumentName) {
@@ -131,7 +138,7 @@ class Tx_T3chimp_Scheduler_Request implements Tx_Extbase_MVC_RequestInterface {
      *
      * @param string $extensionName The extension name.
      * @return void
-     * @throws Tx_Extbase_MVC_Exception_InvalidPackageKey if the package key is not valid
+     * @throws InvalidPackageKey if the package key is not valid
      * @api
      */
     public function setControllerExtensionName($extensionName) {
@@ -178,7 +185,7 @@ class Tx_T3chimp_Scheduler_Request implements Tx_Extbase_MVC_RequestInterface {
      *
      * @param string $actionName: Name of the action to execute by the controller
      * @return void
-     * @throws Tx_Extbase_MVC_Exception_InvalidActionName if the action name is not valid
+     * @throws InvalidActionNameException if the action name is not valid
      * @api
      */
     public function setControllerActionName($actionName) {
@@ -237,6 +244,4 @@ class Tx_T3chimp_Scheduler_Request implements Tx_Extbase_MVC_RequestInterface {
     public function getErrors() {
         // 4.5.x compatibility
     }
-
-
 }

@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,14 +26,24 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Service_FileUpload implements t3lib_Singleton {
+namespace MatoIlic\T3Chimp\Service;
+
+use MatoIlic\T3Chimp\Provider\Settings;
+use MatoIlic\T3Chimp\Service\FileUpload\FilePartiallyUploadedException;
+use MatoIlic\T3Chimp\Service\FileUpload\FileTooLargeException;
+use MatoIlic\T3Chimp\Service\FileUpload\NoFileUploadedException;
+use MatoIlic\T3Chimp\Service\FileUpload\InvalidExtensionException;
+use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+class FileUpload implements SingletonInterface {
     /**
      * @var array
      */
     protected $allowedExtensions;
 
     /**
-     * @var Tx_T3chimp_Provider_Settings
+     * @var Settings
      */
     protected $settingsProvider;
 
@@ -48,14 +58,14 @@ class Tx_T3chimp_Service_FileUpload implements t3lib_Singleton {
     protected $uploadFolder;
 
     public function __construct() {
-        $this->uploadFolder = t3lib_div::getFileAbsFileName('uploads/tx_t3chimp');
+        $this->uploadFolder = GeneralUtility::getFileAbsFileName('uploads/tx_t3chimp');
         $this->allowedExtensions = explode(',', $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']);
     }
 
     /**
-     * @param Tx_T3chimp_Provider_Settings $settingsProvider
+     * @param Settings $settingsProvider
      */
-    public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $settingsProvider) {
+    public function injectSettingsProvider(Settings $settingsProvider) {
         $key = 'tx_' . strtolower($settingsProvider->get('extensionName')) . '_' . $settingsProvider->get('pluginName');
 
         if(array_key_exists($key, $_FILES)) {
@@ -84,7 +94,10 @@ class Tx_T3chimp_Service_FileUpload implements t3lib_Singleton {
     /**
      * @param string $fieldName
      * @return NULL|string
-     * @throws Exception
+     * @throws FileTooLargeException
+     * @throws FilePartiallyUploadedException
+     * @throws NoFileUploadedException
+     * @throws InvalidExtensionException
      */
     public function processUploadedFile($fieldName) {
         if(!array_key_exists($fieldName, $this->files)) {
@@ -96,23 +109,23 @@ class Tx_T3chimp_Service_FileUpload implements t3lib_Singleton {
         switch($file['error']) {
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
-                new Tx_T3chimp_Service_FileUpload_FileTooLargeException();
+                new FileTooLargeException();
 
             case UPLOAD_ERR_PARTIAL:
-                new Tx_T3chimp_Service_FileUpload_FilePartiallyUploadedException();
+                new FilePartiallyUploadedException();
 
             case UPLOAD_ERR_NO_FILE:
-                new Tx_T3chimp_Service_FileUpload_NoFileUploadedException();
+                new NoFileUploadedException();
         }
 
         if(!$this->isAllowed($file['name'])) {
-            throw new Tx_T3chimp_Service_FileUpload_InvalidExtensionException('invalid file extension', 0, NULL, $this->allowedExtensions);
+            throw new InvalidExtensionException('invalid file extension', 0, NULL, $this->allowedExtensions);
         }
 
-        $basicFileFunctions = t3lib_div::makeInstance('t3lib_basicFileFunctions');
+        $basicFileFunctions = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
 
         $fileName = $basicFileFunctions->getUniqueName($file['name'], $this->uploadFolder);
-        t3lib_div::upload_copy_move($file['tmp_name'], $fileName);
+        GeneralUtility::upload_copy_move($file['tmp_name'], $fileName);
 
         return 'uploads/tx_t3chimp/' . basename($fileName);
     }

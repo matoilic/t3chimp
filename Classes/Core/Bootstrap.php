@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,23 +29,17 @@
 /**
  * Custom bootstrap to properly initialize important properties for AJAX requests
  */
-class Tx_T3chimp_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
+namespace MatoIlic\T3Chimp\Core;
+
+use TYPO3\CMS\Extbase\Mvc\RequestHandlerResolver;
+use TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler;
+
+class Bootstrap extends \TYPO3\CMS\Extbase\Core\Bootstrap {
     /**
-     * Runs the the Extbase Framework by resolving an appropriate Request Handler and passing control to it.
-     * If the Framework is not initialized yet, it will be initialized.
-     *
-     * @param string $content The content
-     * @param array $configuration The TS configuration array
-     * @return string $content The processed content
-     * @api
+     * @inherit
      */
     public function run($content, $configuration) {
         $this->initialize($configuration);
-
-        /** @var Tx_Extbase_MVC_RequestHandlerResolver $requestHandlerResolver */
-        $requestHandlerResolver = $this->objectManager->get('Tx_Extbase_MVC_RequestHandlerResolver');
-        /** @var Tx_Extbase_MVC_Web_FrontendRequestHandler $requestHandler */
-        $requestHandler = $requestHandlerResolver->resolveRequestHandler();
 
         $GLOBALS['TSFE']->sys_language_uid = $_GET['L'];
         if(strlen($_GET['LISO']) > 0) {
@@ -55,22 +49,6 @@ class Tx_T3chimp_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 
         $GLOBALS['TSFE']->id = $_GET['id'];
 
-        $response = $requestHandler->handleRequest();
-
-        // If response is NULL after handling the request we need to stop
-        // This happens for instance, when a USER object was converted to a USER_INT
-        // @see Tx_Extbase_MVC_Web_FrontendRequestHandler::handleRequest()
-        if ($response === NULL) {
-            $this->reflectionService->shutdown();
-            return;
-        }
-        if (count($response->getAdditionalHeaderData()) > 0) {
-            $GLOBALS['TSFE']->additionalHeaderData[] = implode(chr(10), $response->getAdditionalHeaderData());
-        }
-        $response->sendHeaders();
-        $content = $response->getContent();
-
-        $this->resetSingletons();
-        return $content;
+        return $this->handleRequest();
     }
 }

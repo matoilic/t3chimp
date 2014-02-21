@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Provider_Session implements t3lib_Singleton {
+namespace MatoIlic\T3Chimp\Provider;
+
+use TYPO3\CMS\Core\SingletonInterface;
+
+class Session implements SingletonInterface {
     const KEY = 'tx_t3chimp';
 
     /**

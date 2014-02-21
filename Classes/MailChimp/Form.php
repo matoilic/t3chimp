@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,11 +26,18 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Form {
+namespace MatoIlic\T3Chimp\MailChimp;
+
+use MatoIlic\T3Chimp\MailChimp\Field;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+
+class Form {
     /**
      * @var string
      */
-    protected static $fieldNamespace = 'Tx_T3chimp_MailChimp_Field_';
+    protected static $fieldNamespace = '\\MatoIlic\\T3Chimp\\MailChimp\\Field\\';
 
     /**
      * @var array
@@ -58,7 +65,7 @@ class Tx_T3chimp_MailChimp_Form {
     protected $listId;
 
     /**
-     * @var Tx_Extbase_Object_ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -94,7 +101,7 @@ class Tx_T3chimp_MailChimp_Form {
         $this->listId = $listId;
     }
 
-    public function bindRequest(Tx_Extbase_MVC_RequestInterface $request) {
+    public function bindRequest(RequestInterface $request) {
         foreach($this->getFields() as $field) {
             $field->bindRequest($request);
         }
@@ -116,7 +123,7 @@ class Tx_T3chimp_MailChimp_Form {
 
     /**
      * @param string $name
-     * @return Tx_T3chimp_MailChimp_Field|NULL
+     * @return Field|NULL
      */
     public function getField($name) {
         foreach($this->getFields(TRUE) as $field) {
@@ -159,7 +166,7 @@ class Tx_T3chimp_MailChimp_Form {
                 $this->hiddenFields[] = $field;
             }
         } else {
-            trigger_error('Tx_T3chimp_MailChimp_Form: unsupported type ' . $type, E_WARNING);
+            trigger_error('MatoIlic\\T3Chimp\\MailChimp\\Form: unsupported type ' . $type, E_WARNING);
         }
     }
 
@@ -175,9 +182,9 @@ class Tx_T3chimp_MailChimp_Form {
     }
 
     /**
-     * @param Tx_Extbase_Object_ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function injectObjectManager(Tx_Extbase_Object_ObjectManager $objectManager) {
+    public function injectObjectManager(ObjectManager $objectManager) {
         $this->objectManager = $objectManager;
         $this->initializeFields($this->fieldDefinitions);
     }
@@ -191,11 +198,11 @@ class Tx_T3chimp_MailChimp_Form {
 
     /**
      * @return bool
-     * @throws Tx_T3chimp_MailChimp_Exception
+     * @throws \MatoIlic\T3Chimp\MailChimp\MailChimpException
      */
     public function isValid() {
         if(!$this->isBound) {
-            throw new Tx_T3chimp_MailChimp_Exception('Can not validate an unbound form');
+            throw new MailChimpException('Can not validate an unbound form');
         }
 
         foreach($this->getFields(TRUE) as $field) {
@@ -219,7 +226,7 @@ class Tx_T3chimp_MailChimp_Form {
                 'groupingId' => $grouping['id'],
                 'form_field' => $grouping['form_field']
             );
-            $this->publicFields[] = new Tx_T3chimp_MailChimp_Field_InterestGrouping($definition, $this);
+            $this->publicFields[] = new Field\InterestGrouping($definition, $this);
         }
     }
 }

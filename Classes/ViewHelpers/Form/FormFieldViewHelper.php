@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,14 +26,21 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_ViewHelpers_Form_FormFieldViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+namespace MatoIlic\T3Chimp\ViewHelpers\Form;
+
+use MatoIlic\T3Chimp\MailChimp\Field;
+use MatoIlic\T3Chimp\MailChimp\Form;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\ViewHelpers\RenderViewHelper;
+
+class FormFieldViewHelper extends AbstractViewHelper {
     /**
-     * @var Tx_T3chimp_MailChimp_Field
+     * @var Field
      */
     protected $field = NULL;
 
     /**
-     * @var Tx_T3chimp_MailChimp_Form
+     * @var Form
      */
     private $form = NULL;
 
@@ -46,11 +53,11 @@ class Tx_T3chimp_ViewHelpers_Form_FormFieldViewHelper extends Tx_Fluid_Core_View
     }
 
     /**
-     * @return Tx_T3chimp_MailChimp_Form
+     * @return Form
      */
     protected function getForm() {
         if($this->form === NULL) {
-            if(class_exists('TYPO3\CMS\Fluid\ViewHelpers\FormViewHelper')) {
+            if(class_exists('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper')) {
                 $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
             } else { // <6.0 compatibility
                 $this->form = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
@@ -66,16 +73,16 @@ class Tx_T3chimp_ViewHelpers_Form_FormFieldViewHelper extends Tx_Fluid_Core_View
     }
 
     /**
-     * @param Tx_T3chimp_MailChimp_Field $field
+     * @param Field $field
      */
-    protected function markAsRendered(Tx_T3chimp_MailChimp_Field $field) {
-        $fields = $this->viewHelperVariableContainer->get('Tx_T3chimp_ViewHelpers_FormViewHelper', 'renderedProperties');
+    protected function markAsRendered(Field $field) {
+        $fields = $this->viewHelperVariableContainer->get('MatoIlic\\T3Chimp\\ViewHelpers\\FormViewHelper', 'renderedProperties');
         $fields[] = $field->getName();
-        $this->viewHelperVariableContainer->addOrUpdate('Tx_T3chimp_ViewHelpers_FormViewHelper', 'renderedProperties', $fields);
+        $this->viewHelperVariableContainer->addOrUpdate('MatoIlic\\T3Chimp\\ViewHelpers\\FormViewHelper', 'renderedProperties', $fields);
     }
 
     public function render() {
-        $renderer = new Tx_Fluid_ViewHelpers_RenderViewHelper();
+        $renderer = new RenderViewHelper();
 
         if(method_exists($this, 'setControllerContext')) { //4.5.x compatibility
             $renderer->setControllerContext($this->controllerContext);
