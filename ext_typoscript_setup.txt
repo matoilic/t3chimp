@@ -13,10 +13,6 @@ config.tx_extbase {
 }
 
 plugin.tx_t3chimp {
-	view {
-		defaultPid = auto
-	}
-
 	ajax = PAGE
     ajax {
         config {

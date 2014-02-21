@@ -98,5 +98,50 @@
 
             <label index="fe_users.subscribed_to_newsletter">Newsletter abonnieren</label>
         </languageKey>
+        <languageKey index="nl" type="array">
+            <label index="t3chimp.flexForm.list">Lijst</label>
+            <label index="t3chimp.flexForm.doubleOtpIn">Dubbele Opt-In</label>
+            <label index="t3chimp.error.invalidEmail">Ongeldig e-mail adress</label>
+            <label index="t3chimp.error.invalidValue">Ongeldige waarde</label>
+            <label index="t3chimp.error.required">Dit is een verplicht veld</label>
+            <label index="t3chimp.error.notNumber">Gelieve een nummer in te vullen</label>
+            <label index="t3chimp.error.invalidZip">Gelieve een geldige postcode in te geven</label>
+            <label index="t3chimp.error.invalidUrl">Gelieve een gelidge URL in te geven</label>
+            <label index="t3chimp.error.invalidDate">Gelieve geen geldige datum in te geven</label>
+            <label index="t3chimp.error.unsupportedImageFormat">Ongeldig afbeeldingsformaat</label>
+            <label index="t3chimp.error.fileTooLarge">Bestand is te groot</label>
+            <label index="t3chimp.error.filePartiallyUploaded">Upload mislukt</label>
+            <label index="t3chimp.error.address.addr1.required">Gelieve de eerste adreslijn in te vullen</label>
+            <label index="t3chimp.error.address.addr2.required">Gelieve de tweede adreslijn in te vullen</label>
+            <label index="t3chimp.error.address.state.required">Gelieve een geldige staat in te geven</label>
+            <label index="t3chimp.error.address.zip.required">Gelieve een postcode in te geven</label>
+            <label index="t3chimp.error.address.city.required">Gelieve een stad in te geven</label>
+            <label index="t3chimp.error.address.country.required">Gelieve een land in te geven</label>
+            <label index="t3chimp.error.address.required">Gelieve een adres in te vullen</label>
+            <label index="t3chimp.error.invalidBirthDate">Gelieve je adres in te geven</label>
+            <label index="t3chimp.form.submit">Inschrijven</label>
+            <label index="t3chimp.form.requiredFields">Verplichte velden</label>
+            <label index="t3chimp.form.subscribed">Je bent succesvol ingeschreven voor onze nieuwsbrief.</label>
+            <label index="t3chimp.form.almostSubscribed">
+                Bijna klaar. Om de inschrijving te voltooien moet je enkel nog de link in de e-mail aan te klikken die je binnen enkele ogenblikken zult ontvangen.
+            </label>
+            <label index="t3chimp.form.unsubscribed">Je bent succesvol uitgeschreven.</label>
+            <label index="t3chimp.form.updated">je inschrijving is gewijzigd.</label>
+            <label index="t3chimp.phone.usFormat">vb. 123-123-1234</label>
+            <label index="t3chimp.exception.invalidEmail">Je kan niet inschrijven met dit e-mail adres</label>
+            <label index="t3chimp.exception.notSubscribed">Je bent niet ingeschreven voor deze lijst</label>
+            <label index="t3chimp.address.line1">Adres 1</label>
+            <label index="t3chimp.address.line2">Adres 2</label>
+            <label index="t3chimp.address.city">Stad</label>
+            <label index="t3chimp.address.state">Staat/Provincie/Regio</label>
+            <label index="t3chimp.address.zipCode">Postcode</label>
+            <label index="t3chimp.address.country">Land</label>
+
+            <label index="t3chimp: Action">Actie</label>
+            <label index="t3chimp: subscribe">Inschrijven</label>
+            <label index="t3chimp: unsubscribe">Uitschrijven</label>
+
+            <label index="fe_users.subscribed_to_newsletter">Inschrijven voor onze nieuwsbrief</label>
+        </languageKey>
 	</data>
 </T3locallang>

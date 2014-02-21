@@ -165,7 +165,8 @@ class Tx_T3chimp_Provider_Settings {
             }
 
             //read session stored settings for ajax requests
-            if(array_key_exists('type', $_GET) && $this->session->settings != NULL) {
+            $this->session->setContext($this->extKey);
+            if(array_key_exists('type', $_GET) && $this->session->settings != null) {
                 $this->settings = $this->session->settings;
             } else {
                 $this->session->settings = $this->settings;
@@ -173,8 +174,13 @@ class Tx_T3chimp_Provider_Settings {
 
             $this->settings = array_merge($this->settings, $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));
             $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]);
-            $global = $this->cleanSettingKeys($global);
-            self::$settingsCache[$this->extKey] = array_merge($this->settings, $global);
+
+            if(is_array($global)) {
+                $global = $this->cleanSettingKeys($global);
+                self::$settingsCache[$this->extKey] = array_merge($this->settings, $global);
+            } else {
+                self::$settingsCache[$this->extKey] = $this->settings;
+            }
         }
 
         $this->settings = self::$settingsCache[$this->extKey];

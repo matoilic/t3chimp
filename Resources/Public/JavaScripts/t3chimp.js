@@ -22,12 +22,12 @@
         return $('meta[name="t3chimp:' + name + '"]').attr('content');
     }
 
-    function setStateSubscribe(form) {
-        $(form || this).parents('form').find('p').show();
+    function setStateSubscribe(e) {
+        $(e.target || e || this).parents('form').find('p').show();
     }
 
-    function setStateUnsubscribe(form) {
-        $(form || this).parents('form').find('p:not(.t3chimp-always)').hide();
+    function setStateUnsubscribe(e) {
+        $(e.target || e || this).parents('form').find('p:not(.t3chimp-always)').hide();
     }
 
     $doc.on('click', '.t3chimp-field-FORM_ACTION input[value="subscribe"]', setStateSubscribe);

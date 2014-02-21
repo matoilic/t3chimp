@@ -23,5 +23,24 @@
             <label index="syncBackFromMailChimpTask.label.listId">List</label>
             <label index="syncBackFromMailChimpTask.label.emailField">Email Database Field</label>
 		</languageKey>
+        <languageKey index="nl" type="array">
+            <label index="mlang_tabs_tab">MailChimp</label>
+            <label index="mlang_labels_tabdescr">MailChimp backend integratie</label>
+            <label index="mlang_labels_tablabel">MailChimp</label>
+            <label index="syncToMailChimpTask.name">Gebruikers synchroniseren naar MailChimp</label>
+            <label index="syncToMailChimpTask.description">
+                De frontend gebruikers synchroniseren naar de MailChimp lijst. Opgepast. Alle gebruikers op de lijst die
+                geen frontend gebruiker zijn en niet ingeschreven zijn op de lijst zullen permanent verwijderd worden van
+                de lijst.
+            </label>
+            <label index="syncBackFromMailChimpTask.name">Synchroniseer gebruikers van MailChimp</label>
+            <label index="syncBackFromMailChimpTask.description">
+                Alle frontend gebruikers markeren als ingeschreven voor de MailChimp lijst.
+            </label>
+            <label index="syncToMailChimpTask.label.listId">Lijst</label>
+            <label index="syncToMailChimpTask.label.mappings">Database Velden</label>
+            <label index="syncBackFromMailChimpTask.label.listId">Lijst</label>
+            <label index="syncBackFromMailChimpTask.label.emailField">E-mail Database Veld</label>
+        </languageKey>
 	</data>
 </T3locallang>

@@ -71,11 +71,12 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @param array $interestGroupings
      * @param bool $doubleOptIn
      * @param string $emailType
+     * @param bool $sendWelcomeEmail
      */
-    public function addSubscriber($listId, $fieldValues, $interestGroupings, $doubleOptIn = TRUE, $emailType = 'html') {
+    public function addSubscriber($listId, $fieldValues, $interestGroupings, $doubleOptIn = TRUE, $emailType = 'html', $sendWelcomeEmail = FALSE) {
         $data = $this->prepareFieldValues($fieldValues, $interestGroupings);
 
-        $this->api->listSubscribe($listId, $data['email'], $data['mergeVars'], $emailType, $doubleOptIn, FALSE, TRUE, TRUE);
+        $this->api->listSubscribe($listId, $data['email'], $data['mergeVars'], $emailType, $doubleOptIn, FALSE, TRUE, $sendWelcomeEmail);
         $this->checkApi();
     }
 
@@ -365,7 +366,9 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
                     $form->getListId(),
                     $fieldValues,
                     $selectedGroupings,
-                    $this->settingsProvider->get('doubleOptIn')
+                    $this->settingsProvider->get('doubleOptIn'),
+                    'html',
+                    !$this->settingsProvider->get('disableWelcomeEmail')
                 );
 
                 $action = self::ACTION_SUBSCRIBE;
