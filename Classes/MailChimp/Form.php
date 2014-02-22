@@ -154,11 +154,7 @@ class Form {
         $type = $fieldDefinition['field_type'];
         if(in_array($type, self::$supportedTypes)) {
             $class = self::$fieldNamespace . ucfirst($type);
-            if(TYPO3_version < '6.1.0') {
-                $field = $this->objectManager->create($class, $fieldDefinition, $this);
-            } else {
-                $field = $this->objectManager->get($class, $fieldDefinition, $this);
-            }
+            $field = $this->objectManager->get($class, $fieldDefinition, $this);
 
             if($fieldDefinition['public']) {
                 $this->publicFields[] = $field;

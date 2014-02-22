@@ -65,11 +65,7 @@ class ErrorsViewHelper extends AbstractViewHelper {
      */
     protected function getForm() {
         if($this->form === NULL) {
-            if(class_exists('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper')) {
-                $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
-            } else { // <6.0 compatibility
-                $this->form = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
-            }
+            $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
         }
 
         return $this->form;
@@ -84,16 +80,10 @@ class ErrorsViewHelper extends AbstractViewHelper {
 
         if(count($errors) > 0) {
             $renderer = new RenderViewHelper();
+            $renderer->setRenderingContext($this->renderingContext);
 
-            if(method_exists($this, 'setControllerContext')) { //4.5.x compatibility
-                $renderer->setControllerContext($this->controllerContext);
-                $renderer->setTemplateVariableContainer($this->templateVariableContainer);
-                $renderer->setViewHelperVariableContainer($this->viewHelperVariableContainer);
-            } else {
-                $renderer->setRenderingContext($this->renderingContext);
-                if($this->renderChildrenClosure !== NULL) {
-                    $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
-                }
+            if($this->renderChildrenClosure !== NULL) {
+                $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
             }
 
             return $renderer->render(NULL, 'Errors', array('errors' => $errors));

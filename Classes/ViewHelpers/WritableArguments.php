@@ -54,10 +54,7 @@ class WritableArguments extends Arguments {
         }
 
         return (
-            (
-                (is_array($this->parent) && array_key_exists($argumentName, $this->parent)) ||
-                (is_object($this->parent) && $this->parent->hasArgument($argumentName)) //4.5.x compatibility
-            ) &&
+            (is_array($this->parent) && array_key_exists($argumentName, $this->parent)) &&
             $this->parent[$argumentName] !== NULL
         );
     }
@@ -67,10 +64,7 @@ class WritableArguments extends Arguments {
             return TRUE;
         }
 
-        return (
-            (is_array($this->parent) && array_key_exists($key, $this->parent)) ||
-            (is_object($this->parent) && $this->parent->offsetExists($key)) //4.5.x compatibility
-        );
+        return (is_array($this->parent) && array_key_exists($key, $this->parent));
     }
 
     public function offsetGet($key) {

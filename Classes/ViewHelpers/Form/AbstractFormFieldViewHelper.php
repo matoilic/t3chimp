@@ -79,11 +79,7 @@ abstract class AbstractFormFieldViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\
      */
     protected function getForm() {
         if($this->form === NULL) {
-            if(class_exists('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper')) {
-                $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
-            } else { // <6.0 compatibility
-                $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
-            }
+            $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
         }
 
         return $this->form;

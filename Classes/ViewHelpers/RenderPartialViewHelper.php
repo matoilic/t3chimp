@@ -51,24 +51,12 @@ class RenderPartialViewHelper extends AbstractViewHelper {
      * @return string
      */
     public function render($name, $arguments = NULL) {
-        if($arguments === NULL) $arguments = $this->templateVariableContainer->getAll(); //4.5.x compatibility
-
         /* @var RenderViewHelper $renderer */
-        if(TYPO3_version < '6.1.0') {
-            $renderer = $this->objectManager->create('TYPO3\\CMS\\Fluid\\ViewHelpers\\RenderViewHelper');
-        } else {
-            $renderer = $this->objectManager->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\RenderViewHelper');
-        }
+        $renderer = $this->objectManager->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\RenderViewHelper');
+        $renderer->setRenderingContext($this->renderingContext);
 
-        if(method_exists($this, 'setControllerContext')) { //4.5.x compatibility
-            $renderer->setControllerContext($this->controllerContext);
-            $renderer->setTemplateVariableContainer($this->templateVariableContainer);
-            $renderer->setViewHelperVariableContainer($this->viewHelperVariableContainer);
-        } else {
-            $renderer->setRenderingContext($this->renderingContext);
-            if($this->renderChildrenClosure !== NULL) {
-                $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
-            }
+        if($this->renderChildrenClosure !== NULL) {
+            $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
         }
 
         return $renderer->render(NULL, $name, $arguments);

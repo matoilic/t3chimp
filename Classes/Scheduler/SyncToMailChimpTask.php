@@ -51,11 +51,7 @@ class SyncToMailChimpTask extends Base {
     private function addSubscribedUsers(array $users, array $interestGroupings) {
         $fieldDefinitions = $this->mailChimp->getFieldsFor($this->listId);
         /** @var Form $form */
-        if(TYPO3_version < '6.1.0') {
-            $form = $this->objectManager->create('MatoIlic\\T3Chimp\\MailChimp\\Form', $fieldDefinitions, $this->listId);
-        } else {
-            $form = $this->objectManager->get('MatoIlic\\T3Chimp\\MailChimp\\Form', $fieldDefinitions, $this->listId);
-        }
+        $form = $this->objectManager->get('MatoIlic\\T3Chimp\\MailChimp\\Form', $fieldDefinitions, $this->listId);
         $form->setInterestGroupings($interestGroupings);
 
         $groupingFields = array();
@@ -88,11 +84,7 @@ class SyncToMailChimpTask extends Base {
      * @return Request
      */
     private function createRequest($user, array $groupingFields) {
-        if(TYPO3_version < '6.1.0') {
-            $request = $this->objectManager->create('MatoIlic\\T3Chimp\\Scheduler');
-        } else {
-            $request = $this->objectManager->get('MatoIlic\\T3Chimp\\Scheduler');
-        }
+        $request = $this->objectManager->get('MatoIlic\\T3Chimp\\Scheduler');
 
         $subscriber = array();
         foreach($this->mappings as $tag => $dbField) {

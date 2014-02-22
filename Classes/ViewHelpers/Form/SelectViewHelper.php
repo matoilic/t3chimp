@@ -124,8 +124,7 @@ class SelectViewHelper extends AbstractFormFieldViewHelper {
 		foreach ($optionsArgument as $key => $value) {
 			if (is_object($value)) {
 
-				if ((is_array($this->arguments) && array_key_exists('optionValueField', $this->arguments)) ||
-                    (is_object($this->arguments) && $this->arguments->hasArgument('optionValueField'))) { //4.5.x compatibility
+				if (is_array($this->arguments) && array_key_exists('optionValueField', $this->arguments)) {
 					$key = ObjectAccess::getProperty($value, $this->arguments['optionValueField']);
 					if (is_object($key)) {
 						if (method_exists($key, '__toString')) {
@@ -142,8 +141,7 @@ class SelectViewHelper extends AbstractFormFieldViewHelper {
 					throw new ViewHelperException('No identifying value for object of class "' . get_class($value) . '" found.', 1247826696);
 				}
 
-				if ((is_array($this->arguments) && array_key_exists('optionLabelField', $this->arguments)) ||
-                    ((is_object($this->arguments) && $this->arguments->hasArgument('optionLabelField')))) { //4.5.x compatibility
+				if (is_array($this->arguments) && array_key_exists('optionLabelField', $this->arguments)) {
 					$value = ObjectAccess::getProperty($value, $this->arguments['optionLabelField']);
 					if (is_object($value)) {
 						if (method_exists($value, '__toString')) {
@@ -192,9 +190,7 @@ class SelectViewHelper extends AbstractFormFieldViewHelper {
 	 */
 	protected function getSelectedValue() {
 		$value = $this->getValue();
-		if ((is_array($this->arguments) && !array_key_exists('optionValueField', $this->arguments)) ||
-            ((is_object($this->arguments) && $this->arguments->hasArgument('optionValueField'))) //4.5.x compatibility
-        ) {
+		if (is_array($this->arguments) && !array_key_exists('optionValueField', $this->arguments)) {
 			return $value;
 		}
 		if (!is_array($value) && !($value instanceof Iterator)) {

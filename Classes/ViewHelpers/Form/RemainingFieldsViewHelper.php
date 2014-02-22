@@ -57,19 +57,13 @@ class RemainingFieldsViewHelper extends FormFieldViewHelper {
     protected function renderField($field) {
         $arguments = new WritableArguments(array('property' => $field->getName()));
         $renderer = new FormFieldViewHelper();
+        $renderer->setRenderingContext($this->renderingContext);
 
-        if(method_exists($this, 'setControllerContext')) { //4.5.x compatibility
-            $renderer->setControllerContext($this->controllerContext);
-            $renderer->setTemplateVariableContainer($this->templateVariableContainer);
-            $renderer->setViewHelperVariableContainer($this->viewHelperVariableContainer);
-            $renderer->setArguments($arguments);
-        } else {
-            $renderer->setRenderingContext($this->renderingContext);
-            if($this->renderChildrenClosure !== NULL) {
-                $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
-            }
-            $renderer->setArguments($arguments->toArray());
+        if($this->renderChildrenClosure !== NULL) {
+            $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
         }
+
+        $renderer->setArguments($arguments->toArray());
 
         return $renderer->render();
     }

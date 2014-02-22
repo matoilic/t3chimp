@@ -96,7 +96,7 @@ class Settings {
 
     public function getApiKey() {
         // check if there is a site specific api key
-        if(TYPO3_version >= '6.0.0' && $this->settings['settings']['apiKey'] && $this->settings['settings']['apiKey'][0] != '{') {
+        if($this->settings['settings']['apiKey'] && $this->settings['settings']['apiKey'][0] != '{') {
             return $this->settings['settings']['apiKey'];
         }
 

@@ -47,7 +47,7 @@ class FlexFormValues {
         $tsConfig = BackendUtility::getPagesTSconfig($this->getCurrentPageId());
         $tsConfig = $tsConfig['plugin.']['tx_' . $extKey . '.'];
 
-        if(TYPO3_version >= '6.0.0' && $setup['settings.']['apiKey'] && $setup['settings.']['apiKey'][0] != '{') {
+        if($setup['settings.']['apiKey'] && $setup['settings.']['apiKey'][0] != '{') {
             $apiKey = $setup['settings.']['apiKey'];
         } else if($tsConfig['settings.']['apiKey'] && $tsConfig['settings.']['apiKey'][0] != '{') {
             $apiKey = $tsConfig['settings.']['apiKey'];

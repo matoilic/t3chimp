@@ -149,11 +149,7 @@ class MailChimp implements SingletonInterface {
             $interestGroupings = array();
         }
 
-        if(TYPO3_version < '6.1.0') {
-            $form = $this->objectManager->create('MatoIlic\\T3Chimp\\MailChimp\\Form', $fields, $listId);
-        } else {
-            $form = $this->objectManager->get('MatoIlic\\T3Chimp\\MailChimp\\Form', $fields, $listId);
-        }
+        $form = $this->objectManager->get('MatoIlic\\T3Chimp\\MailChimp\\Form', $fields, $listId);
         $form->setInterestGroupings($interestGroupings);
 
         $this->writeToCache($form);
