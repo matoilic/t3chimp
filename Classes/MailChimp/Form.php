@@ -101,6 +101,20 @@ class Form {
         $this->listId = $listId;
     }
 
+    /**
+     * @param Field $field
+     */
+    public function addField(Field $field) {
+        if($field->getIsHidden()) {
+            $this->hiddenFields[] = $field;
+        } else {
+            $this->publicFields[] = $field;
+        }
+    }
+
+    /**
+     * @param RequestInterface $request
+     */
     public function bindRequest(RequestInterface $request) {
         foreach($this->getFields() as $field) {
             $field->bindRequest($request);

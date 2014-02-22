@@ -123,6 +123,13 @@ abstract class AbstractField implements Field {
     /**
      * @return bool
      */
+    public function getIsEmailFormatField() {
+        return FALSE;
+    }
+
+    /**
+     * @return bool
+     */
     public function getIsEmpty() {
         $value = $this->getValue();
         return empty($value);

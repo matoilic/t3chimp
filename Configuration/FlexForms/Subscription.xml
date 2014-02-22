@@ -38,6 +38,14 @@
                             </config>
                         </TCEforms>
                     </settings.disableWelcomeEmail>
+                    <settings.showEmailFormat>
+                        <TCEforms>
+                            <label>Let subscribers pick email format</label>
+                            <config>
+                                <type>check</type>
+                            </config>
+                        </TCEforms>
+                    </settings.showEmailFormat>
                 </el>
             </ROOT>
         </main>

@@ -16,6 +16,7 @@ return array(
     'matoilic\\t3chimp\\mailchimp\\field\\date' => $extensionPath . 'Classes/MailChimp/Field/Date.php',
     'matoilic\\t3chimp\\mailchimp\\field\\dropdown' => $extensionPath . 'Classes/MailChimp/Field/Dropdown.php',
     'matoilic\\t3chimp\\mailchimp\\field\\email' => $extensionPath . 'Classes/MailChimp/Field/Email.php',
+    'matoilic\\t3chimp\\mailchimp\\field\\emailformat' => $extensionPath . 'Classes/MailChimp/Field/EmailFormat.php',
     'matoilic\\t3chimp\\mailchimp\\field\\helper\\choice' => $extensionPath . 'Classes/MailChimp/Field/Helper/Choice.php',
     'matoilic\\t3chimp\\mailchimp\\field\\helper\\countrychoice' => $extensionPath . 'Classes/MailChimp/Field/Helper/CountryChoice.php',
     'matoilic\\t3chimp\\mailchimp\\field\\helper\\multichoice' => $extensionPath . 'Classes/MailChimp/Field/Helper/MultiChoice.php',

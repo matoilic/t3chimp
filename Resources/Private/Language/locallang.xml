@@ -48,6 +48,7 @@
             <label index="t3chimp: Action">Action</label>
             <label index="t3chimp: subscribe">Subscribe</label>
             <label index="t3chimp: unsubscribe">Unsubscribe</label>
+            <label index="t3chimp: Email format">Email format</label>
 
             <label index="fe_users.subscribed_to_newsletter">Subscribe to newsletter</label>
 		</languageKey>
@@ -95,6 +96,7 @@
             <label index="t3chimp: Action">Aktion</label>
             <label index="t3chimp: subscribe">Anmelden</label>
             <label index="t3chimp: unsubscribe">Abmelden</label>
+            <label index="t3chimp: Email format">E-Mail Format</label>
 
             <label index="fe_users.subscribed_to_newsletter">Newsletter abonnieren</label>
         </languageKey>
@@ -140,6 +142,7 @@
             <label index="t3chimp: Action">Actie</label>
             <label index="t3chimp: subscribe">Inschrijven</label>
             <label index="t3chimp: unsubscribe">Uitschrijven</label>
+            <label index="t3chimp: Email format">E-mail formaat</label>
 
             <label index="fe_users.subscribed_to_newsletter">Inschrijven voor onze nieuwsbrief</label>
         </languageKey>

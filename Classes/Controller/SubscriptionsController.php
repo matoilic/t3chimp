@@ -115,7 +115,10 @@ class SubscriptionsController extends ActionController {
      * @return void
      */
     public function processAction() {
-        $form = $this->mailChimpService->getFormFor($this->request->getArgument('list'));
+        $form = $this->mailChimpService->getFormFor(
+            $this->request->getArgument('list'),
+            $this->request->hasArgument('email_type')
+        );
         $form->bindRequest($this->request);
 
         if($form->isValid()) {

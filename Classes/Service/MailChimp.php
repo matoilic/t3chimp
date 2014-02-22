@@ -28,6 +28,8 @@
 
 namespace MatoIlic\T3Chimp\Service;
 
+use MatoIlic\T3Chimp\MailChimp\Field\EmailFormat;
+use MatoIlic\T3Chimp\MailChimp\Field;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi;
 use MatoIlic\T3Chimp\MailChimp\Form;
 use MatoIlic\T3Chimp\Provider\Settings;
@@ -134,9 +136,10 @@ class MailChimp implements SingletonInterface {
 
     /**
      * @param string $listId
+     * @param bool $forceFormatField
      * @return Form
      */
-    public function getFormFor($listId) {
+    public function getFormFor($listId, $forceFormatField = FALSE) {
         $form = $this->getFormFromCache($listId . '.mc');
         if($form !== NULL) {
             return $form;
@@ -149,8 +152,13 @@ class MailChimp implements SingletonInterface {
             $interestGroupings = array();
         }
 
+        /** @var \MatoIlic\T3Chimp\MailChimp\Form $form */
         $form = $this->objectManager->get('MatoIlic\\T3Chimp\\MailChimp\\Form', $fields, $listId);
         $form->setInterestGroupings($interestGroupings);
+        $formatField = new EmailFormat(array(), $form);
+        $formatField->hide(!$this->settingsProvider->get('showEmailFormat'));
+        if($forceFormatField) $formatField->hide(FALSE);
+        $form->addField($formatField);
 
         $this->writeToCache($form);
 
@@ -232,6 +240,7 @@ class MailChimp implements SingletonInterface {
         }
 
         $mergeVars = $info['data'][0]['merges'];
+        $mergeVars['email_type'] = $info['data'][0]['email_type'];
 
         if(array_key_exists('GROUPINGS', $mergeVars)) {
             foreach($mergeVars['GROUPINGS'] as $grouping) {
@@ -320,7 +329,9 @@ class MailChimp implements SingletonInterface {
     public function separateForm(Form $form) {
         $fieldValues = array();
         $selectedGroupings = array();
+        $emailFormat = 'HTML';
 
+        /** @var Field\AbstractField $field */
         foreach($form->getFields(TRUE) as $field) {
             if($field->getIsActionField()) {
                 continue;
@@ -329,6 +340,8 @@ class MailChimp implements SingletonInterface {
                     'id' => $field->getGroupingId(),
                     'groups' => $field->getApiValue()
                 );
+            } else if($field->getIsEmailFormatField()) {
+                $emailFormat = $field->getApiValue();
             } else {
                 $fieldValues[] = array(
                     'tag' => $field->getTag(),
@@ -337,7 +350,7 @@ class MailChimp implements SingletonInterface {
             }
         }
 
-        return array($fieldValues, $selectedGroupings);
+        return array($fieldValues, $selectedGroupings, $emailFormat);
     }
 
     /**
@@ -346,7 +359,7 @@ class MailChimp implements SingletonInterface {
      */
     public function saveForm(Form $form) {
         if($form->getField('FORM_ACTION')->getValue() == 'subscribe') {
-            list($fieldValues, $selectedGroupings) = $this->separateForm($form);
+            list($fieldValues, $selectedGroupings, $emailFormat) = $this->separateForm($form);
 
             try {
                 $this->addSubscriber(
@@ -354,7 +367,7 @@ class MailChimp implements SingletonInterface {
                     $fieldValues,
                     $selectedGroupings,
                     $this->settingsProvider->get('doubleOptIn'),
-                    'html',
+                    $emailFormat,
                     !$this->settingsProvider->get('disableWelcomeEmail')
                 );
 
@@ -363,7 +376,8 @@ class MailChimp implements SingletonInterface {
                 $this->updateSubscriber(
                     $form->getListId(),
                     $fieldValues,
-                    $selectedGroupings
+                    $selectedGroupings,
+                    $emailFormat
                 );
 
                 $action = self::ACTION_UPDATE;
