@@ -24,7 +24,7 @@
                     </settings.subscriptionList>
                     <settings.doubleOptIn>
                         <TCEforms>
-                            <label>Double opt-in</label>
+                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:flexForm.activateDoubleOptIn</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -32,7 +32,7 @@
                     </settings.doubleOptIn>
                     <settings.disableWelcomeEmail>
                         <TCEforms>
-                            <label>Disable welcome email</label>
+                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:flexForm.disableWelcome</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -40,7 +40,7 @@
                     </settings.disableWelcomeEmail>
                     <settings.showEmailFormat>
                         <TCEforms>
-                            <label>Let subscribers pick email format</label>
+                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:flexForm.showEmailFormat</label>
                             <config>
                                 <type>check</type>
                             </config>

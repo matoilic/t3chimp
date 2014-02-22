@@ -22,7 +22,33 @@
             <label index="syncToMailChimpTask.label.mappings">Database Field Mappings</label>
             <label index="syncBackFromMailChimpTask.label.listId">List</label>
             <label index="syncBackFromMailChimpTask.label.emailField">Email Database Field</label>
+            <label index="flexForm.activateDoubleOptIn">Double opt-in</label>
+            <label index="flexForm.disableWelcome">Disable welcome email</label>
+            <label index="flexForm.showEmailFormat">Let subscribers pick email format</label>
 		</languageKey>
+
+        <languageKey index="de" type="array">
+            <label index="mlang_tabs_tab">MailChimp</label>
+            <label index="mlang_labels_tabdescr">MailChimp Backend-Integration</label>
+            <label index="mlang_labels_tablabel">MailChimp</label>
+            <label index="syncToMailChimpTask.name">Benutzer zu MailChimp synchronisieren</label>
+            <label index="syncToMailChimpTask.description">
+                Synchronisiert die FE-Benutzer zu MailChimp. Aber Achtung! Alle Benutzer welche nicht in der FE-Benutzer
+                Tabelle sind oder nicht als Abonnent markiert sind, werden permanent aus der Liste entfernt.
+            </label>
+            <label index="syncBackFromMailChimpTask.name">Benutzer von MailChimp in die Datenbank synchronisieren</label>
+            <label index="syncBackFromMailChimpTask.description">
+                Markiert alle Benutzer als Abonnenten, welche in der ausgewählten Liste sind.
+            </label>
+            <label index="syncToMailChimpTask.label.listId">Liste</label>
+            <label index="syncToMailChimpTask.label.mappings">Abbildung der Datenbankfelder</label>
+            <label index="syncBackFromMailChimpTask.label.listId">Liste</label>
+            <label index="syncBackFromMailChimpTask.label.emailField">E-Mail Datenbankfeld</label>
+            <label index="activateDoubleOptIn">Double opt-in aktivieren</label>
+            <label index="flexForm.disableWelcome">Willkommens-E-Mail deaktivieren</label>
+            <label index="flexForm.showEmailFormat">Benutzer können E-Mail-Format wählen</label>
+        </languageKey>
+
         <languageKey index="nl" type="array">
             <label index="mlang_tabs_tab">MailChimp</label>
             <label index="mlang_labels_tabdescr">MailChimp backend integratie</label>
@@ -41,6 +67,9 @@
             <label index="syncToMailChimpTask.label.mappings">Database Velden</label>
             <label index="syncBackFromMailChimpTask.label.listId">Lijst</label>
             <label index="syncBackFromMailChimpTask.label.emailField">E-mail Database Veld</label>
+            <label index="activateDoubleOptIn">Double opt-in</label>
+            <label index="flexForm.disableWelcome">Welkom e-mail deactiveren</label>
+            <label index="flexForm.showEmailFormat">Gebruikers kunnen kiezen voor e-mail formaat</label>
         </languageKey>
 	</data>
 </T3locallang>
