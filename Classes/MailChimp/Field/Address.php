@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,14 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abstract {
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+use MatoIlic\T3Chimp\Domain\Repository\CountryRepository;
+use MatoIlic\T3Chimp\MailChimp\MailChimpException;
+use MatoIlic\T3Chimp\MailChimp\Field\Helper\CountryChoice;
+use MatoIlic\T3Chimp\MailChimp\Form;
+
+class Address extends AbstractField {
     const TYPE_EXPLODED = 'exploded';
     const TYPE_TEXT = 'text';
 
@@ -36,7 +43,7 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     private static $allowedKeys = array('addr1', 'addr2', 'state', 'city', 'zip', 'country');
 
     /**
-     * @var Tx_T3chimp_Domain_Repository_CountryRepository
+     * @var CountryRepository
      */
     private $countryRepository;
 
@@ -50,7 +57,7 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
      */
     private $type;
 
-    public function __construct(array $definition, Tx_T3chimp_MailChimp_Form $form) {
+    public function __construct(array $definition, Form $form) {
         parent::__construct($definition, $form);
         $this->setType(self::TYPE_EXPLODED);
     }
@@ -106,11 +113,8 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
         $countries = $this->countryRepository->findAllOrdered();
         $list = array();
 
-        /**
-         * @var $country Tx_T3chimp_Domain_Model_Country
-         */
         foreach($countries as $iso => $country) {
-            $list[] = new Tx_T3chimp_MailChimp_Field_Helper_CountryChoice(
+            $list[] = new CountryChoice(
                 $this,
                 $iso,
                 $country
@@ -158,9 +162,9 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     }
 
     /**
-     * @param Tx_T3chimp_Domain_Repository_CountryRepository $repo
+     * @param CountryRepository $repo
      */
-    public function injectCountryRepository(Tx_T3chimp_Domain_Repository_CountryRepository $repo) {
+    public function injectCountryRepository(CountryRepository $repo) {
         $this->countryRepository = $repo;
     }
 
@@ -178,13 +182,13 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
     /**
      * @param array $value in the format
      *  array('addr1' => '', 'addr2' => '', 'state' => '', 'city' => '', 'zip' => '', 'country' => '')
-     * @throws Tx_T3chimp_MailChimp_Exception
+     * @throws MailChimpException
      */
     public function setValue($value) {
         if(!$this->getIsTextField()) {
             foreach(array_keys($value) as $key) {
                 if(!in_array($key, self::$allowedKeys)) {
-                    throw new Tx_T3chimp_MailChimp_Exception('Unallowed key in value ' . htmlentities($key));
+                    throw new MailChimpException('Unallowed key in value ' . htmlentities($key));
                 }
             }
 
@@ -213,7 +217,7 @@ class Tx_T3chimp_MailChimp_Field_Address extends Tx_T3chimp_MailChimp_Field_Abst
 
 
     protected function validate() {
-        $this->isValidated = true;
+        $this->isValidated = TRUE;
         $value = $this->getValue();
 
         if($this->getIsRequired()) {

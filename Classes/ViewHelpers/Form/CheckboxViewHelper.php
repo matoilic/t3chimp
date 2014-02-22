@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_ViewHelpers_Form_CheckboxViewHelper extends Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper {
+namespace MatoIlic\T3Chimp\ViewHelpers\Form;
+
+use TYPO3\CMS\Fluid\Core\ViewHelper\Exception as ViewHelperException;
+
+class CheckboxViewHelper extends AbstractFormFieldViewHelper {
 
 	/**
 	 * @var string
@@ -63,8 +67,7 @@ class Tx_T3chimp_ViewHelpers_Form_CheckboxViewHelper extends Tx_T3chimp_ViewHelp
 	 * @param boolean $checked Specifies that the input element should be preselected
 	 *
 	 * @return string
-	 * @author Bastian Waidelich <bastian@typo3.org>
-	 * @api
+     * @throws ViewHelperException
 	 */
 	public function render($checked = NULL) {
 		$this->tag->addAttribute('type', 'checkbox');
@@ -79,7 +82,7 @@ class Tx_T3chimp_ViewHelpers_Form_CheckboxViewHelper extends Tx_T3chimp_ViewHelp
 				$checked = in_array($valueAttribute, $propertyValue);
 				$nameAttribute .= '[]';
 			} else {
-				throw new Tx_Fluid_Core_ViewHelper_Exception('Checkbox viewhelpers can only be bound to properties of type boolean or array. Property "' . $this->arguments['property'] . '" is of type "' . (is_object($propertyValue) ? get_class($propertyValue) : gettype($propertyValue)) . '".' , 1248261038);
+				throw new ViewHelperException('Checkbox viewhelpers can only be bound to properties of type boolean or array. Property "' . $this->arguments['property'] . '" is of type "' . (is_object($propertyValue) ? get_class($propertyValue) : gettype($propertyValue)) . '".' , 1248261038);
 			}
 		}
 

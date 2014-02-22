@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,12 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Checkboxes extends Tx_T3chimp_MailChimp_Field_Radio {
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+use MatoIlic\T3Chimp\MailChimp\MailChimpException;
+use MatoIlic\T3Chimp\MailChimp\Field\Helper\MultiChoice;
+
+class Checkboxes extends Radio {
     public function getDefaultValue() {
         return array();
     }
@@ -37,28 +42,28 @@ class Tx_T3chimp_MailChimp_Field_Checkboxes extends Tx_T3chimp_MailChimp_Field_R
      */
     protected function initializeChoices(array $choices) {
         foreach($choices as $choice) {
-            $this->choices[] = new Tx_T3chimp_MailChimp_Field_Helper_MultiChoice($this, $choice['name']);
+            $this->choices[] = new MultiChoice($this, $choice['name']);
             $this->validValues[] = $choice['name'];
         }
     }
 
     /**
      * @param mixed $value
-     * @throws Tx_T3chimp_MailChimp_Exception
+     * @throws MailChimpException
      */
     public function setValue($value) {
-        if($value == null) {
+        if($value == NULL) {
             $this->value = array();
             return;
         }
 
         if(!is_array($value)) {
-            throw new Tx_T3chimp_MailChimp_Exception('Value for checkboxes field must be an array');
+            throw new MailChimpException('Value for checkboxes field must be an array');
         }
 
         foreach($value as $selection) {
             if(!in_array($selection, $this->validValues)) {
-                throw new Tx_T3chimp_MailChimp_Exception('Invalid choice ' . htmlentities($selection) . ' for field ' . $this->getName());
+                throw new MailChimpException('Invalid choice ' . htmlentities($selection) . ' for field ' . $this->getName());
             }
         }
 
@@ -71,7 +76,7 @@ class Tx_T3chimp_MailChimp_Field_Checkboxes extends Tx_T3chimp_MailChimp_Field_R
      * @return void
      */
     protected function validate() {
-        $this->isValidated = true;
+        $this->isValidated = TRUE;
         $value = $this->getValue();
         if($this->getIsRequired() && count($value) == 0) {
             $this->errors[] = 't3chimp.error.required';

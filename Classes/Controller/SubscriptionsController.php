@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,9 +26,20 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Controller_ActionController {
+namespace MatoIlic\T3Chimp\Controller;
+
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Error;
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi\InvalidEmail;
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi\ListNotSubscribed;
+use MatoIlic\T3Chimp\Provider\Settings;
+use MatoIlic\T3Chimp\Service\MailChimp;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
+class SubscriptionsController extends ActionController {
     /**
-     * @var Tx_T3chimp_Service_MailChimp
+     * @var MailChimp
      */
     private $mailChimpService;
 
@@ -78,24 +89,24 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
     }
 
     /**
-     * @param Tx_Extbase_Configuration_ConfigurationManager $configurationManager
+     * @param ConfigurationManager $configurationManager
      */
-    public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManager $configurationManager) {
+    public function injectConfigurationManager(ConfigurationManager $configurationManager) {
         $this->configurationManager = $configurationManager;
     }
 
 
     /**
-     * @param Tx_T3chimp_Service_MailChimp $service
+     * @param MailChimp $service
      */
-    public function injectMailChimpService(Tx_T3chimp_Service_MailChimp $service) {
+    public function injectMailChimpService(MailChimp $service) {
         $this->mailChimpService = $service;
     }
 
     /**
-     * @param Tx_T3chimp_Provider_Settings $provider
+     * @param Settings $provider
      */
-    public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $provider) {
+    public function injectSettingsProvider(Settings $provider) {
         $provider->initialize($this->extensionName);
         $this->settings = $provider->getAll();
     }
@@ -111,22 +122,22 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
             try {
                 $performedAction = $this->mailChimpService->saveForm($form);
 
-                if($performedAction == Tx_T3chimp_Service_MailChimp::ACTION_SUBSCRIBE) {
+                if($performedAction == MailChimp::ACTION_SUBSCRIBE) {
                     if($this->settings['doubleOptIn']) {
                         $message = $this->translate('t3chimp.form.almostSubscribed');
                     } else {
                         $message = $this->translate('t3chimp.form.subscribed');
                     }
-                } else if($performedAction == Tx_T3chimp_Service_MailChimp::ACTION_UPDATE) {
+                } else if($performedAction == MailChimp::ACTION_UPDATE) {
                     $message = $this->translate('t3chimp.form.updated');
                 } else {
                     $message = $this->translate('t3chimp.form.unsubscribed');
                 }
-            } catch(Tx_T3chimp_Service_MailChimp_InvalidEmailException $ex) {
+            } catch(InvalidEmail $ex) {
                 $message = $this->translate('t3chimp.exception.invalidEmail');
-            } catch(Tx_T3chimp_Service_MailChimp_ListNotSubscribedException $ex) {
+            } catch(ListNotSubscribed $ex) {
                 $message = $this->translate('t3chimp.exception.notSubscribed');
-            } catch(Tx_T3chimp_Service_MailChimp_Exception $ex) {
+            } catch(Error $ex) {
                 $message = $ex->getMessage();
             }
 
@@ -140,19 +151,19 @@ class Tx_T3chimp_Controller_SubscriptionsController extends Tx_Extbase_MVC_Contr
 
     /**
      * @param $key the key for the label
-     * @param null|array $arguments
+     * @param NULL|array $arguments
      * @param string $default
      * @return string
      */
-    protected function translate($key, $arguments = null, $default = 'MISSING TRANSLATION') {
+    protected function translate($key, $arguments = NULL, $default = 'MISSING TRANSLATION') {
         $extensionName = $this->request->getControllerExtensionName();
 
-        $value = Tx_Extbase_Utility_Localization::translate($key, $extensionName, $arguments);
+        $value = LocalizationUtility::translate($key, $extensionName, $arguments);
         if($value != NULL) {
             return $value;
         }
 
-        $value = Tx_Extbase_Utility_Localization::translate($key, 't3chimp', $arguments);
+        $value = LocalizationUtility::translate($key, 't3chimp', $arguments);
 
         return ($value != NULL) ? $value : $default;
     }

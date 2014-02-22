@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Url extends Tx_T3chimp_MailChimp_Field_PatternBased {
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+class Url extends PatternBased {
     public function getHtmlPattern() {
         return '^(https?://)?([a-zA-Z0-9\-]+\.)([a-z0-9\-]+\.)+(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2})(\:[0-9]+)?(/(\$|[a-zA-Z0-9\.\,\?\'\\\+&%\$#\=~_\-%]+)?)*$';
     }

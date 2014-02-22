@@ -43,4 +43,4 @@
             }
         });
     });
-})(t3chimpJQuery);
+})(window.t3chimpJQuery || window.jQuery);

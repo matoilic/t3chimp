@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,14 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base {
+namespace MatoIlic\T3Chimp\Scheduler;
+
+use MatoIlic\T3Chimp\Domain\Model\FrontendUser;
+use MatoIlic\T3Chimp\MailChimp\Field;
+use MatoIlic\T3Chimp\MailChimp\Form;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+class SyncToMailChimpTask extends Base {
     /**
      * @var string
      */
@@ -43,12 +50,8 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
      */
     private function addSubscribedUsers(array $users, array $interestGroupings) {
         $fieldDefinitions = $this->mailChimp->getFieldsFor($this->listId);
-        /** @var Tx_T3chimp_MailChimp_Form $form */
-        if(TYPO3_version < '6.1.0') {
-            $form = $this->objectManager->create('Tx_T3chimp_MailChimp_Form', $fieldDefinitions, $this->listId);
-        } else {
-            $form = $this->objectManager->get('Tx_T3chimp_MailChimp_Form', $fieldDefinitions, $this->listId);
-        }
+        /** @var Form $form */
+        $form = $this->objectManager->get('MatoIlic\\T3Chimp\\MailChimp\\Form', $fieldDefinitions, $this->listId);
         $form->setInterestGroupings($interestGroupings);
 
         $groupingFields = array();
@@ -76,16 +79,12 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
     }
 
     /**
-     * @param Tx_T3chimp_Domain_Model_FrontendUser $user
+     * @param FrontendUser $user
      * @param array $groupingFields
-     * @return Tx_T3chimp_Command_Request
+     * @return Request
      */
     private function createRequest($user, array $groupingFields) {
-        if(TYPO3_version < '6.1.0') {
-            $request = $this->objectManager->create('Tx_T3chimp_Scheduler_Request');
-        } else {
-            $request = $this->objectManager->get('Tx_T3chimp_Scheduler_Request');
-        }
+        $request = $this->objectManager->get('MatoIlic\\T3Chimp\\Scheduler');
 
         $subscriber = array();
         foreach($this->mappings as $tag => $dbField) {
@@ -117,7 +116,7 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
     }
 
     /**
-     * @param Tx_T3chimp_MailChimp_Form $form
+     * @param Form $form
      * @return array
      */
     private function createSubscriber($form) {
@@ -144,10 +143,10 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getMessage());
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getTraceAsString());
 
-            return false;
+            return FALSE;
         }
 
-        return true;
+        return TRUE;
     }
 
     /**
@@ -165,18 +164,18 @@ class Tx_T3chimp_Scheduler_SyncToMailChimpTask extends Tx_T3chimp_Scheduler_Base
     }
 
     /**
-     * @param Tx_T3chimp_MailChimp_Form $form
+     * @param Form $form
      */
     private function logInvalidSubscription($form) {
         $error = 'Could not synchronize user ' . $form->getField('EMAIL')->getValue() . ":\n";
-        /** @var Tx_T3chimp_MailChimp_Field $field */
-        foreach($form->getFields(true) as $field) {
+        /** @var Field $field */
+        foreach($form->getFields(TRUE) as $field) {
             foreach($field->getErrors() as $error) {
                 $error .= $field->getName() . ': ' . $this->translate($error) . "\n";
             }
         }
 
-        t3lib_div::sysLog($error, 't3chimp', 2);
+        GeneralUtility::sysLog($error, 't3chimp', 2);
     }
 
     /**

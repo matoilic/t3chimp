@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,16 +26,22 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-abstract class Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper extends Tx_Fluid_ViewHelpers_Form_AbstractFormFieldViewHelper {
+namespace MatoIlic\T3Chimp\ViewHelpers\Form;
+
+use MatoIlic\T3Chimp\MailChimp\Field;
+use MatoIlic\T3Chimp\MailChimp\Form;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
+abstract class AbstractFormFieldViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper {
     /**
-     * @var Tx_T3chimp_MailChimp_Field
+     * @var Field
      */
-    protected $field = null;
+    protected $field = NULL;
 
     /**
-     * @var Tx_T3chimp_MailChimp_Form
+     * @var Form
      */
-    private $form = null;
+    private $form = NULL;
 
     /**
      * @return array
@@ -45,8 +51,8 @@ abstract class Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper extends T
         $localizedErrors = array();
 
         foreach($errors as $error) {
-            $value = Tx_Extbase_Utility_Localization::translate($error, 'T3chimp');
-            $localizedErrors[] = ($value !== null) ? $value : $this->getValue();
+            $value = LocalizationUtility::translate($error, 'T3chimp');
+            $localizedErrors[] = ($value !== NULL) ? $value : $this->getValue();
         }
 
         return $localizedErrors;
@@ -54,14 +60,14 @@ abstract class Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper extends T
 
 
     /**
-     * @return Tx_T3chimp_MailChimp_Field
-     * @throws Exception
+     * @return Field
+     * @throws \Exception
      */
     protected function getField() {
-        if($this->field === null) {
+        if($this->field === NULL) {
             $this->field = $this->getForm()->getField($this->arguments['property']);
-            if($this->field === null) {
-                throw new Exception('Unknown field ' . htmlentities($this->arguments['property']) . ' referenced in template');
+            if($this->field === NULL) {
+                throw new \Exception('Unknown field ' . htmlentities($this->arguments['property']) . ' referenced in template');
             }
         }
 
@@ -69,15 +75,11 @@ abstract class Tx_T3chimp_ViewHelpers_Form_AbstractFormFieldViewHelper extends T
     }
 
     /**
-     * @return Tx_T3chimp_MailChimp_Form
+     * @return Form
      */
     protected function getForm() {
-        if($this->form === null) {
-            if(class_exists('TYPO3\CMS\Fluid\ViewHelpers\FormViewHelper')) {
-                $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
-            } else { // <6.0 compatibility
-                $this->form = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
-            }
+        if($this->form === NULL) {
+            $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
         }
 
         return $this->form;

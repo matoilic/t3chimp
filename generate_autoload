@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+require 'FileUtils'
+
+FILENAME = 'ext_autoload.php'
+CLASSES = {}
+
+def add_to_autoload(filename)
+  content = File.read(filename)
+  
+  return if content.index('namespace ').nil?
+  
+  class_name = content.match(/(class|interface) ([a-zA-Z0-9]+) /)[2]
+  namespace = content.match(/namespace ([a-zA-Z0-9\\]+);\n/)[1]
+  
+  content.scan(/(class|interface) ([a-zA-Z0-9]+) /).each do |m|
+    full_class_name = "#{namespace}\\#{m[1]}".downcase
+    CLASSES[full_class_name] = filename
+  end  
+end
+
+Dir.glob('Classes/**/*.php').each {|f| add_to_autoload(f) }
+
+File.open(FILENAME, 'w') do |f|
+  f.write("<?php\n");
+  f.write("$extensionPath = t3lib_extMgm::extPath('t3chimp') . '/';\n");
+  f.write("return array(\n")
+  
+  CLASSES.each do |class_name, filename|
+    class_name = class_name.gsub('\\', '\\\\\\')
+    f.write("    '#{class_name}' => $extensionPath . '#{filename}',\n")
+  end
+  
+  f.write(");\n")
+end

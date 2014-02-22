@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,12 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Domain_Repository_CountryRepository {
+namespace MatoIlic\T3Chimp\Domain\Repository;
+
+use MatoIlic\T3Chimp\Provider\Settings;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+class CountryRepository {
     private $countryListPath = 'EXT:t3chimp/Resources/Private/Language/Countries';
 
     /**
@@ -47,10 +52,10 @@ class Tx_T3chimp_Domain_Repository_CountryRepository {
      */
     public function findAllOrderedByLocale($locale = 'default') {
         if(!array_key_exists($locale, self::$localized)) {
-            $file = t3lib_div::getFileAbsFileName($this->countryListPath . '/' . $locale . '.php');
+            $file = GeneralUtility::getFileAbsFileName($this->countryListPath . '/' . $locale . '.php');
             if(!file_exists($file)) {
                 $locale = 'default';
-                $file = t3lib_div::getFileAbsFileName($this->countryListPath . '/default.php');
+                $file = GeneralUtility::getFileAbsFileName($this->countryListPath . '/default.php');
             }
 
             if(!array_key_exists($locale, self::$localized)) {
@@ -61,7 +66,7 @@ class Tx_T3chimp_Domain_Repository_CountryRepository {
         return self::$localized[$locale];
     }
 
-    public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $settings) {
+    public function injectSettingsProvider(Settings $settings) {
         $this->countryListPath = $settings->get('countryLists');
     }
 }

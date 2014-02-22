@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,9 +26,15 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Provider_Settings {
+namespace MatoIlic\T3Chimp\Provider;
+
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+
+class Settings {
     /**
-     * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+     * @var ConfigurationManagerInterface
      */
     private $configurationManager;
 
@@ -38,7 +44,7 @@ class Tx_T3chimp_Provider_Settings {
     private $extKey;
 
     /**
-     * @var Tx_T3chimp_Session_Provider
+     * @var Session
      */
     private $session;
 
@@ -89,15 +95,13 @@ class Tx_T3chimp_Provider_Settings {
     }
 
     public function getApiKey() {
-        global $_EXTKEY;
-
         // check if there is a site specific api key
-        if(TYPO3_version >= '6.0.0' && $this->settings['settings']['apiKey'] && $this->settings['settings']['apiKey'][0] != '{') {
+        if($this->settings['settings']['apiKey'] && $this->settings['settings']['apiKey'][0] != '{') {
             return $this->settings['settings']['apiKey'];
         }
 
-        $tsConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->id);
-        $tsConfig = $tsConfig['plugin.']['tx_' . $_EXTKEY . '.'];
+        $tsConfig = BackendUtility::getPagesTSconfig($GLOBALS['TSFE']->id);
+        $tsConfig = $tsConfig['plugin.']['tx_' . $this->extKey . '.'];
         if($tsConfig['settings.']['apiKey'] && $tsConfig['settings.']['apiKey'][0] != '{') {
             return $tsConfig['settings.']['apiKey'];
         }
@@ -117,7 +121,7 @@ class Tx_T3chimp_Provider_Settings {
      * @return bool
      */
     public function getIsCacheDisabled() {
-        $config = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $config = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 
         return array_key_exists('no_cache', $config['config.']) && $config['config.']['no_cache'] == '1';
     }
@@ -127,8 +131,8 @@ class Tx_T3chimp_Provider_Settings {
         if(strlen($listType[0]) > 0) {
             $this->extKey = $listType[0];
         } else { //initialized via typoscript USER_INT
-            $config = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-            $this->extKey = array_key_exists('extensionName',  $config) ? $config['extensionName'] : 't3chimp';
+            $config = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+            $this->extKey = array_key_exists('extensionName', $config) ? $config['extensionName'] : 't3chimp';
         }
 
         $this->extKey = strtolower($this->extKey);
@@ -136,32 +140,32 @@ class Tx_T3chimp_Provider_Settings {
     }
 
     /**
-     * @param Tx_Extbase_Object_ObjectManager $manager
+     * @param ObjectManager $manager
      */
-    public function injectObjectManager(Tx_Extbase_Object_ObjectManager $manager) {
-        $this->injectSessionProvider($manager->get('Tx_T3chimp_Provider_Session'));
-        $this->injectConfigurationManager($manager->get('Tx_Extbase_Configuration_ConfigurationManagerInterface'));
+    public function injectObjectManager(ObjectManager $manager) {
+        $this->injectSessionProvider($manager->get('MatoIlic\\T3Chimp\\Provider\\Session'));
+        $this->injectConfigurationManager($manager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManagerInterface'));
         $this->initialize();
     }
 
     /**
-     * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $manager
+     * @param ConfigurationManagerInterface $manager
      */
-    private function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $manager) {
+    private function injectConfigurationManager(ConfigurationManagerInterface $manager) {
         $this->configurationManager = $manager;
         $this->loadConfiguration();
     }
 
     /**
-     * @param Tx_T3chimp_Provider_Session $provider
+     * @param Session $provider
      */
-    private function injectSessionProvider(Tx_T3chimp_Provider_Session $provider) {
+    private function injectSessionProvider(Session $provider) {
         $this->session = $provider;
     }
 
     private function loadConfiguration() {
         if(!array_key_exists($this->extKey, self::$settingsCache)) {
-            $this->settings = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
+            $this->settings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
             if($this->settings == NULL) {
                 $this->settings = array();
             }
@@ -174,9 +178,9 @@ class Tx_T3chimp_Provider_Settings {
                 $this->session->settings = $this->settings;
             }
 
-            $this->settings = array_merge($this->settings, $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));            
+            $this->settings = array_merge($this->settings, $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));
             $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]);
-            
+
             if(is_array($global)) {
                 $global = $this->cleanSettingKeys($global);
                 self::$settingsCache[$this->extKey] = array_merge($this->settings, $global);

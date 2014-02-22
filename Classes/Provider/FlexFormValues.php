@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,21 +26,28 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Provider_FlexFormValues {
+namespace MatoIlic\T3Chimp\Provider;
+
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
+
+class FlexFormValues {
     /**
-     * @var MCAPI
+     * @var MailChimpApi
      */
     private $api;
 
     protected function initialize($extKey) {
-        /** @var Tx_Extbase_Configuration_BackendConfigurationManager $config */
-        $config = t3lib_div::makeInstance('Tx_Extbase_Configuration_BackendConfigurationManager');
+        /** @var BackendConfigurationManager $config */
+        $config = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\BackendConfigurationManager');
         $setup = $config->getTypoScriptSetup();
         $setup = $setup['plugin.']['tx_' . $extKey . '.'];
-        $tsConfig = t3lib_BEfunc::getPagesTSconfig($this->getCurrentPageId());
+        $tsConfig = BackendUtility::getPagesTSconfig($this->getCurrentPageId());
         $tsConfig = $tsConfig['plugin.']['tx_' . $extKey . '.'];
 
-        if(TYPO3_version >= '6.0.0' && $setup['settings.']['apiKey'] && $setup['settings.']['apiKey'][0] != '{') {
+        if($setup['settings.']['apiKey'] && $setup['settings.']['apiKey'][0] != '{') {
             $apiKey = $setup['settings.']['apiKey'];
         } else if($tsConfig['settings.']['apiKey'] && $tsConfig['settings.']['apiKey'][0] != '{') {
             $apiKey = $tsConfig['settings.']['apiKey'];
@@ -49,11 +56,11 @@ class Tx_T3chimp_Provider_FlexFormValues {
             $apiKey = $globals['apiKey'];
         }
 
-        $this->api = new Tx_T3chimp_MailChimp_Api($apiKey);
+        $this->api = new MailChimpApi($apiKey);
     }
 
     protected function getCurrentPageId() {
-        $pageId = (integer)t3lib_div::_GP('id');
+        $pageId = (integer)GeneralUtility::_GP('id');
         if ($pageId > 0) {
             return $pageId;
         }
@@ -81,7 +88,7 @@ class Tx_T3chimp_Provider_FlexFormValues {
     public function getLists($config) {
         $listType = explode('_', $config['row']['list_type']);
         $this->initialize($listType[0]);
-        $result = $this->api->lists();
+        $result = $this->api->lists->getList();
 
         foreach($result['data'] as $list) {
             $config['items'][] = array($list['name'], $list['id']);

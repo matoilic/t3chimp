@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_ViewHelpers_Form_Birthday_DayViewHelper extends Tx_T3chimp_ViewHelpers_Form_NumberViewHelper {
+namespace MatoIlic\T3Chimp\ViewHelpers\Form\Birthday;
+
+use MatoIlic\T3Chimp\ViewHelpers\Form\NumberViewHelper;
+
+class DayViewHelper extends NumberViewHelper {
     protected function getName() {
         return $this->prefixFieldName($this->getField()->getName()) . '[day]';
     }

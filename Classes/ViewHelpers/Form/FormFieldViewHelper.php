@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,19 +26,26 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_ViewHelpers_Form_FormFieldViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+namespace MatoIlic\T3Chimp\ViewHelpers\Form;
+
+use MatoIlic\T3Chimp\MailChimp\Field;
+use MatoIlic\T3Chimp\MailChimp\Form;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\ViewHelpers\RenderViewHelper;
+
+class FormFieldViewHelper extends AbstractViewHelper {
     /**
-     * @var Tx_T3chimp_MailChimp_Field
+     * @var Field
      */
-    protected $field = null;
+    protected $field = NULL;
 
     /**
-     * @var Tx_T3chimp_MailChimp_Form
+     * @var Form
      */
-    private $form = null;
+    private $form = NULL;
 
     protected function getField() {
-        if($this->field === null) {
+        if($this->field === NULL) {
             $this->field = $this->getForm()->getField($this->arguments['property']);
         }
 
@@ -46,15 +53,11 @@ class Tx_T3chimp_ViewHelpers_Form_FormFieldViewHelper extends Tx_Fluid_Core_View
     }
 
     /**
-     * @return Tx_T3chimp_MailChimp_Form
+     * @return Form
      */
     protected function getForm() {
-        if($this->form === null) {
-            if(class_exists('TYPO3\CMS\Fluid\ViewHelpers\FormViewHelper')) {
-                $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
-            } else { // <6.0 compatibility
-                $this->form = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
-            }
+        if($this->form === NULL) {
+            $this->form = $this->viewHelperVariableContainer->get('TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper', 'formObject');
         }
 
         return $this->form;
@@ -62,34 +65,28 @@ class Tx_T3chimp_ViewHelpers_Form_FormFieldViewHelper extends Tx_Fluid_Core_View
 
     public function initializeArguments() {
         parent::initializeArguments();
-        $this->registerArgument('property', 'The field Tag', true);
+        $this->registerArgument('property', 'The field Tag', TRUE);
     }
 
     /**
-     * @param Tx_T3chimp_MailChimp_Field $field
+     * @param Field $field
      */
-    protected function markAsRendered(Tx_T3chimp_MailChimp_Field $field) {
-        $fields = $this->viewHelperVariableContainer->get('Tx_T3chimp_ViewHelpers_FormViewHelper', 'renderedProperties');
+    protected function markAsRendered(Field $field) {
+        $fields = $this->viewHelperVariableContainer->get('MatoIlic\\T3Chimp\\ViewHelpers\\FormViewHelper', 'renderedProperties');
         $fields[] = $field->getName();
-        $this->viewHelperVariableContainer->addOrUpdate('Tx_T3chimp_ViewHelpers_FormViewHelper', 'renderedProperties', $fields);
+        $this->viewHelperVariableContainer->addOrUpdate('MatoIlic\\T3Chimp\\ViewHelpers\\FormViewHelper', 'renderedProperties', $fields);
     }
 
     public function render() {
-        $renderer = new Tx_Fluid_ViewHelpers_RenderViewHelper();
+        $renderer = new RenderViewHelper();
+        $renderer->setRenderingContext($this->renderingContext);
 
-        if(method_exists($this, 'setControllerContext')) { //4.5.x compatibility
-            $renderer->setControllerContext($this->controllerContext);
-            $renderer->setTemplateVariableContainer($this->templateVariableContainer);
-            $renderer->setViewHelperVariableContainer($this->viewHelperVariableContainer);
-        } else {
-            $renderer->setRenderingContext($this->renderingContext);
-            if($this->renderChildrenClosure !== NULL) {
-                $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
-            }
+        if($this->renderChildrenClosure !== NULL) {
+            $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
         }
 
         $this->markAsRendered($this->getField());
 
-        return $renderer->render(null, $this->getField()->getTemplate(), array('field' => $this->getField()));
+        return $renderer->render(NULL, $this->getField()->getTemplate(), array('field' => $this->getField()));
     }
 }

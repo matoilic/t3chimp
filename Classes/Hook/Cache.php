@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Hook_Cache {
+namespace MatoIlic\T3Chimp\Hook;
+
+class Cache {
     public function clearCache($params) {
         if ($params['cacheCmd'] == 'all' || $params['cacheCmd'] === 'pages') {
             $files = glob(PATH_site . '/typo3temp/tx_t3chimp/*.mc');

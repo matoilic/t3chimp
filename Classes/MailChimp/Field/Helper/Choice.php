@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,14 +26,19 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Helper_Choice {
+namespace MatoIlic\T3Chimp\MailChimp\Field\Helper;
+
+use MatoIlic\T3Chimp\MailChimp\Field;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
+class Choice {
     /**
      * @var string
      */
     protected $id;
 
     /**
-     * @var Tx_T3chimp_MailChimp_Field
+     * @var Field
      */
     protected $parent;
 
@@ -43,10 +48,11 @@ class Tx_T3chimp_MailChimp_Field_Helper_Choice {
     protected $value;
 
     /**
-     * @param Tx_T3chimp_MailChimp_Field $parent
+     * @param Field $parent
      * @param mixed $value
+     * @param string $key
      */
-    public function __construct(Tx_T3chimp_MailChimp_Field $parent, $value, $key = NULL) {
+    public function __construct(Field $parent, $value, $key = NULL) {
         $this->parent = $parent;
         $this->value = $value;
         $this->key = $key;
@@ -65,12 +71,12 @@ class Tx_T3chimp_MailChimp_Field_Helper_Choice {
     }
 
     public function getLocalizedValue() {
-        $value = Tx_Extbase_Utility_Localization::translate(
+        $value = LocalizationUtility::translate(
             't3chimp: ' . $this->getValue(),
             'T3chimp'
         );
 
-        return ($value !== null) ? $value : $this->getValue();
+        return ($value !== NULL) ? $value : $this->getValue();
     }
 
     /**

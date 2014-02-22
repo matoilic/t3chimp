@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,29 +26,34 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Helper_CountryChoice extends Tx_T3chimp_MailChimp_Field_Helper_Choice {
+namespace MatoIlic\T3Chimp\MailChimp\Field\Helper;
+
+use MatoIlic\T3Chimp\MailChimp\Field;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
+class CountryChoice extends Choice {
     /**
      * @var string
      */
     private $label;
 
     /**
-     * @param Tx_T3chimp_MailChimp_Field $parent
+     * @param Field $parent
      * @param string $value
      * @param string $label
      */
-    public function __construct(Tx_T3chimp_MailChimp_Field $parent, $value, $label) {
+    public function __construct(Field $parent, $value, $label) {
         parent::__construct($parent, $value);
         $this->label = $label;
     }
 
     public function getLocalizedValue() {
-        $value = Tx_Extbase_Utility_Localization::translate(
+        $value = LocalizationUtility::translate(
             't3chimp: ' . $this->label,
             'T3chimp'
         );
 
-        return ($value !== null) ? $value : $this->label;
+        return ($value !== NULL) ? $value : $this->label;
     }
 
     public function getIsSelected() {

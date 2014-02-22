@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,8 +26,12 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Birthday extends Tx_T3chimp_MailChimp_Field_Abstract {
-    static $daysInMonth = array(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+use MatoIlic\T3Chimp\MailChimp\MailChimpException;
+
+class Birthday extends AbstractField {
+    protected static $daysInMonth = array(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 
     /**
      * @return int
@@ -87,12 +91,12 @@ class Tx_T3chimp_MailChimp_Field_Birthday extends Tx_T3chimp_MailChimp_Field_Abs
 
     /**
      * @param array $value in the format array('month' => x, 'day' => x)
-     * @throws Tx_T3chimp_MailChimp_Exception
+     * @throws MailChimpException
      */
     public function setValue($value) {
         foreach(array_keys($value) as $key) {
             if($key != 'month' && $key != 'day') {
-                throw new Tx_T3chimp_MailChimp_Exception('Unallowed key ' . htmlentities($key) . ' in value for field' . $this->getName());
+                throw new MailChimpException('Unallowed key ' . htmlentities($key) . ' in value for field' . $this->getName());
             }
         }
 
@@ -105,7 +109,7 @@ class Tx_T3chimp_MailChimp_Field_Birthday extends Tx_T3chimp_MailChimp_Field_Abs
     }
 
     protected function validate() {
-        $this->isValidated = true;
+        $this->isValidated = TRUE;
 
         $value = $this->getValue();
 

@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Action extends Tx_T3chimp_MailChimp_Field_Radio {
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+use MatoIlic\T3Chimp\MailChimp\Form;
+
+class Action extends Radio {
     /**
      * @var array
      */
@@ -34,11 +38,11 @@ class Tx_T3chimp_MailChimp_Field_Action extends Tx_T3chimp_MailChimp_Field_Radio
 
     /**
      * @param array $definition
-     * @param Tx_T3chimp_MailChimp_Form $form
+     * @param Form $form
      */
-    public function __construct(array $definition, Tx_T3chimp_MailChimp_Form $form) {
+    public function __construct(array $definition, Form $form) {
         $definition['choices'] = self::$_choices;
-        $definition['req'] = true;
+        $definition['req'] = TRUE;
         parent::__construct($definition, $form);
     }
 
@@ -47,7 +51,7 @@ class Tx_T3chimp_MailChimp_Field_Action extends Tx_T3chimp_MailChimp_Field_Radio
     }
 
     public function getIsActionField() {
-        return true;
+        return TRUE;
     }
 
     public function getLabel() {

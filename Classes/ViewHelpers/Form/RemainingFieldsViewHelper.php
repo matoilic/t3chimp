@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,10 +26,15 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_ViewHelpers_Form_RemainingFieldsViewHelper extends Tx_T3chimp_ViewHelpers_Form_FormFieldViewHelper {
+namespace MatoIlic\T3Chimp\ViewHelpers\Form;
+
+use MatoIlic\T3Chimp\MailChimp\Field;
+use MatoIlic\T3Chimp\ViewHelpers\WritableArguments;
+
+class RemainingFieldsViewHelper extends FormFieldViewHelper {
     public function render() {
-        if($this->viewHelperVariableContainer->exists('Tx_T3chimp_ViewHelpers_FormViewHelper', 'renderedProperties')) {
-            $renderedFields = $this->viewHelperVariableContainer->get('Tx_T3chimp_ViewHelpers_FormViewHelper', 'renderedProperties');
+        if($this->viewHelperVariableContainer->exists('MatoIlic\\T3Chimp\\ViewHelpers\\FormViewHelper', 'renderedProperties')) {
+            $renderedFields = $this->viewHelperVariableContainer->get('MatoIlic\\T3Chimp\\ViewHelpers\\FormViewHelper', 'renderedProperties');
         } else {
             $renderedFields = array();
         }
@@ -46,25 +51,19 @@ class Tx_T3chimp_ViewHelpers_Form_RemainingFieldsViewHelper extends Tx_T3chimp_V
     }
 
     /**
-     * @param Tx_T3chimp_MailChimp_Field $field
+     * @param Field $field
      * @return string
      */
     protected function renderField($field) {
-        $arguments = new Tx_T3chimp_ViewHelpers_WritableArguments(array('property' => $field->getName()));
-        $renderer = new Tx_T3chimp_ViewHelpers_Form_FormFieldViewHelper();
+        $arguments = new WritableArguments(array('property' => $field->getName()));
+        $renderer = new FormFieldViewHelper();
+        $renderer->setRenderingContext($this->renderingContext);
 
-        if(method_exists($this, 'setControllerContext')) { //4.5.x compatibility
-            $renderer->setControllerContext($this->controllerContext);
-            $renderer->setTemplateVariableContainer($this->templateVariableContainer);
-            $renderer->setViewHelperVariableContainer($this->viewHelperVariableContainer);
-            $renderer->setArguments($arguments);
-        } else {
-            $renderer->setRenderingContext($this->renderingContext);
-            if($this->renderChildrenClosure !== NULL) {
-                $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
-            }
-            $renderer->setArguments($arguments->toArray());
+        if($this->renderChildrenClosure !== NULL) {
+            $renderer->setRenderChildrenClosure($this->renderChildrenClosure);
         }
+
+        $renderer->setArguments($arguments->toArray());
 
         return $renderer->render();
     }

@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Scheduler_SyncBackFromMailChimpTask extends Tx_T3chimp_Scheduler_Base {
+namespace MatoIlic\T3Chimp\Scheduler;
+
+class SyncBackFromMailChimpTask extends Base {
     /**
      * @var string
      */
@@ -51,10 +53,10 @@ class Tx_T3chimp_Scheduler_SyncBackFromMailChimpTask extends Tx_T3chimp_Schedule
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getMessage());
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getTraceAsString());
 
-            return false;
+            return FALSE;
         }
 
-        return true;
+        return TRUE;
     }
 
     /**

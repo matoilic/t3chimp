@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,46 +26,38 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
+namespace MatoIlic\T3Chimp\Service;
+
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi;
+use MatoIlic\T3Chimp\MailChimp\Form;
+use MatoIlic\T3Chimp\Provider\Settings;
+use MatoIlic\T3Chimp\Service\MailChimp as ServiceSpace;
+use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+
+class MailChimp implements SingletonInterface {
     const ACTION_UNSUBSCRIBE = -1;
     const ACTION_SUBSCRIBE = 1;
     const ACTION_UPDATE = 2;
 
     /**
-     * @var Tx_T3chimp_MailChimp_Api
+     * @var MailChimpApi
      */
     protected $api;
 
     /**
-     * @var array
-     */
-    protected static $exceptions = array(
-        211 => 'ListInvalidOption',
-        214 => 'ListAlreadySubscribed',
-        215 => 'ListNotSubscribed',
-        230 => 'EmailAlreadySubscribed',
-        231 => 'EmailAlreadyUnsubscribed',
-        232 => 'EmailNotExists',
-        502 => 'InvalidEmail'
-    );
-
-    /**
-     * @var string
-     */
-    protected static $exceptionNamespace = 'Tx_T3chimp_Service_MailChimp_';
-
-    /**
-     * @var Tx_Extbase_Object_ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var Tx_T3chimp_Provider_Settings
+     * @var Settings
      */
     protected $settingsProvider;
 
     /**
-     * TODO make sending of welcome message configurable
      * @param string $listId
      * @param array $fieldValues
      * @param array $interestGroupings
@@ -73,11 +65,18 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @param string $emailType
      * @param bool $sendWelcomeEmail
      */
-    public function addSubscriber($listId, $fieldValues, $interestGroupings, $doubleOptIn = true, $emailType = 'html', $sendWelcomeEmail = false) {
+    public function addSubscriber($listId, $fieldValues, $interestGroupings, $doubleOptIn = TRUE, $emailType = 'html', $sendWelcomeEmail = FALSE) {
         $data = $this->prepareFieldValues($fieldValues, $interestGroupings);
-
-        $this->api->listSubscribe($listId, $data['email'], $data['mergeVars'], $emailType, $doubleOptIn, false, true, $sendWelcomeEmail);
-        $this->checkApi();
+        $this->api->lists->subscribe(
+            $listId,
+            array('email' => $data['email']),
+            $data['mergeVars'],
+            $emailType,
+            $doubleOptIn,
+            FALSE,
+            TRUE,
+            $sendWelcomeEmail
+        );
     }
 
     /**
@@ -86,21 +85,13 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @param bool $doubleOptIn
      * @param string $emailType
      */
-    public function addSubscribers($listId, $subscribers, $doubleOptIn = false, $emailType = 'html') {
+    public function addSubscribers($listId, $subscribers, $doubleOptIn = FALSE, $emailType = 'html') {
         for($i = 0, $n = count($subscribers); $i < $n; $i++) {
             $subscribers[$i]['EMAIL_TYPE'] = $emailType;
         }
 
-        $response = $this->api->listBatchSubscribe($listId, $subscribers, $doubleOptIn, true, true);
+        $response = $this->api->lists->batchSubscribe($listId, $subscribers, $doubleOptIn, TRUE, TRUE);
         $this->logResponseErrors($response);
-
-        $this->checkApi();
-    }
-
-    protected function checkApi() {
-        if(!empty($this->api->errorCode)) {
-            $this->throwException($this->api->errorCode, $this->api->errorMessage);
-        }
     }
 
     /**
@@ -116,20 +107,19 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @return array
      */
     public function getFieldsFor($listId) {
-        $fields = $this->api->listMergeVars($listId);
-        $this->checkApi();
+        $result = $this->api->lists->mergeVars(array($listId));
 
-        return $fields;
+        return $result['data'][0]['merge_vars'];
     }
 
     /**
      * @param string $email if passed, the form will be prefilled with the subscriber's current profile data
-     * @return Tx_T3chimp_MailChimp_Form
+     * @return Form
      */
-    public function getForm($email = null) {
+    public function getForm($email = NULL) {
         $form = $this->getFormFor($this->settingsProvider->get('subscriptionList'));
 
-        if($email != null) {
+        if($email != NULL) {
             $data = $this->getSubscriptionInfo($email);
 
             if($data != NULL) {
@@ -144,26 +134,22 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
 
     /**
      * @param string $listId
-     * @return Tx_T3chimp_MailChimp_Form
+     * @return Form
      */
     public function getFormFor($listId) {
         $form = $this->getFormFromCache($listId . '.mc');
-        if($form !== null) {
+        if($form !== NULL) {
             return $form;
         }
 
         $fields = $this->getFieldsFor($listId);
         try {
             $interestGroupings = $this->getInterestGroupingsFor($listId);
-        } catch(Tx_T3chimp_Service_MailChimp_ListInvalidOptionException $ex) { //if interest groups are not enabled
+        } catch(MailChimpApi\ListInvalidOption $ex) { //if interest groups are not enabled
             $interestGroupings = array();
         }
 
-        if(TYPO3_version < '6.1.0') {
-            $form = $this->objectManager->create('Tx_T3chimp_MailChimp_Form', $fields, $listId);
-        } else {
-            $form = $this->objectManager->get('Tx_T3chimp_MailChimp_Form', $fields, $listId);
-        }
+        $form = $this->objectManager->get('MatoIlic\\T3Chimp\\MailChimp\\Form', $fields, $listId);
         $form->setInterestGroupings($interestGroupings);
 
         $this->writeToCache($form);
@@ -173,11 +159,11 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
 
     /**
      * @param $listId
-     * @return Tx_T3chimp_MailChimp_Form|null
+     * @return Form|NULL
      */
     protected function getFormFromCache($listId) {
         if($this->settingsProvider->getIsCacheDisabled()) {
-            return null;
+            return NULL;
         }
 
         $file = $this->getCachePath($listId . '.mc');
@@ -186,7 +172,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
             return unserialize(file_get_contents($file));
         }
 
-        return null;
+        return NULL;
     }
 
     /**
@@ -195,21 +181,19 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      */
     public function getInterestGroupingsFor($listId) {
         try {
-            $groups = $this->api->listInterestGroupings($listId);
-            $this->checkApi();
-        } catch(Tx_T3chimp_Service_MailChimp_ListInvalidOptionException $ex) { //if interest groups are not enabled
+            $groups = $this->api->lists->interestGroupings($listId);
+        } catch(MailChimpApi\ListInvalidOption $ex) { //if interest groups are not enabled
             $groups = array();
         }
 
-        return ($groups == null) ? array() : $groups;
+        return ($groups == NULL) ? array() : $groups;
     }
 
     /**
      * @return array
      */
     public function getLists() {
-        $lists = $this->api->lists();
-        $this->checkApi();
+        $lists = $this->api->lists->getList();
 
         return $lists['data'];
     }
@@ -224,8 +208,10 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
         $page = 0;
         $limit = 15000;
         do {
-            $response = $this->api->listMembers($listId, 'subscribed', null, $page, $limit);
-            $this->checkApi();
+            $response = $this->api->lists->members($listId, 'subscribed', array(
+                'start' => $page * $limit,
+                'limit' => $limit
+            ));
             $page++;
             $subscribers = array_merge($subscribers, $response['data']);
         } while(count($subscribers) < $response['total']);
@@ -234,8 +220,12 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     public function getSubscriptionInfo($email) {
-        $info = $this->api->listMemberInfo($this->settingsProvider->get('subscriptionList'), array($email));
-        $this->checkApi();
+        $info = $this->api->lists->memberInfo(
+            $this->settingsProvider->get('subscriptionList'),
+            array(
+                array('email' => $email)
+            )
+        );
 
         if(count($info['data']) == 0) {
             return array();
@@ -254,20 +244,20 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
 
     public function initialize() {
         $this->settingsProvider->initialize();
-        $this->api = new Tx_T3chimp_MailChimp_Api($this->settingsProvider->getApiKey(), $this->settingsProvider->get('secureConnection'));
+        $this->api = new MailChimpApi($this->settingsProvider->getApiKey());
     }
 
     /**
-     * @param Tx_Extbase_Object_ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function injectObjectManager(Tx_Extbase_Object_ObjectManager $objectManager) {
+    public function injectObjectManager(ObjectManager $objectManager) {
         $this->objectManager = $objectManager;
     }
 
     /**
-     * @param Tx_T3chimp_Provider_Settings $provider
+     * @param Settings $provider
      */
-    public function injectSettingsProvider(Tx_T3chimp_Provider_Settings $provider) {
+    public function injectSettingsProvider(Settings $provider) {
         $this->settingsProvider = $provider;
     }
 
@@ -277,7 +267,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     protected function logResponseErrors($response) {
         foreach($response['errors'] as $error) {
             $message = 'T3Chimp: Error(' . $error['code'] . ') => ' . $error['message'];
-            t3lib_div::sysLog($message, 't3chimp', 1);
+            GeneralUtility::sysLog($message, 't3chimp', 1);
         }
     }
 
@@ -308,8 +298,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @param string $email
      */
     public function removeSubscriber($listId, $email) {
-        $this->api->listUnsubscribe($listId, $email);
-        $this->checkApi();
+        $this->api->lists->unsubscribe($listId, $email);
     }
 
     /**
@@ -320,21 +309,19 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      * @param bool $sendNotification
      */
     public function removeSubscribers($listId, $emails, $delete = FALSE, $sendGoodbye = FALSE, $sendNotification = FALSE) {
-        $response = $this->api->listBatchUnsubscribe($listId, $emails, $delete, $sendGoodbye, $sendNotification);
+        $response = $this->api->lists->batchUnsubscribe($listId, $emails, $delete, $sendGoodbye, $sendNotification);
         $this->logResponseErrors($response);
-
-        $this->checkApi();
     }
 
     /**
-     * @param Tx_T3chimp_MailChimp_Form $form
+     * @param Form $form
      * @return array returns field values at index 0 and interest groupings at index 1
      */
-    public function separateForm(Tx_T3chimp_MailChimp_Form $form) {
+    public function separateForm(Form $form) {
         $fieldValues = array();
         $selectedGroupings = array();
 
-        foreach($form->getFields(true) as $field) {
+        foreach($form->getFields(TRUE) as $field) {
             if($field->getIsActionField()) {
                 continue;
             } elseif($field->getIsInterestGroup()) {
@@ -354,10 +341,10 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
-     * @param Tx_T3chimp_MailChimp_Form $form
+     * @param Form $form
      * @return int the performed action
      */
-    public function saveForm(Tx_T3chimp_MailChimp_Form $form) {
+    public function saveForm(Form $form) {
         if($form->getField('FORM_ACTION')->getValue() == 'subscribe') {
             list($fieldValues, $selectedGroupings) = $this->separateForm($form);
 
@@ -372,7 +359,7 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
                 );
 
                 $action = self::ACTION_SUBSCRIBE;
-            } catch(Tx_T3chimp_Service_MailChimp_AlreadySubscribedException $ex) {
+            } catch(MailChimpApi\ListAlreadySubscribed $ex) {
                 $this->updateSubscriber(
                     $form->getListId(),
                     $fieldValues,
@@ -391,31 +378,16 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
     }
 
     /**
-     * @param int $errorCode
-     * @param string $errorMessage
-     * @throws Tx_T3chimp_Service_MailChimp_Exception
+     * @param Form $form
      */
-    protected function throwException($errorCode, $errorMessage) {
-        $exceptionClass = self::$exceptionNamespace;
-        if(array_key_exists($errorCode, self::$exceptions)) {
-            $exceptionClass .= self::$exceptions[$errorCode];
-        }
-        $exceptionClass .= "Exception";
-
-        throw new $exceptionClass("MailChimp error: $errorMessage ($errorCode)", $errorCode);
-    }
-
-    /**
-     * @param Tx_T3chimp_MailChimp_Form $form
-     */
-    protected function writeToCache(Tx_T3chimp_MailChimp_Form $form) {
+    protected function writeToCache(Form $form) {
         if($this->settingsProvider->getIsCacheDisabled()) {
             return;
         }
 
         $cachePath = $this->getCachePath('');
         if(!file_exists($cachePath)) {
-            mkdir($cachePath, 0777, true);
+            mkdir($cachePath, 0777, TRUE);
             file_put_contents($this->getCachePath('index.html'), '');
         }
 
@@ -431,8 +403,12 @@ class Tx_T3chimp_Service_MailChimp implements t3lib_Singleton {
      */
     public function updateSubscriber($listId, $fieldValues, $interestGroupings, $emailType = 'html') {
         $data = $this->prepareFieldValues($fieldValues, $interestGroupings);
-
-        $this->api->listUpdateMember($listId, $data['email'], $data['mergeVars'], $emailType, true);
-        $this->checkApi();
+        $this->api->lists->updateMember(
+            $listId,
+            array('email' => $data['email']),
+            $data['mergeVars'],
+            $emailType,
+            TRUE
+        );
     }
 }

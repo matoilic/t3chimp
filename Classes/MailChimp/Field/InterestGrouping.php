@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,14 +26,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_Field_Checkboxes {
-    public function getApiValue() {
-        //commas in interest group names should be escaped with a backslash
-        $selection = str_replace(',', '\\,', $this->getValue());
-        return implode(',', $selection);
-    }
+namespace MatoIlic\T3Chimp\MailChimp\Field;
 
+use MatoIlic\T3Chimp\MailChimp\MailChimpException;
 
+class InterestGrouping extends Checkboxes {
     public function getGroupingId() {
         return $this->definition['groupingId'];
     }
@@ -55,7 +52,7 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
     }
 
     public function getIsInterestGroup() {
-        return true;
+        return TRUE;
     }
 
     public function getTag() {
@@ -63,30 +60,28 @@ class Tx_T3chimp_MailChimp_Field_InterestGrouping extends Tx_T3chimp_MailChimp_F
     }
 
     public function setApiValue($value) {
-        if(strlen($value) == 0) {
+        $selected = array();
+        foreach($value as $group) {
+            if($group['interested']) {
+                $selected[] = $group['name'];
+            }
+        }
+
+        if(count($selected) == 0) {
             return;
         }
 
-        if($this->getDisplayAsCheckboxes()) {
-            $values = preg_split('/(?<!\\\\),/', $value);
-            for($i = 0; $i < count($values); $i++) {
-                $values[$i] = trim(str_replace('\,', ',', $values[$i]));
-            }
-
-            $this->setValue($values);
-        } else {
-            $this->setValue($value);
-        }
+        $this->setValue($selected);
     }
 
     public function setValue($value) {
-        if($value != null && !is_array($value)) {
+        if($value != NULL && !is_array($value)) {
             parent::setValue(array($value));
             return;
         }
 
         if(!$this->getDisplayAsCheckboxes() && !$this->getIsHidden() && count($value) > 1) {
-            throw new Tx_T3chimp_MailChimp_Exception('Interest groupings with a field type other than checkboxes can only have one value');
+            throw new MailChimpException('Interest groupings with a field type other than checkboxes can only have one value');
         }
 
         parent::setValue($value);

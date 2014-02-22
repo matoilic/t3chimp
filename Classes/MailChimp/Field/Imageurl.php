@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Mato Ilic <info@matoilic.ch>
+ *  (c) 2014 Mato Ilic <info@matoilic.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,35 +26,42 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_T3chimp_MailChimp_Field_Imageurl extends Tx_T3chimp_MailChimp_Field_Abstract {
+namespace MatoIlic\T3Chimp\MailChimp\Field;
+
+use MatoIlic\T3Chimp\Service\FileUpload;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Web\Request;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+
+class Imageurl extends AbstractField {
     /**
-     * @var Tx_T3chimp_Service_FileUpload
+     * @var FileUpload
      */
     protected $uploadService;
 
     /**
-     * @var Tx_Extbase_MVC_Web_Routing_UriBuilder
+     * @var UriBuilder
      */
     protected $uriBuilder;
 
     /**
-     * @param Tx_Extbase_MVC_Request $request
+     * @param Request $request
      */
-    public function bindRequest(Tx_Extbase_MVC_Request $request) {
+    public function bindRequest(Request $request) {
         try {
             $file = $this->uploadService->processUploadedFile($this->getName());
             $this->setValue($file);
-        } catch(Tx_T3chimp_Service_FileUpload_InvalidExtensionException $ex) {
-            $this->setValue(null);
+        } catch(FileUpload\InvalidExtensionException $ex) {
+            $this->setValue(NULL);
             $this->errors[] = 't3chimp.error.unsupportedImageFormat';
-        } catch(Tx_T3chimp_Service_FileUpload_FileTooLargeException $ex) {
-            $this->setValue(null);
+        } catch(FileUpload\FileTooLargeException $ex) {
+            $this->setValue(NULL);
             $this->errors[] = 't3chimp.error.fileTooLarge';
-        } catch(Tx_T3chimp_Service_FileUpload_FilePartiallyUploadedException $ex) {
-            $this->setValue(null);
+        } catch(FileUpload\FilePartiallyUploadedException $ex) {
+            $this->setValue(NULL);
             $this->errors[] = 't3chimp.error.filePartiallyUploaded';
-        } catch(Tx_T3chimp_Service_FileUpload_NoFileUploadedException $ex) {
-            $this->setValue(null);
+        } catch(FileUpload\NoFileUploadedException $ex) {
+            $this->setValue(NULL);
         }
     }
 
@@ -62,20 +69,20 @@ class Tx_T3chimp_MailChimp_Field_Imageurl extends Tx_T3chimp_MailChimp_Field_Abs
      * @return string
      */
     public function getApiValue() {
-        return t3lib_div::locationHeaderUrl('/' . $this->getValue());
+        return GeneralUtility::locationHeaderUrl('/' . $this->getValue());
     }
 
     /**
-     * @param Tx_T3chimp_Service_FileUpload $uploadService
+     * @param FileUpload $uploadService
      */
-    public function injectUploadService(Tx_T3chimp_Service_FileUpload $uploadService) {
+    public function injectUploadService(FileUpload $uploadService) {
         $this->uploadService = $uploadService;
     }
 
     /**
-     * @param Tx_Extbase_MVC_Web_Routing_UriBuilder $uriBuilder
+     * @param UriBuilder $uriBuilder
      */
-    public function injectUriBuilder(Tx_Extbase_MVC_Web_Routing_UriBuilder $uriBuilder) {
+    public function injectUriBuilder(UriBuilder $uriBuilder) {
         $this->uriBuilder = $uriBuilder;
     }
 
