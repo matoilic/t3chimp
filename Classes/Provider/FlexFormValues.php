@@ -28,22 +28,23 @@
 
 namespace MatoIlic\T3Chimp\Provider;
 
-use MatoIlic\T3Chimp\MailChimp\Api;
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
 
 class FlexFormValues {
     /**
-     * @var Api
+     * @var MailChimpApi
      */
     private $api;
 
     protected function initialize($extKey) {
         /** @var BackendConfigurationManager $config */
-        $config = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\BackendConfigurationManager');
+        $config = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\BackendConfigurationManager');
         $setup = $config->getTypoScriptSetup();
         $setup = $setup['plugin.']['tx_' . $extKey . '.'];
-        $tsConfig = \TYPO3\CMS\Backend\Utility\BackendUtility::getPagesTSconfig($this->getCurrentPageId());
+        $tsConfig = BackendUtility::getPagesTSconfig($this->getCurrentPageId());
         $tsConfig = $tsConfig['plugin.']['tx_' . $extKey . '.'];
 
         if(TYPO3_version >= '6.0.0' && $setup['settings.']['apiKey'] && $setup['settings.']['apiKey'][0] != '{') {
@@ -55,7 +56,7 @@ class FlexFormValues {
             $apiKey = $globals['apiKey'];
         }
 
-        $this->api = new Api($apiKey);
+        $this->api = new MailChimpApi($apiKey);
     }
 
     protected function getCurrentPageId() {
@@ -87,7 +88,7 @@ class FlexFormValues {
     public function getLists($config) {
         $listType = explode('_', $config['row']['list_type']);
         $this->initialize($listType[0]);
-        $result = $this->api->lists();
+        $result = $this->api->lists->getList();
 
         foreach($result['data'] as $list) {
             $config['items'][] = array($list['name'], $list['id']);

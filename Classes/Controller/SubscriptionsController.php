@@ -28,11 +28,11 @@
 
 namespace MatoIlic\T3Chimp\Controller;
 
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Error;
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi\InvalidEmail;
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi\ListNotSubscribed;
 use MatoIlic\T3Chimp\Provider\Settings;
 use MatoIlic\T3Chimp\Service\MailChimp;
-use MatoIlic\T3Chimp\Service\MailChimp\InvalidEmailException;
-use MatoIlic\T3Chimp\Service\MailChimp\ListNotSubscribedException;
-use MatoIlic\T3Chimp\Service\MailChimp\MailChimpServiceException;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -133,11 +133,11 @@ class SubscriptionsController extends ActionController {
                 } else {
                     $message = $this->translate('t3chimp.form.unsubscribed');
                 }
-            } catch(InvalidEmailException $ex) {
+            } catch(InvalidEmail $ex) {
                 $message = $this->translate('t3chimp.exception.invalidEmail');
-            } catch(ListNotSubscribedException $ex) {
+            } catch(ListNotSubscribed $ex) {
                 $message = $this->translate('t3chimp.exception.notSubscribed');
-            } catch(MailChimpServiceException $ex) {
+            } catch(Error $ex) {
                 $message = $ex->getMessage();
             }
 

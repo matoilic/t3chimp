@@ -31,13 +31,6 @@ namespace MatoIlic\T3Chimp\MailChimp\Field;
 use MatoIlic\T3Chimp\MailChimp\MailChimpException;
 
 class InterestGrouping extends Checkboxes {
-    public function getApiValue() {
-        //commas in interest group names should be escaped with a backslash
-        $selection = str_replace(',', '\\,', $this->getValue());
-        return implode(',', $selection);
-    }
-
-
     public function getGroupingId() {
         return $this->definition['groupingId'];
     }
@@ -67,20 +60,18 @@ class InterestGrouping extends Checkboxes {
     }
 
     public function setApiValue($value) {
-        if(strlen($value) == 0) {
+        $selected = array();
+        foreach($value as $group) {
+            if($group['interested']) {
+                $selected[] = $group['name'];
+            }
+        }
+
+        if(count($selected) == 0) {
             return;
         }
 
-        if($this->getDisplayAsCheckboxes()) {
-            $values = preg_split('/(?<!\\\\),/', $value);
-            for($i = 0, $n = count($values); $i < $n; $i++) {
-                $values[$i] = trim(str_replace('\,', ',', $values[$i]));
-            }
-
-            $this->setValue($values);
-        } else {
-            $this->setValue($value);
-        }
+        $this->setValue($selected);
     }
 
     public function setValue($value) {

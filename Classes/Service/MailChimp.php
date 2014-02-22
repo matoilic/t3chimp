@@ -28,8 +28,7 @@
 
 namespace MatoIlic\T3Chimp\Service;
 
-use MatoIlic\T3Chimp\MailChimp\Api;
-use MatoIlic\T3Chimp\MailChimp\MailChimpException;
+use MatoIlic\T3Chimp\MailChimp\MailChimpApi;
 use MatoIlic\T3Chimp\MailChimp\Form;
 use MatoIlic\T3Chimp\Provider\Settings;
 use MatoIlic\T3Chimp\Service\MailChimp as ServiceSpace;
@@ -44,27 +43,9 @@ class MailChimp implements SingletonInterface {
     const ACTION_UPDATE = 2;
 
     /**
-     * @var Api
+     * @var MailChimpApi
      */
     protected $api;
-
-    /**
-     * @var array
-     */
-    protected static $exceptions = array(
-        211 => 'ListInvalidOption',
-        214 => 'ListAlreadySubscribed',
-        215 => 'ListNotSubscribed',
-        230 => 'EmailAlreadySubscribed',
-        231 => 'EmailAlreadyUnsubscribed',
-        232 => 'EmailNotExists',
-        502 => 'InvalidEmail'
-    );
-
-    /**
-     * @var string
-     */
-    protected static $exceptionNamespace = '\\MatoIlic\\T3Chimp\\Service\\MailChimp\\';
 
     /**
      * @var ObjectManagerInterface
@@ -86,9 +67,16 @@ class MailChimp implements SingletonInterface {
      */
     public function addSubscriber($listId, $fieldValues, $interestGroupings, $doubleOptIn = TRUE, $emailType = 'html', $sendWelcomeEmail = FALSE) {
         $data = $this->prepareFieldValues($fieldValues, $interestGroupings);
-
-        $this->api->listSubscribe($listId, $data['email'], $data['mergeVars'], $emailType, $doubleOptIn, FALSE, TRUE, $sendWelcomeEmail);
-        $this->checkApi();
+        $this->api->lists->subscribe(
+            $listId,
+            array('email' => $data['email']),
+            $data['mergeVars'],
+            $emailType,
+            $doubleOptIn,
+            FALSE,
+            TRUE,
+            $sendWelcomeEmail
+        );
     }
 
     /**
@@ -102,16 +90,8 @@ class MailChimp implements SingletonInterface {
             $subscribers[$i]['EMAIL_TYPE'] = $emailType;
         }
 
-        $response = $this->api->listBatchSubscribe($listId, $subscribers, $doubleOptIn, TRUE, TRUE);
+        $response = $this->api->lists->batchSubscribe($listId, $subscribers, $doubleOptIn, TRUE, TRUE);
         $this->logResponseErrors($response);
-
-        $this->checkApi();
-    }
-
-    protected function checkApi() {
-        if(!empty($this->api->errorCode)) {
-            $this->throwException($this->api->errorCode, $this->api->errorMessage);
-        }
     }
 
     /**
@@ -127,10 +107,9 @@ class MailChimp implements SingletonInterface {
      * @return array
      */
     public function getFieldsFor($listId) {
-        $fields = $this->api->listMergeVars($listId);
-        $this->checkApi();
+        $result = $this->api->lists->mergeVars(array($listId));
 
-        return $fields;
+        return $result['data'][0]['merge_vars'];
     }
 
     /**
@@ -166,7 +145,7 @@ class MailChimp implements SingletonInterface {
         $fields = $this->getFieldsFor($listId);
         try {
             $interestGroupings = $this->getInterestGroupingsFor($listId);
-        } catch(ServiceSpace\ListInvalidOptionException $ex) { //if interest groups are not enabled
+        } catch(MailChimpApi\ListInvalidOption $ex) { //if interest groups are not enabled
             $interestGroupings = array();
         }
 
@@ -206,9 +185,8 @@ class MailChimp implements SingletonInterface {
      */
     public function getInterestGroupingsFor($listId) {
         try {
-            $groups = $this->api->listInterestGroupings($listId);
-            $this->checkApi();
-        } catch(ServiceSpace\ListInvalidOptionException $ex) { //if interest groups are not enabled
+            $groups = $this->api->lists->interestGroupings($listId);
+        } catch(MailChimpApi\ListInvalidOption $ex) { //if interest groups are not enabled
             $groups = array();
         }
 
@@ -219,8 +197,7 @@ class MailChimp implements SingletonInterface {
      * @return array
      */
     public function getLists() {
-        $lists = $this->api->lists();
-        $this->checkApi();
+        $lists = $this->api->lists->getList();
 
         return $lists['data'];
     }
@@ -235,8 +212,10 @@ class MailChimp implements SingletonInterface {
         $page = 0;
         $limit = 15000;
         do {
-            $response = $this->api->listMembers($listId, 'subscribed', NULL, $page, $limit);
-            $this->checkApi();
+            $response = $this->api->lists->members($listId, 'subscribed', array(
+                'start' => $page * $limit,
+                'limit' => $limit
+            ));
             $page++;
             $subscribers = array_merge($subscribers, $response['data']);
         } while(count($subscribers) < $response['total']);
@@ -245,8 +224,12 @@ class MailChimp implements SingletonInterface {
     }
 
     public function getSubscriptionInfo($email) {
-        $info = $this->api->listMemberInfo($this->settingsProvider->get('subscriptionList'), array($email));
-        $this->checkApi();
+        $info = $this->api->lists->memberInfo(
+            $this->settingsProvider->get('subscriptionList'),
+            array(
+                array('email' => $email)
+            )
+        );
 
         if(count($info['data']) == 0) {
             return array();
@@ -265,7 +248,7 @@ class MailChimp implements SingletonInterface {
 
     public function initialize() {
         $this->settingsProvider->initialize();
-        $this->api = new Api($this->settingsProvider->getApiKey(), $this->settingsProvider->get('secureConnection'));
+        $this->api = new MailChimpApi($this->settingsProvider->getApiKey());
     }
 
     /**
@@ -319,8 +302,7 @@ class MailChimp implements SingletonInterface {
      * @param string $email
      */
     public function removeSubscriber($listId, $email) {
-        $this->api->listUnsubscribe($listId, $email);
-        $this->checkApi();
+        $this->api->lists->unsubscribe($listId, $email);
     }
 
     /**
@@ -331,10 +313,8 @@ class MailChimp implements SingletonInterface {
      * @param bool $sendNotification
      */
     public function removeSubscribers($listId, $emails, $delete = FALSE, $sendGoodbye = FALSE, $sendNotification = FALSE) {
-        $response = $this->api->listBatchUnsubscribe($listId, $emails, $delete, $sendGoodbye, $sendNotification);
+        $response = $this->api->lists->batchUnsubscribe($listId, $emails, $delete, $sendGoodbye, $sendNotification);
         $this->logResponseErrors($response);
-
-        $this->checkApi();
     }
 
     /**
@@ -383,7 +363,7 @@ class MailChimp implements SingletonInterface {
                 );
 
                 $action = self::ACTION_SUBSCRIBE;
-            } catch(ServiceSpace\AlreadySubscribedException $ex) {
+            } catch(MailChimpApi\ListAlreadySubscribed $ex) {
                 $this->updateSubscriber(
                     $form->getListId(),
                     $fieldValues,
@@ -399,21 +379,6 @@ class MailChimp implements SingletonInterface {
         }
 
         return $action;
-    }
-
-    /**
-     * @param int $errorCode
-     * @param string $errorMessage
-     * @throws MailChimpException
-     */
-    protected function throwException($errorCode, $errorMessage) {
-        $exceptionClass = self::$exceptionNamespace;
-        if(array_key_exists($errorCode, self::$exceptions)) {
-            $exceptionClass .= self::$exceptions[$errorCode];
-        }
-        $exceptionClass .= 'Exception';
-
-        throw new $exceptionClass('MailChimp error: $errorMessage (' . $errorCode . ')', $errorCode);
     }
 
     /**
@@ -442,8 +407,12 @@ class MailChimp implements SingletonInterface {
      */
     public function updateSubscriber($listId, $fieldValues, $interestGroupings, $emailType = 'html') {
         $data = $this->prepareFieldValues($fieldValues, $interestGroupings);
-
-        $this->api->listUpdateMember($listId, $data['email'], $data['mergeVars'], $emailType, TRUE);
-        $this->checkApi();
+        $this->api->lists->updateMember(
+            $listId,
+            array('email' => $data['email']),
+            $data['mergeVars'],
+            $emailType,
+            TRUE
+        );
     }
 }
