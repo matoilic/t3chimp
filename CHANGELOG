@@ -1,3 +1,6 @@
+2.0.1
+- fixes #14, an issue with the field provider for the sync task, where the class from a wrong namespace got imported
+
 2.0.0
 - Refactored code to use v2 of the MailChimp API
 - Refactored code to use namespaces
