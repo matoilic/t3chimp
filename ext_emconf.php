@@ -15,8 +15,8 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'Integrates MailChimp into Typo3.',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '2.0.1',
-	'dependencies' => '',
+	'version' => '2.0.2',
+	'dependencies' => 'extbase,fluid',
 	'conflicts' => '',
 	'priority' => '',
 	'loadOrder' => '',
@@ -34,8 +34,10 @@ $EM_CONF[$_EXTKEY] = array(
 	'CGLcompliance_note' => '',
 	'constraints' => array(
 		'depends' => array(
-			'php' => '5.2.0-0.0.0',
-			'typo3' => '6.1.0-6.1.99',
+			'php' => '5.3.7-0.0.0',
+			'typo3' => '6.1.0-6.2.99',
+            'extbase' => '6.1.0-6.2.99',
+            'fluid' => '6.1.0-6.2.99',
 		),
 		'conflicts' => array(
 		),
