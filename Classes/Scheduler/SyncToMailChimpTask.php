@@ -124,7 +124,7 @@ class SyncToMailChimpTask extends Base {
 
         $preparedValues = $this->mailChimp->prepareFieldValues($fieldValues, $groupings);
         $subscriber = $preparedValues['mergeVars'];
-        $subscriber['EMAIL'] = $preparedValues['email'];
+        $subscriber['EMAIL'] = array('email' => $preparedValues['email']);
 
         return $subscriber;
     }
@@ -188,7 +188,7 @@ class SyncToMailChimpTask extends Base {
         foreach($subscribers as $subscriber) {
             $email = $subscriber['email'];
             if(!array_key_exists($email, $users) || !$users[$email]['subscribed_to_newsletter']) {
-                $usersToUnsubscribe[] = $email;
+                $usersToUnsubscribe[] = array('email' => $email);
             }
         }
 

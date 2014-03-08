@@ -307,7 +307,7 @@ class MailChimp implements SingletonInterface {
      * @param string $email
      */
     public function removeSubscriber($listId, $email) {
-        $this->api->lists->unsubscribe($listId, $email);
+        $this->api->lists->unsubscribe($listId, array('email' => $email));
     }
 
     /**
