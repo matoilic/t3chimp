@@ -29,6 +29,7 @@
 namespace MatoIlic\T3Chimp\Scheduler;
 
 use MatoIlic\T3Chimp\Service\MailChimp;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
