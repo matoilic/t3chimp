@@ -1,3 +1,6 @@
+2.0.3
+- Fixed missing namespace import
+
 2.0.2
 - Fixed MailChimp API v2 incompatibilities
 
