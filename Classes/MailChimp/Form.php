@@ -215,13 +215,17 @@ class Form {
             throw new MailChimpException('Can not validate an unbound form');
         }
 
-        foreach($this->getFields(TRUE) as $field) {
-            if(!$field->getIsValid()) {
-                return FALSE;
+        if($this->getField('FORM_ACTION')->getValue() == 'subscribe') {
+            foreach($this->getFields(TRUE) as $field) {
+                if(!$field->getIsValid()) {
+                    return FALSE;
+                }
             }
+
+            return TRUE;
         }
 
-        return TRUE;
+        return $this->getField('EMAIL')->getIsValid();
     }
 
     /**
