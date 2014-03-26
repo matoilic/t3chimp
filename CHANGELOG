@@ -1,3 +1,6 @@
+2.0.4
+- Fixed an issue where the unsubscription form would always be invalid
+
 2.0.3
 - Fixed missing namespace import
 
