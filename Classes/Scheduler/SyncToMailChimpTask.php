@@ -84,7 +84,7 @@ class SyncToMailChimpTask extends Base {
      * @return Request
      */
     private function createRequest($user, array $groupingFields) {
-        $request = $this->objectManager->get('MatoIlic\\T3Chimp\\Scheduler');
+        $request = $this->objectManager->get('MatoIlic\\T3Chimp\\Scheduler\\Request');
 
         $subscriber = array();
         foreach($this->mappings as $tag => $dbField) {
@@ -123,8 +123,10 @@ class SyncToMailChimpTask extends Base {
         list($fieldValues, $groupings) = $this->mailChimp->separateForm($form);
 
         $preparedValues = $this->mailChimp->prepareFieldValues($fieldValues, $groupings);
-        $subscriber = $preparedValues['mergeVars'];
-        $subscriber['EMAIL'] = array('email' => $preparedValues['email']);
+        $subscriber = array(
+            'MERGE_VARS' => $preparedValues['mergeVars'],
+            'EMAIL' => array('email' => $preparedValues['email'])
+        );
 
         return $subscriber;
     }

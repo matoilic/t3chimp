@@ -214,7 +214,7 @@ class MailChimp implements SingletonInterface {
         $subscribers = array();
 
         $page = 0;
-        $limit = 15000;
+        $limit = 100;
         do {
             $response = $this->api->lists->members($listId, 'subscribed', array(
                 'start' => $page * $limit,
