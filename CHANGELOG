@@ -1,3 +1,6 @@
+2.0.5
+- Fixed further MailChimp API v2 incompatibilities
+
 2.0.4
 - Fixed an issue where the unsubscription form would always be invalid
 
