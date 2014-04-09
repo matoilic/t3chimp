@@ -1,16 +1,14 @@
 <?php
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-
 if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin($_EXTKEY, 'subscription', 'T3Chimp: Newsletter Subscription');
 
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_subscription'] = 'pi_flexform';
-ExtensionManagementUtility::addPiFlexFormValue($_EXTKEY . '_subscription', 'FILE:EXT:t3chimp/Configuration/FlexForms/Subscription.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($_EXTKEY . '_subscription', 'FILE:EXT:t3chimp/Configuration/FlexForms/Subscription.xml');
 
-ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'T3Chimp Setup');
-ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/DefaultStyles', 'T3Chimp CSS Styles (optional)');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'T3Chimp Setup');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/DefaultStyles', 'T3Chimp CSS Styles (optional)');
 
 /*if (TYPO3_MODE === 'BE') {
     Tx_Extbase_Utility_Extension::registerModule(
@@ -39,8 +37,8 @@ $feUserColumns = array(
         )
     )
 );
-ExtensionManagementUtility::addTCAcolumns('fe_users', $feUserColumns, 1);
-ExtensionManagementUtility::addToAllTCATypes('fe_users', '--div--;T3Chimp,subscribed_to_newsletter;;;;1-1-1');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('fe_users', $feUserColumns, 1);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCATypes('fe_users', '--div--;T3Chimp,subscribed_to_newsletter;;;;1-1-1');
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['MatoIlic\\T3Chimp\\Scheduler\\SyncToMailChimpTask'] = array(
     'extension'        => $_EXTKEY,
