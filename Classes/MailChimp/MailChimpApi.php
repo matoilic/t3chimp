@@ -274,7 +274,7 @@ class MailChimpApi {
         $this->ch = curl_init();
         curl_setopt($this->ch, CURLOPT_USERAGENT, 'MailChimp-PHP/2.0.4');
         curl_setopt($this->ch, CURLOPT_POST, TRUE);
-        curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, TRUE);
+        @curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_setopt($this->ch, CURLOPT_HEADER, FALSE);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, 30);

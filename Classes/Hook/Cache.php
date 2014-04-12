@@ -32,8 +32,10 @@ class Cache {
     public function clearCache($params) {
         if ($params['cacheCmd'] == 'all' || $params['cacheCmd'] === 'pages') {
             $files = glob(PATH_site . '/typo3temp/tx_t3chimp/*.mc');
-            foreach ($files as & $file) {
-                unlink($file);
+            if(!empty($files)) {
+                foreach ($files as & $file) {
+                    unlink($file);
+                }
             }
         }
     }
