@@ -15,7 +15,12 @@
     }
 
     function onResponse(data, $form) {
-        $form.parent().html(data.html);
+        if(data.success) {
+            $form.parent().html(data.html);
+        } else {
+            var $newForm = $(data.html);
+            $form.html($newForm.html()).removeClass('t3chimp-loading');
+        }
     }
 
     function prop(name) {

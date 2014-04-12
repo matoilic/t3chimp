@@ -122,6 +122,8 @@ class SubscriptionsController extends ActionController {
         $form->bindRequest($this->request);
 
         if($form->isValid()) {
+            $success = FALSE;
+
             try {
                 $performedAction = $this->mailChimpService->saveForm($form);
 
@@ -136,6 +138,8 @@ class SubscriptionsController extends ActionController {
                 } else {
                     $message = $this->translate('t3chimp.form.unsubscribed');
                 }
+
+                $success = TRUE;
             } catch(InvalidEmail $ex) {
                 $message = $this->translate('t3chimp.exception.invalidEmail');
             } catch(ListNotSubscribed $ex) {
@@ -144,12 +148,12 @@ class SubscriptionsController extends ActionController {
                 $message = $ex->getMessage();
             }
 
-            return json_encode(array('html' => $message), JSON_HEX_TAG | JSON_HEX_QUOT);
+            return json_encode(array('html' => $message, 'success' => $success), JSON_HEX_TAG | JSON_HEX_QUOT);
         }
 
         $this->view->assign('form', $form);
 
-        return json_encode(array('html' => $this->view->render()), JSON_HEX_TAG | JSON_HEX_QUOT);
+        return json_encode(array('html' => $this->view->render(), 'success' => FALSE), JSON_HEX_TAG | JSON_HEX_QUOT);
     }
 
     /**
