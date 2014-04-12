@@ -320,7 +320,44 @@ class MailChimpApi {
             curl_setopt($ch, CURLOPT_STDERR, $curl_buffer);
         }
 
-        $response_body = curl_exec($ch);
+        if(ini_get('open_basedir') == '' && (!ini_get('safe_mode') || ini_get('safe_mode') == 'Off')) {
+            $response_body = curl_exec($ch);
+        } else {
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+            $redirectsLeft = 5;
+
+            $finalUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+            $ch2 = curl_copy_handle($ch);
+            curl_setopt($ch2, CURLOPT_HEADER, true);
+            curl_setopt($ch2, CURLOPT_NOBODY, true);
+            curl_setopt($ch2, CURLOPT_FORBID_REUSE, false);
+            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+
+            do {
+                curl_setopt($ch2, CURLOPT_URL, $finalUrl);
+                $header = curl_exec($ch2);
+                if (curl_errno($ch2)) {
+                    $code = 0;
+                } else {
+                    $code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+                    if ($code == 301 || $code == 302) {
+                        preg_match('/Location:(.*?)\n/', $header, $matches);
+                        $finalUrl = trim(array_pop($matches));
+                    } else {
+                        $code = 0;
+                    }
+                }
+                $redirectsLeft--;
+            } while ($code != 0 && $redirectsLeft > 0);
+
+            curl_setopt($ch, CURLOPT_URL, $finalUrl);
+            $response_body = curl_exec($ch);
+        }
+
+        if($redirectsLeft <= 0) {
+            trigger_error('Too many redirects when trying to call the MailChimp API.', E_USER_ERROR);
+        }
+
         $info = curl_getinfo($ch);
         $time = microtime(TRUE) - $start;
         if($this->debug) {
