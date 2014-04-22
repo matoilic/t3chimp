@@ -1,3 +1,7 @@
+# 2.1.0
+- Improved the handling of settings during AJAX requests → **[you need to update your templates](https://github.com/matoilic/t3chimp/wiki/Upgrading-from-2.0.x-to-2.1.x)**
+- Improved error handling for MailChimp API calls
+
 # 2.0.6
 - Fixed a incompatibility with RealURL where forms sometimes would have an empty action
 - Removed all use statements from ext_tables.php since it can cause conflicts with other extensions
