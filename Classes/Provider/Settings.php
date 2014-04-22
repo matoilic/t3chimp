@@ -39,19 +39,19 @@ class Settings {
     private $configurationManager;
 
     /**
+     * @var \TYPO3\CMS\Extbase\Service\FlexFormService
+     */
+    protected $flexFormService;
+
+    /**
      * @var string
      */
     private $extKey;
 
     /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @var array
      */
-    private $settings;
+    private $settings = array();
 
     /**
      * @var array
@@ -143,9 +143,16 @@ class Settings {
      * @param ObjectManager $manager
      */
     public function injectObjectManager(ObjectManager $manager) {
-        $this->injectSessionProvider($manager->get('MatoIlic\\T3Chimp\\Provider\\Session'));
+        $this->injectFlexFormService($manager->get('TYPO3\\CMS\\Extbase\\Service\\FlexFormService'));
         $this->injectConfigurationManager($manager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManagerInterface'));
         $this->initialize();
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Service\FlexFormService $flexFormService
+     */
+    public function injectFlexFormService(\TYPO3\CMS\Extbase\Service\FlexFormService $flexFormService) {
+        $this->flexFormService = $flexFormService;
     }
 
     /**
@@ -153,42 +160,32 @@ class Settings {
      */
     private function injectConfigurationManager(ConfigurationManagerInterface $manager) {
         $this->configurationManager = $manager;
-        $this->loadConfiguration();
-    }
-
-    /**
-     * @param Session $provider
-     */
-    private function injectSessionProvider(Session $provider) {
-        $this->session = $provider;
     }
 
     private function loadConfiguration() {
         if(!array_key_exists($this->extKey, self::$settingsCache)) {
-            $this->settings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
-            if($this->settings == NULL) {
-                $this->settings = array();
-            }
+            $this->mergeSettings(unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]));
+            $this->mergeSettings($this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));
+            $this->mergeSettings($this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS));
+            $flexformSettings = $this->flexFormService->convertFlexFormContentToArray($this->configurationManager->getContentObject()->data['pi_flexform']);
+            $this->mergeSettings($flexformSettings['settings']);
 
-            //read session stored settings for ajax requests
-            $this->session->setContext($this->extKey);
-            if(array_key_exists('type', $_GET) && $this->session->settings != null) {
-                $this->settings = $this->session->settings;
-            } else {
-                $this->session->settings = $this->settings;
-            }
-
-            $this->settings = array_merge($this->settings, $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK));
-            $global = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]);
-
-            if(is_array($global)) {
-                $global = $this->cleanSettingKeys($global);
-                self::$settingsCache[$this->extKey] = array_merge($this->settings, $global);
-            } else {
-                self::$settingsCache[$this->extKey] = $this->settings;
-            }
+            self::$settingsCache[$this->extKey] = $this->settings;
         }
 
         $this->settings = self::$settingsCache[$this->extKey];
+    }
+
+    /**
+     * @param array|NULL $additionalSettings
+     */
+    protected function mergeSettings($additionalSettings) {
+        if(is_array($additionalSettings)) {
+            if(array_key_exists('apiKey', $additionalSettings) && strlen($additionalSettings['apiKey']) < 20) {
+                unset($additionalSettings['apiKey']);
+            }
+
+            $this->settings = array_merge($this->settings, $additionalSettings);
+        }
     }
 }

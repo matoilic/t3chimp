@@ -1,6 +1,6 @@
 {namespace t = MatoIlic\T3Chimp\ViewHelpers}
 
-<t:form action="process" controller="Subscriptions" class="t3chimp-form" object="{form}" pageType="{pageType}" arguments="{list: form.listId}" additionalParams="{L: language, LISO: languageIso, id: pageId}">
+<t:form action="process" controller="Subscriptions" class="t3chimp-form" object="{form}" pageType="{pageType}" arguments="{list: form.listId}" additionalParams="{L: language, LISO: languageIso, id: pageId, cid: contentId}">
     <t:form.formField property="FORM_ACTION"/>
 
     <t:form.remainingFields />

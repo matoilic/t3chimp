@@ -31,15 +31,19 @@
  */
 namespace MatoIlic\T3Chimp\Core;
 
-use TYPO3\CMS\Extbase\Mvc\RequestHandlerResolver;
-use TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler;
 
 class Bootstrap extends \TYPO3\CMS\Extbase\Core\Bootstrap {
+    /**
+     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+     * @inject
+     */
+    protected $db;
     /**
      * @inherit
      */
     public function run($content, $configuration) {
         $this->initialize($configuration);
+        $this->db = $GLOBALS['TYPO3_DB'];
 
         $GLOBALS['TSFE']->sys_language_uid = $_GET['L'];
         if(strlen($_GET['LISO']) > 0) {
@@ -48,6 +52,18 @@ class Bootstrap extends \TYPO3\CMS\Extbase\Core\Bootstrap {
         }
 
         $GLOBALS['TSFE']->id = $_GET['id'];
+
+        if(array_key_exists('cid', $_GET)) {
+            $cid = (int)$_GET['cid'];
+
+            $ttContent = $this->db->exec_SELECTgetSingleRow(
+                '*',
+                'tt_content',
+                'uid=' . $cid
+            );
+
+            $this->cObj->data = array_merge($this->cObj->data, $ttContent);
+        }
 
         return $this->handleRequest();
     }

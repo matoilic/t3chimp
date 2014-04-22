@@ -58,6 +58,7 @@ class SubscriptionsController extends ActionController {
         $this->view->assign('language', $GLOBALS['TSFE']->sys_language_uid);
         $this->view->assign('languageIso', strtolower($GLOBALS['TSFE']->sys_language_isocode));
         $this->view->assign('pageId', $GLOBALS['TSFE']->id);
+        $this->view->assign('contentId', $this->configurationManager->getContentObject()->data['uid']);
         $this->view->assign('form', $this->mailChimpService->getForm());
         $this->view->assign('pageType', $this->getPageType());
     }
