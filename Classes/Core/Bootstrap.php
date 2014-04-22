@@ -34,16 +34,10 @@ namespace MatoIlic\T3Chimp\Core;
 
 class Bootstrap extends \TYPO3\CMS\Extbase\Core\Bootstrap {
     /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-     * @inject
-     */
-    protected $db;
-    /**
      * @inherit
      */
     public function run($content, $configuration) {
         $this->initialize($configuration);
-        $this->db = $GLOBALS['TYPO3_DB'];
 
         $GLOBALS['TSFE']->sys_language_uid = $_GET['L'];
         if(strlen($_GET['LISO']) > 0) {
@@ -53,18 +47,26 @@ class Bootstrap extends \TYPO3\CMS\Extbase\Core\Bootstrap {
 
         $GLOBALS['TSFE']->id = $_GET['id'];
 
+        return $this->handleRequest();
+    }
+
+    public function initializeConfiguration($configuration) {
         if(array_key_exists('cid', $_GET)) {
             $cid = (int)$_GET['cid'];
 
-            $ttContent = $this->db->exec_SELECTgetSingleRow(
+            $ttContent = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
                 '*',
                 'tt_content',
                 'uid=' . $cid
             );
 
+            if(!isset($this->cObj)) {
+                $this->cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
+            }
+
             $this->cObj->data = array_merge($this->cObj->data, $ttContent);
         }
 
-        return $this->handleRequest();
+        parent::initializeConfiguration($configuration);
     }
 }
