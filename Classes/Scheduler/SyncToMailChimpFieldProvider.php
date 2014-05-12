@@ -59,27 +59,27 @@ class SyncToMailChimpFieldProvider implements AdditionalFieldProviderInterface {
         $code = '<strong>' . $fieldDefinition['name'] . '</strong><br />';
 
         $name = $tag . '.addr1';
-        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.line1') . '<br>';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xlf:t3chimp.address.line1') . '<br>';
         $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
 
         $name = $tag . '.addr2';
-        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.line2') . '<br>';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xlf:t3chimp.address.line2') . '<br>';
         $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
 
         $name = $tag . '.city';
-        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.city') . '<br>';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xlf:t3chimp.address.city') . '<br>';
         $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
 
         $name = $tag . '.state';
-        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.state') . '<br>';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xlf:t3chimp.address.state') . '<br>';
         $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
 
         $name = $tag . '.zip';
-        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.zipCode') . '<br>';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xlf:t3chimp.address.zipCode') . '<br>';
         $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
 
         $name = $tag . '.country';
-        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:t3chimp.address.country') . '<br>';
+        $code .= $GLOBALS['LANG']->sL('LLL:EXT:t3chimp/Resources/Private/Language/locallang.xlf:t3chimp.address.country') . '<br>';
         $code .= $this->createFieldSelection($name, $values[$name]) . '<br>';
 
         return $code;

@@ -22,7 +22,7 @@ $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_subscriptio
         array(
             'access' => 'user,group',
             'icon'   => 'EXT:' . $_EXTKEY . '/ext_icon.gif',
-            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend.xml',
+            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend.xlf',
         )
     );
 }*/
@@ -30,7 +30,7 @@ $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_subscriptio
 $feUserColumns = array(
     'subscribed_to_newsletter' => array (
         'exclude' => 0,
-        'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang.xml:fe_users.subscribed_to_newsletter',
+        'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang.xlf:fe_users.subscribed_to_newsletter',
         'config' => Array (
             'type' => 'check',
             'default' => '0'
@@ -42,15 +42,15 @@ $feUserColumns = array(
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['MatoIlic\\T3Chimp\\Scheduler\\SyncToMailChimpTask'] = array(
     'extension'        => $_EXTKEY,
-    'title'            => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncToMailChimpTask.name',
-    'description'      => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncToMailChimpTask.description',
+    'title'            => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:syncToMailChimpTask.name',
+    'description'      => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:syncToMailChimpTask.description',
     'additionalFields' => 'MatoIlic\\T3Chimp\\Scheduler\\SyncToMailChimpFieldProvider'
 );
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['MatoIlic\\T3Chimp\\Scheduler\\SyncBackFromMailChimpTask'] = array(
     'extension'        => $_EXTKEY,
-    'title'            => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncBackFromMailChimpTask.name',
-    'description'      => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncBackFromMailChimpTask.description',
+    'title'            => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:syncBackFromMailChimpTask.name',
+    'description'      => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:syncBackFromMailChimpTask.description',
     'additionalFields' => 'MatoIlic\\T3Chimp\\Scheduler\\SyncBackFromMailChimpFieldProvider'
 );
 
