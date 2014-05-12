@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="nl" datatype="plaintext" original="messages" date="2014-05-12T08:27:05Z" product-name="t3chimp">
+		<header/>
+		<body>
+			<trans-unit id="t3chimp.flexForm.list" xml:space="preserve" approved="yes">
+				<source>List</source>
+				<target>Lijst</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.flexForm.doubleOtpIn" xml:space="preserve" approved="yes">
+				<source>Double Opt-In</source>
+				<target>Dubbele Opt-In</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.invalidEmail" xml:space="preserve" approved="yes">
+				<source>Invalid email address</source>
+				<target>Ongeldig e-mail adress</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.invalidValue" xml:space="preserve" approved="yes">
+				<source>Invalid value</source>
+				<target>Ongeldige waarde</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.required" xml:space="preserve" approved="yes">
+				<source>This is a required field</source>
+				<target>Dit is een verplicht veld</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.notNumber" xml:space="preserve" approved="yes">
+				<source>Please enter a number</source>
+				<target>Gelieve een nummer in te vullen</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.invalidZip" xml:space="preserve" approved="yes">
+				<source>Please enter a zip code (5 digits)</source>
+				<target>Gelieve een geldige postcode in te geven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.invalidUrl" xml:space="preserve" approved="yes">
+				<source>Please enter a valid URL</source>
+				<target>Gelieve een gelidge URL in te geven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.invalidDate" xml:space="preserve" approved="yes">
+				<source>Please enter a valid date</source>
+				<target>Gelieve geen geldige datum in te geven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.unsupportedImageFormat" xml:space="preserve" approved="yes">
+				<source>Unsupported image format</source>
+				<target>Ongeldig afbeeldingsformaat</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.fileTooLarge" xml:space="preserve" approved="yes">
+				<source>File too large</source>
+				<target>Bestand is te groot</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.filePartiallyUploaded" xml:space="preserve" approved="yes">
+				<source>Upload failed</source>
+				<target>Upload mislukt</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.address.addr1.required" xml:space="preserve" approved="yes">
+				<source>Please enter a value for address line 1</source>
+				<target>Gelieve de eerste adreslijn in te vullen</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.address.addr2.required" xml:space="preserve" approved="yes">
+				<source>Please enter a value for address line 2</source>
+				<target>Gelieve de tweede adreslijn in te vullen</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.address.state.required" xml:space="preserve" approved="yes">
+				<source>Please enter a value for state</source>
+				<target>Gelieve een geldige staat in te geven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.address.zip.required" xml:space="preserve" approved="yes">
+				<source>Please enter a value for zip code</source>
+				<target>Gelieve een postcode in te geven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.address.city.required" xml:space="preserve" approved="yes">
+				<source>Please enter a value for city</source>
+				<target>Gelieve een stad in te geven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.address.country.required" xml:space="preserve" approved="yes">
+				<source>Please enter a value for country</source>
+				<target>Gelieve een land in te geven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.address.required" xml:space="preserve" approved="yes">
+				<source>Please enter a valid address</source>
+				<target>Gelieve een adres in te vullen</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.error.invalidBirthDate" xml:space="preserve" approved="yes">
+				<source>Please enter a valid birthday</source>
+				<target>Gelieve je adres in te geven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.form.submit" xml:space="preserve" approved="yes">
+				<source>Submit</source>
+				<target>Inschrijven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.form.requiredFields" xml:space="preserve" approved="yes">
+				<source>Required fields</source>
+				<target>Verplichte velden</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.form.subscribed" xml:space="preserve" approved="yes">
+				<source>You have successfully subscribed.</source>
+				<target>Je bent succesvol ingeschreven voor onze nieuwsbrief.</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.form.almostSubscribed" xml:space="preserve" approved="yes">
+				<source>
+                Almost finished. To complete the subscription process, please click the link in the email
+                you will receive shortly.
+            </source>
+				<target>
+                Bijna klaar. Om de inschrijving te voltooien moet je enkel nog de link in de e-mail aan te klikken die je binnen enkele ogenblikken zult ontvangen.
+            </target>
+			</trans-unit>
+			<trans-unit id="t3chimp.form.unsubscribed" xml:space="preserve" approved="yes">
+				<source>You have successfully unsubscribed.</source>
+				<target>Je bent succesvol uitgeschreven.</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.form.updated" xml:space="preserve" approved="yes">
+				<source>Your subscription has been updated.</source>
+				<target>je inschrijving is gewijzigd.</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.phone.usFormat" xml:space="preserve" approved="yes">
+				<source>eg. 123-123-1234</source>
+				<target>vb. 123-123-1234</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.exception.invalidEmail" xml:space="preserve" approved="yes">
+				<source>You cannot subscribe with this email address</source>
+				<target>Je kan niet inschrijven met dit e-mail adres</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.exception.notSubscribed" xml:space="preserve" approved="yes">
+				<source>You are not subscribed to this list</source>
+				<target>Je bent niet ingeschreven voor deze lijst</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.address.line1" xml:space="preserve" approved="yes">
+				<source>Address Line 1</source>
+				<target>Adres 1</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.address.line2" xml:space="preserve" approved="yes">
+				<source>Address Line 2</source>
+				<target>Adres 2</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.address.city" xml:space="preserve" approved="yes">
+				<source>City</source>
+				<target>Stad</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.address.state" xml:space="preserve" approved="yes">
+				<source>State/Province/Region</source>
+				<target>Staat/Provincie/Regio</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.address.zipCode" xml:space="preserve" approved="yes">
+				<source>Postal/Zip Code</source>
+				<target>Postcode</target>
+			</trans-unit>
+			<trans-unit id="t3chimp.address.country" xml:space="preserve" approved="yes">
+				<source>Country</source>
+				<target>Land</target>
+			</trans-unit>
+			<trans-unit id="t3chimp: Action" xml:space="preserve" approved="yes">
+				<source>Action</source>
+				<target>Actie</target>
+			</trans-unit>
+			<trans-unit id="t3chimp: subscribe" xml:space="preserve" approved="yes">
+				<source>Subscribe</source>
+				<target>Inschrijven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp: unsubscribe" xml:space="preserve" approved="yes">
+				<source>Unsubscribe</source>
+				<target>Uitschrijven</target>
+			</trans-unit>
+			<trans-unit id="t3chimp: Email format" xml:space="preserve" approved="yes">
+				<source>Email format</source>
+				<target>E-mail formaat</target>
+			</trans-unit>
+			<trans-unit id="fe_users.subscribed_to_newsletter" xml:space="preserve" approved="yes">
+				<source>Subscribe to newsletter</source>
+				<target>Inschrijven voor onze nieuwsbrief</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
