@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" target-language="nl" datatype="plaintext" original="messages" date="2014-05-12T08:27:05Z" product-name="t3chimp">
-		<header/>
-		<body>
-			<trans-unit id="t3chimp.flexForm.list" xml:space="preserve" approved="yes">
+    <file source-language="en" target-language="nl" datatype="plaintext" original="messages" date="2014-05-12T08:27:05Z" product-name="t3chimp">
+        <header/>
+        <body>
+            <trans-unit id="t3chimp.flexForm.list" xml:space="preserve" approved="yes">
 				<source>List</source>
 				<target>Lijst</target>
 			</trans-unit>
@@ -97,12 +97,12 @@
 			</trans-unit>
 			<trans-unit id="t3chimp.form.almostSubscribed" xml:space="preserve" approved="yes">
 				<source>
-                Almost finished. To complete the subscription process, please click the link in the email
-                you will receive shortly.
-            </source>
+                    Almost finished. To complete the subscription process, please click the link in the email
+                    you will receive shortly.
+                </source>
 				<target>
-                Bijna klaar. Om de inschrijving te voltooien moet je enkel nog de link in de e-mail aan te klikken die je binnen enkele ogenblikken zult ontvangen.
-            </target>
+                    Bijna klaar. Om de inschrijving te voltooien moet je enkel nog de link in de e-mail aan te klikken die je binnen enkele ogenblikken zult ontvangen.
+                </target>
 			</trans-unit>
 			<trans-unit id="t3chimp.form.unsubscribed" xml:space="preserve" approved="yes">
 				<source>You have successfully unsubscribed.</source>
@@ -168,6 +168,6 @@
 				<source>Subscribe to newsletter</source>
 				<target>Inschrijven voor onze nieuwsbrief</target>
 			</trans-unit>
-		</body>
-	</file>
+        </body>
+    </file>
 </xliff>

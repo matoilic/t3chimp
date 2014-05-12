@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" target-language="nl" datatype="plaintext" original="messages" date="2014-05-12T08:27:15Z" product-name="t3chimp">
-		<header/>
-		<body>
-			<trans-unit id="mlang_tabs_tab" xml:space="preserve" approved="yes">
+    <file source-language="en" target-language="nl" datatype="plaintext" original="messages" date="2014-05-12T08:27:15Z" product-name="t3chimp">
+        <header/>
+        <body>
+            <trans-unit id="mlang_tabs_tab" xml:space="preserve" approved="yes">
 				<source>MailChimp</source>
 				<target>MailChimp</target>
 			</trans-unit>
@@ -21,14 +21,14 @@
 			</trans-unit>
 			<trans-unit id="syncToMailChimpTask.description" xml:space="preserve" approved="yes">
 				<source>
-                Synchronizes the FE users to a MailChimp list. Be careful. All subscribers on the list that are not
-                in the fe users table and are not marked as subscribers will be permanently removed from the list.
-            </source>
+                    Synchronizes the FE users to a MailChimp list. Be careful. All subscribers on the list that are not
+                    in the fe users table and are not marked as subscribers will be permanently removed from the list.
+                </source>
 				<target>
-                De frontend gebruikers synchroniseren naar de MailChimp lijst. Opgepast. Alle gebruikers op de lijst die
-                geen frontend gebruiker zijn en niet ingeschreven zijn op de lijst zullen permanent verwijderd worden van
-                de lijst.
-            </target>
+                    De frontend gebruikers synchroniseren naar de MailChimp lijst. Opgepast. Alle gebruikers op de lijst die
+                    geen frontend gebruiker zijn en niet ingeschreven zijn op de lijst zullen permanent verwijderd worden van
+                    de lijst.
+                </target>
 			</trans-unit>
 			<trans-unit id="syncBackFromMailChimpTask.name" xml:space="preserve" approved="yes">
 				<source>Synchronize users back from MailChimp</source>
@@ -36,11 +36,11 @@
 			</trans-unit>
 			<trans-unit id="syncBackFromMailChimpTask.description" xml:space="preserve" approved="yes">
 				<source>
-                Marks all FE users as subscribers that are on the MailChimp list.
-            </source>
+                    Marks all FE users as subscribers that are on the MailChimp list.
+                </source>
 				<target>
-                Alle frontend gebruikers markeren als ingeschreven voor de MailChimp lijst.
-            </target>
+                    Alle frontend gebruikers markeren als ingeschreven voor de MailChimp lijst.
+                </target>
 			</trans-unit>
 			<trans-unit id="syncToMailChimpTask.label.listId" xml:space="preserve" approved="yes">
 				<source>List</source>
@@ -59,8 +59,8 @@
 				<target>E-mail Database Veld</target>
 			</trans-unit>
 			<trans-unit id="flexForm.activateDoubleOptIn" xml:space="preserve" approved="yes">
-				<source>Double opt-in</source>
-				<target></target>
+				<source>Double Opt-in</source>
+				<target>Double opt-In</target>
 			</trans-unit>
 			<trans-unit id="flexForm.disableWelcome" xml:space="preserve" approved="yes">
 				<source>Disable welcome email</source>
@@ -71,9 +71,9 @@
 				<target>Gebruikers kunnen kiezen voor e-mail formaat</target>
 			</trans-unit>
 			<trans-unit id="activateDoubleOptIn" xml:space="preserve" approved="yes">
-				<source></source>
+				<source>Double Opt-In</source>
 				<target>Double opt-in</target>
 			</trans-unit>
-		</body>
-	</file>
+        </body>
+    </file>
 </xliff>
