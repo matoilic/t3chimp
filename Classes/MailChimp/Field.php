@@ -91,6 +91,12 @@ interface Field {
 
     /**
      * @abstract
+     * @return string
+     */
+    public function getTranslationKey();
+
+    /**
+     * @abstract
      * @return mixed
      */
     public function getValue();

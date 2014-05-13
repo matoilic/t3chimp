@@ -34,7 +34,7 @@ class Email extends Text {
 
         if( $this->getIsValid() &&
             !preg_match("/^([a-z0-9])([a-z0-9-_.]+)@([a-z0-9])([a-z0-9-_]+\.)+([a-z]{2,4})$/i", $this->getValue())) {
-            $this->errors[] = 't3chimp.error.invalidEmail';
+            $this->errors[] = 'error_invalidEmail';
         }
     }
 }

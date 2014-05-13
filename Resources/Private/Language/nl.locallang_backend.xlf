@@ -15,11 +15,11 @@
 				<source>MailChimp</source>
 				<target>MailChimp</target>
 			</trans-unit>
-			<trans-unit id="syncToMailChimpTask.name" xml:space="preserve" approved="yes">
+			<trans-unit id="syncToMailChimpTask_name" xml:space="preserve" approved="yes">
 				<source>Synchronize users to MailChimp</source>
 				<target>Gebruikers synchroniseren naar MailChimp</target>
 			</trans-unit>
-			<trans-unit id="syncToMailChimpTask.description" xml:space="preserve" approved="yes">
+			<trans-unit id="syncToMailChimpTask_description" xml:space="preserve" approved="yes">
 				<source>
                     Synchronizes the FE users to a MailChimp list. Be careful. All subscribers on the list that are not
                     in the fe users table and are not marked as subscribers will be permanently removed from the list.
@@ -30,11 +30,11 @@
                     de lijst.
                 </target>
 			</trans-unit>
-			<trans-unit id="syncBackFromMailChimpTask.name" xml:space="preserve" approved="yes">
+			<trans-unit id="syncBackFromMailChimpTask_name" xml:space="preserve" approved="yes">
 				<source>Synchronize users back from MailChimp</source>
 				<target>Synchroniseer gebruikers van MailChimp</target>
 			</trans-unit>
-			<trans-unit id="syncBackFromMailChimpTask.description" xml:space="preserve" approved="yes">
+			<trans-unit id="syncBackFromMailChimpTask_description" xml:space="preserve" approved="yes">
 				<source>
                     Marks all FE users as subscribers that are on the MailChimp list.
                 </source>
@@ -42,31 +42,31 @@
                     Alle frontend gebruikers markeren als ingeschreven voor de MailChimp lijst.
                 </target>
 			</trans-unit>
-			<trans-unit id="syncToMailChimpTask.label.listId" xml:space="preserve" approved="yes">
+			<trans-unit id="syncToMailChimpTask_label_listId" xml:space="preserve" approved="yes">
 				<source>List</source>
 				<target>Lijst</target>
 			</trans-unit>
-			<trans-unit id="syncToMailChimpTask.label.mappings" xml:space="preserve" approved="yes">
+			<trans-unit id="syncToMailChimpTask_label_mappings" xml:space="preserve" approved="yes">
 				<source>Database Field Mappings</source>
 				<target>Database Velden</target>
 			</trans-unit>
-			<trans-unit id="syncBackFromMailChimpTask.label.listId" xml:space="preserve" approved="yes">
+			<trans-unit id="syncBackFromMailChimpTask_label_listId" xml:space="preserve" approved="yes">
 				<source>List</source>
 				<target>Lijst</target>
 			</trans-unit>
-			<trans-unit id="syncBackFromMailChimpTask.label.emailField" xml:space="preserve" approved="yes">
+			<trans-unit id="syncBackFromMailChimpTask_label_emailField" xml:space="preserve" approved="yes">
 				<source>Email Database Field</source>
 				<target>E-mail Database Veld</target>
 			</trans-unit>
-			<trans-unit id="flexForm.activateDoubleOptIn" xml:space="preserve" approved="yes">
+			<trans-unit id="flexForm_activateDoubleOptIn" xml:space="preserve" approved="yes">
 				<source>Double Opt-in</source>
 				<target>Double opt-In</target>
 			</trans-unit>
-			<trans-unit id="flexForm.disableWelcome" xml:space="preserve" approved="yes">
+			<trans-unit id="flexForm_disableWelcome" xml:space="preserve" approved="yes">
 				<source>Disable welcome email</source>
 				<target>Welkom e-mail deactiveren</target>
 			</trans-unit>
-			<trans-unit id="flexForm.showEmailFormat" xml:space="preserve" approved="yes">
+			<trans-unit id="flexForm_showEmailFormat" xml:space="preserve" approved="yes">
 				<source>Let subscribers pick email format</source>
 				<target>Gebruikers kunnen kiezen voor e-mail formaat</target>
 			</trans-unit>

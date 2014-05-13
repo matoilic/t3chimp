@@ -224,12 +224,12 @@ class Address extends AbstractField {
             if(!$this->getIsTextField()) {
                 foreach(self::$requiredKeys as $key) {
                     if(!array_key_exists($key, $value) || empty($value[$key])) {
-                        $this->errors[] = "t3chimp.error.address.$key.required";
+                        $this->errors[] = 't3chimp_error_address_' . $key . '_required';
                     }
                 }
             } else {
                 if(strlen($value) == 0) {
-                    $this->errors[] = 't3chimp.error.address.required';
+                    $this->errors[] = 'error_address_required';
                 }
             }
         }

@@ -1,7 +1,7 @@
 {namespace t = MatoIlic\T3Chimp\ViewHelpers}
 <p class="t3chimp-field t3chimp-field-dropdown<f:if condition='{field.isRequired}'> t3chimp-field-dropdown-required</f:if> t3chimp-field-{field.name}">
     <label for="{field.id}">{property}
-        <f:translate key="t3chimp: {field.label}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
+        <f:translate key="{field.translationKey}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
     </label><br>
     <t:form.select property="{field.name}" id="{field.id}" options="{field.choices}" optionValueField="key" optionLabelField="localizedValue" />
     <t:form.errors property="{field.name}" />

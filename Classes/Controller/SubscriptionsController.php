@@ -130,21 +130,21 @@ class SubscriptionsController extends ActionController {
 
                 if($performedAction == MailChimp::ACTION_SUBSCRIBE) {
                     if($this->settings['doubleOptIn']) {
-                        $message = $this->translate('t3chimp.form.almostSubscribed');
+                        $message = $this->translate('form_almostSubscribed');
                     } else {
-                        $message = $this->translate('t3chimp.form.subscribed');
+                        $message = $this->translate('form_subscribed');
                     }
                 } else if($performedAction == MailChimp::ACTION_UPDATE) {
-                    $message = $this->translate('t3chimp.form.updated');
+                    $message = $this->translate('form_updated');
                 } else {
-                    $message = $this->translate('t3chimp.form.unsubscribed');
+                    $message = $this->translate('form_unsubscribed');
                 }
 
                 $success = TRUE;
             } catch(InvalidEmail $ex) {
-                $message = $this->translate('t3chimp.exception.invalidEmail');
+                $message = $this->translate('exception_invalidEmail');
             } catch(ListNotSubscribed $ex) {
-                $message = $this->translate('t3chimp.exception.notSubscribed');
+                $message = $this->translate('exception_notSubscribed');
             } catch(Error $ex) {
                 $message = $ex->getMessage();
             }

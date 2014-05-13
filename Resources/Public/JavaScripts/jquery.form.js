@@ -442,7 +442,7 @@ $.fn.ajaxSubmit = function(options) {
                         io.addEventListener('load', cb, false);
                 }
                 setTimeout(checkState,15);
-                form.submit();
+                form_submit();
             }
             finally {
                 // reset attrs and remove "extra" input elements

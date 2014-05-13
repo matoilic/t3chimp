@@ -12,7 +12,7 @@
                 <el>
                     <settings.subscriptionList>
                         <TCEforms>
-                            <label>List</label>
+                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:flexForm_list</label>
                             <config>
                                 <type>select</type>
                                 <items></items>
@@ -24,7 +24,7 @@
                     </settings.subscriptionList>
                     <settings.doubleOptIn>
                         <TCEforms>
-                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:flexForm.activateDoubleOptIn</label>
+                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:flexForm_activateDoubleOptIn</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -32,7 +32,7 @@
                     </settings.doubleOptIn>
                     <settings.disableWelcomeEmail>
                         <TCEforms>
-                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:flexForm.disableWelcome</label>
+                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:flexForm_disableWelcome</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -40,7 +40,7 @@
                     </settings.disableWelcomeEmail>
                     <settings.showEmailFormat>
                         <TCEforms>
-                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:flexForm.showEmailFormat</label>
+                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:flexForm_showEmailFormat</label>
                             <config>
                                 <type>check</type>
                             </config>

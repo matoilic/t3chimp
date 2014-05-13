@@ -79,7 +79,7 @@ class Checkboxes extends Radio {
         $this->isValidated = TRUE;
         $value = $this->getValue();
         if($this->getIsRequired() && count($value) == 0) {
-            $this->errors[] = 't3chimp.error.required';
+            $this->errors[] = 'error_required';
         }
     }
 }
