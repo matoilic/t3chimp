@@ -2,6 +2,7 @@
 - Fixed a bug in the API that showed a wrong error message
 - Moved all translation files to xliff format (thanks to Mark Howells-Mead for the help)
 - All texts are now translatable using TypoScript, [read it up here](https://github.com/matoilic/t3chimp/wiki/Custom-Translations)
+- Added country list translation for dutch
 
 # 2.1.0
 - Improved the handling of settings during AJAX requests → **[you need to update your templates](https://github.com/matoilic/t3chimp/wiki/Upgrading-from-2.0.x-to-2.1.x)**
