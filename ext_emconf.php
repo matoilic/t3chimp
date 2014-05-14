@@ -1,21 +1,11 @@
 <?php
 
-/***************************************************************
- * Extension Manager/Repository config file for ext "t3chimp".
- *
- * Auto generated 24-02-2014 19:54
- *
- * Manual updates:
- * Only the data in the array - everything else is removed by next
- * writing. "version" and "dependencies" must not be touched!
- ***************************************************************/
-
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'T3Chimp MailChimp Integration',
 	'description' => 'Integrates MailChimp into Typo3.',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '2.1.0',
+	'version' => '2.2.0',
 	'dependencies' => 'extbase,fluid',
 	'conflicts' => '',
 	'priority' => '',
