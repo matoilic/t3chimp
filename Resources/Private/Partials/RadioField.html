@@ -1,7 +1,7 @@
 {namespace t = MatoIlic\T3Chimp\ViewHelpers}
 <p class="t3chimp-field t3chimp-field-radio<f:if condition='{field.isRequired}'> t3chimp-field-radio-required</f:if> t3chimp-field-{field.name}">
     <span class="caption">
-        <f:translate key="t3chimp: {field.label}">{field.label}</f:translate>
+        <f:translate key="{field.translationKey}">{field.label}</f:translate>
     </span><br>
     <f:for each="{field.choices}" as="choice">
         <t:form.radio property="{field.name}" id="{choice.id}" value="{choice.key}" checked="{choice.isSelected}" />

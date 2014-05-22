@@ -1,7 +1,7 @@
 {namespace t = MatoIlic\T3Chimp\ViewHelpers}
 <p class="t3chimp-field t3chimp-field-checkboxes<f:if condition='{field.isRequired}'> t3chimp-field-checkboxes-required</f:if> t3chimp-field-{field.name}">
     <span class="caption">
-        <f:translate key="t3chimp: {field.label}">{field.label}</f:translate>
+        <f:translate key="{field.translationKey}">{field.label}</f:translate>
     </span><br>
     <t:form.errors property="{field.name}" />
     <f:for each="{field.choices}" as="choice">

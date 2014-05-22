@@ -1,7 +1,7 @@
 {namespace t = MatoIlic\T3Chimp\ViewHelpers}
 <p class="t3chimp-field-date<f:if condition='{field.isRequired}'> t3chimp-field-date-required</f:if> t3chimp-field t3chimp-field-{field.name}">
     <label for="{field.id}">
-        <f:translate key="t3chimp: {field.label}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
+        <f:translate key="{field.translationKey}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
     </label><br>
     <t:form.textField property="{field.name}" id="{field.id}" required="{field.isRequired}" pattern="{field.htmlPattern}" placeholder="{field.format}" />
     <t:form.errors property="{field.name}" />
