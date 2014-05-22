@@ -5,7 +5,7 @@
             <label for="{field.id}">
                 <f:translate key="{field.translationKey}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
             </label><br>
-            <t:form.address_city property="{field.name}" id="{field.id}" required="{field.isRequired}" />
+            <t:form.address.city property="{field.name}" id="{field.id}" required="{field.isRequired}" />
         </f:then>
         <f:else>
             <span class="caption">
@@ -25,22 +25,22 @@
             <label for="{field.id}_city">
                 <f:translate key="address_city">City</f:translate><f:if condition="{field.isRequired}"> *</f:if>
             </label><br>
-            <t:form.address_city property="{field.name}" id="{field.id}_city" required="{field.isRequired}" /><br>
+            <t:form.address.city property="{field.name}" id="{field.id}_city" required="{field.isRequired}" /><br>
 
             <label for="{field.id}_state">
                 <f:translate key="address_state">State/Province/Region</f:translate>
             </label><br>
-            <t:form.address_state property="{field.name}" id="{field.id}_state" required="{field.isRequired}" /><br>
+            <t:form.address.state property="{field.name}" id="{field.id}_state" required="{field.isRequired}" /><br>
 
             <label for="{field.id}_zip">
                 <f:translate key="address_zipCode">Postal/Zip Code</f:translate><f:if condition="{field.isRequired}"> *</f:if>
             </label><br>
-            <t:form.address_zipCode property="{field.name}" id="{field.id}_zip" required="{field.isRequired}" /><br>
+            <t:form.address.zipCode property="{field.name}" id="{field.id}_zip" required="{field.isRequired}" /><br>
 
             <label for="{field.id}_country">
                 <f:translate key="address_country">Country</f:translate><f:if condition="{field.isRequired}"> *</f:if>
             </label><br>
-            <t:form.address_countryList property="{field.name}" id="{field.id}_country" options="{field.countryList}" optionValueField="value" optionLabelField="localizedValue" />
+            <t:form.address.countryList property="{field.name}" id="{field.id}_country" options="{field.countryList}" optionValueField="value" optionLabelField="localizedValue" />
         </f:else>
     </f:if>
 
