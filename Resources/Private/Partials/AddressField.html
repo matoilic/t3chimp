@@ -5,7 +5,7 @@
             <label for="{field.id}">
                 <f:translate key="{field.translationKey}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
             </label><br>
-            <t:form.address_city property="{field.name}" id="{field.id}" required="{field.isRequired}" />
+            <t:form.address.city property="{field.name}" id="{field.id}" required="{field.isRequired}" />
         </f:then>
         <f:else>
             <span class="caption">
