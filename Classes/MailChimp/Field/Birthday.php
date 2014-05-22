@@ -121,12 +121,12 @@ class Birthday extends AbstractField {
         }
 
         if($this->getIsRequired() && $month == 0 && $day == 0) {
-            $this->errors[] = 't3chimp.error.required';
+            $this->errors[] = 'error_required';
             return;
         }
 
         if($month < 1 || $month > 12 && $day < 0 || $day > self::$daysInMonth[$month - 1]) {
-            $this->errors[] = 't3chimp.error.invalidBirthDate';
+            $this->errors[] = 'error_invalidBirthDate';
         }
     }
 }

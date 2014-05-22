@@ -38,7 +38,7 @@ class Phone extends AbstractField {
 
         if($this->getIsValid() && !$this->getIsEmpty() && $this->getFormat() == 'US') {
             if(!preg_match('\d{3}-\d{3}-\d{4}', $this->getValue())) {
-                $this->errors[] = 't3chimp.error.invalidPhone';
+                $this->errors[] = 'error.invalidPhone';
             }
         }
     }

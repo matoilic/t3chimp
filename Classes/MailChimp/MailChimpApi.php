@@ -396,6 +396,7 @@ class MailChimpApi {
         if ($this->sslCaInfo) curl_setopt($ch, CURLOPT_CAINFO, $this->sslCaInfo);
 
         $start = microtime(TRUE);
+        $redirectsLeft = self::CURL_MAX_REDIRECTS;
         $this->log('Call to ' . $this->root . $url . '.json: ' . $params);
         if($this->debug) {
             $curl_buffer = fopen('php://memory', 'w+');
@@ -406,7 +407,6 @@ class MailChimpApi {
             $response_body = curl_exec($ch);
         } else {
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-            $redirectsLeft = self::CURL_MAX_REDIRECTS;
 
             $finalUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
             $ch2 = curl_copy_handle($ch);

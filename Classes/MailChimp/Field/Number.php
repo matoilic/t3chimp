@@ -37,7 +37,7 @@ class Number extends PatternBased {
         parent::validate();
 
         if($this->getIsValid() && !$this->getIsEmpty() && !preg_match($this->getPattern(), $this->getValue())) {
-            $this->errors[] = 't3chimp.error.notNumber';
+            $this->errors[] = 'error_notNumber';
         }
     }
 }

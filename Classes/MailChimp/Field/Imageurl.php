@@ -53,13 +53,13 @@ class Imageurl extends AbstractField {
             $this->setValue($file);
         } catch(FileUpload\InvalidExtensionException $ex) {
             $this->setValue(NULL);
-            $this->errors[] = 't3chimp.error.unsupportedImageFormat';
+            $this->errors[] = 'error_unsupportedImageFormat';
         } catch(FileUpload\FileTooLargeException $ex) {
             $this->setValue(NULL);
-            $this->errors[] = 't3chimp.error.fileTooLarge';
+            $this->errors[] = 'error_fileTooLarge';
         } catch(FileUpload\FilePartiallyUploadedException $ex) {
             $this->setValue(NULL);
-            $this->errors[] = 't3chimp.error.filePartiallyUploaded';
+            $this->errors[] = 'error_filePartiallyUploaded';
         } catch(FileUpload\NoFileUploadedException $ex) {
             $this->setValue(NULL);
         }

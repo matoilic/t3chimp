@@ -56,7 +56,7 @@ class Choice {
         $this->parent = $parent;
         $this->value = $value;
         $this->key = $key;
-        $this->id = strtolower(str_replace(' ', '-', $value));
+        $this->id = strtolower(str_replace(' ', '_', $value));
     }
 
     public function getKey() {
@@ -72,11 +72,15 @@ class Choice {
 
     public function getLocalizedValue() {
         $value = LocalizationUtility::translate(
-            't3chimp: ' . $this->getValue(),
+            $this->getTranslationKey(),
             'T3chimp'
         );
 
         return ($value !== NULL) ? $value : $this->getValue();
+    }
+
+    public function getTranslationKey() {
+        return $this->parent->getTranslationKey() . '_' . $this->id;
     }
 
     /**

@@ -85,12 +85,12 @@ class SyncBackFromMailChimpFieldProvider implements AdditionalFieldProviderInter
         return array(
             'listId' => array(
                 'code' => $codeListId,
-                'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:syncBackFromMailChimpTask.label.listId'
+                'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:syncBackFromMailChimpTask_label_listId'
             ),
 
             'emailField' => array(
                 'code' => $codeMailField,
-                'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:syncBackFromMailChimpTask.label.emailField'
+                'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:syncBackFromMailChimpTask_label_emailField'
             )
         );
     }

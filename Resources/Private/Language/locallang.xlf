@@ -1,131 +1,131 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2014-05-12T08:27:05Z" product-name="t3chimp">
-		<header/>
-		<body>
-			<trans-unit id="t3chimp.flexForm.list" xml:space="preserve">
+    <file source-language="en" datatype="plaintext" original="messages" date="2014-05-12T08:27:05Z" product-name="t3chimp">
+        <header/>
+        <body>
+            <trans-unit id="flexForm_list" xml:space="preserve">
 				<source>List</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.flexForm.doubleOtpIn" xml:space="preserve">
+			<trans-unit id="flexForm_doubleOtpIn" xml:space="preserve">
 				<source>Double Opt-In</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.invalidEmail" xml:space="preserve">
+			<trans-unit id="error_invalidEmail" xml:space="preserve">
 				<source>Invalid email address</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.invalidValue" xml:space="preserve">
+			<trans-unit id="error_invalidValue" xml:space="preserve">
 				<source>Invalid value</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.required" xml:space="preserve">
+			<trans-unit id="error_required" xml:space="preserve">
 				<source>This is a required field</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.notNumber" xml:space="preserve">
+			<trans-unit id="error_notNumber" xml:space="preserve">
 				<source>Please enter a number</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.invalidZip" xml:space="preserve">
+			<trans-unit id="error_invalidZip" xml:space="preserve">
 				<source>Please enter a zip code (5 digits)</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.invalidUrl" xml:space="preserve">
+			<trans-unit id="error_invalidUrl" xml:space="preserve">
 				<source>Please enter a valid URL</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.invalidDate" xml:space="preserve">
+			<trans-unit id="error_invalidDate" xml:space="preserve">
 				<source>Please enter a valid date</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.unsupportedImageFormat" xml:space="preserve">
+			<trans-unit id="error_unsupportedImageFormat" xml:space="preserve">
 				<source>Unsupported image format</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.fileTooLarge" xml:space="preserve">
+			<trans-unit id="error_fileTooLarge" xml:space="preserve">
 				<source>File too large</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.filePartiallyUploaded" xml:space="preserve">
+			<trans-unit id="error_filePartiallyUploaded" xml:space="preserve">
 				<source>Upload failed</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.address.addr1.required" xml:space="preserve">
+			<trans-unit id="error_address_addr1_required" xml:space="preserve">
 				<source>Please enter a value for address line 1</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.address.addr2.required" xml:space="preserve">
+			<trans-unit id="error_address_addr2_required" xml:space="preserve">
 				<source>Please enter a value for address line 2</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.address.state.required" xml:space="preserve">
+			<trans-unit id="error_address_state_required" xml:space="preserve">
 				<source>Please enter a value for state</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.address.zip.required" xml:space="preserve">
+			<trans-unit id="error_address_zip_required" xml:space="preserve">
 				<source>Please enter a value for zip code</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.address.city.required" xml:space="preserve">
+			<trans-unit id="error_address_city_required" xml:space="preserve">
 				<source>Please enter a value for city</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.address.country.required" xml:space="preserve">
+			<trans-unit id="error_address_country_required" xml:space="preserve">
 				<source>Please enter a value for country</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.address.required" xml:space="preserve">
+			<trans-unit id="error_address_required" xml:space="preserve">
 				<source>Please enter a valid address</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.error.invalidBirthDate" xml:space="preserve">
+			<trans-unit id="error_invalidBirthDate" xml:space="preserve">
 				<source>Please enter a valid birthday</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.form.submit" xml:space="preserve">
+			<trans-unit id="form_submit" xml:space="preserve">
 				<source>Submit</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.form.requiredFields" xml:space="preserve">
+			<trans-unit id="form_requiredFields" xml:space="preserve">
 				<source>Required fields</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.form.subscribed" xml:space="preserve">
+			<trans-unit id="form_subscribed" xml:space="preserve">
 				<source>You have successfully subscribed.</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.form.almostSubscribed" xml:space="preserve">
+			<trans-unit id="form_almostSubscribed" xml:space="preserve">
 				<source>
-                Almost finished. To complete the subscription process, please click the link in the email
-                you will receive shortly.
-            </source>
+                    Almost finished. To complete the subscription process, please click the link in the email
+                    you will receive shortly.
+                </source>
 			</trans-unit>
-			<trans-unit id="t3chimp.form.unsubscribed" xml:space="preserve">
+			<trans-unit id="form_unsubscribed" xml:space="preserve">
 				<source>You have successfully unsubscribed.</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.form.updated" xml:space="preserve">
+			<trans-unit id="form_updated" xml:space="preserve">
 				<source>Your subscription has been updated.</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.phone.usFormat" xml:space="preserve">
+			<trans-unit id="phone_usFormat" xml:space="preserve">
 				<source>eg. 123-123-1234</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.exception.invalidEmail" xml:space="preserve">
+			<trans-unit id="exception_invalidEmail" xml:space="preserve">
 				<source>You cannot subscribe with this email address</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.exception.notSubscribed" xml:space="preserve">
+			<trans-unit id="exception_notSubscribed" xml:space="preserve">
 				<source>You are not subscribed to this list</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.address.line1" xml:space="preserve">
+			<trans-unit id="address_line1" xml:space="preserve">
 				<source>Address Line 1</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.address.line2" xml:space="preserve">
+			<trans-unit id="address_line2" xml:space="preserve">
 				<source>Address Line 2</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.address.city" xml:space="preserve">
+			<trans-unit id="address_city" xml:space="preserve">
 				<source>City</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.address.state" xml:space="preserve">
+			<trans-unit id="address_state" xml:space="preserve">
 				<source>State/Province/Region</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.address.zipCode" xml:space="preserve">
+			<trans-unit id="address_zipCode" xml:space="preserve">
 				<source>Postal/Zip Code</source>
 			</trans-unit>
-			<trans-unit id="t3chimp.address.country" xml:space="preserve">
+			<trans-unit id="address_country" xml:space="preserve">
 				<source>Country</source>
 			</trans-unit>
-			<trans-unit id="t3chimp: Action" xml:space="preserve">
+			<trans-unit id="form_action" xml:space="preserve">
 				<source>Action</source>
 			</trans-unit>
-			<trans-unit id="t3chimp: subscribe" xml:space="preserve">
+			<trans-unit id="form_action_subscribe" xml:space="preserve">
 				<source>Subscribe</source>
 			</trans-unit>
-			<trans-unit id="t3chimp: unsubscribe" xml:space="preserve">
+			<trans-unit id="form_action_unsubscribe" xml:space="preserve">
 				<source>Unsubscribe</source>
 			</trans-unit>
-			<trans-unit id="t3chimp: Email format" xml:space="preserve">
+			<trans-unit id="email_type" xml:space="preserve">
 				<source>Email format</source>
 			</trans-unit>
-			<trans-unit id="fe_users.subscribed_to_newsletter" xml:space="preserve">
+			<trans-unit id="fe_users_subscribed_to_newsletter" xml:space="preserve">
 				<source>Subscribe to newsletter</source>
 			</trans-unit>
-		</body>
-	</file>
+        </body>
+    </file>
 </xliff>

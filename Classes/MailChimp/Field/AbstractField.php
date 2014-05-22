@@ -195,6 +195,13 @@ abstract class AbstractField implements Field {
     }
 
     /**
+     * @return string
+     */
+    public function getTranslationKey() {
+        return strtolower($this->getTag());
+    }
+
+    /**
      * @return mixed
      */
     public function getValue() {
@@ -221,7 +228,7 @@ abstract class AbstractField implements Field {
         $this->isValidated = TRUE;
         $value = $this->getValue();
         if($this->getIsRequired() && empty($value)) {
-            $this->errors[] = 't3chimp.error.required';
+            $this->errors[] = 'error_required';
         }
     }
 }
