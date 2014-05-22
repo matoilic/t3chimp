@@ -1,3 +1,6 @@
+# 2.2.1
+- Fixed wrong template tags that were introduced during the automatic change of translation keys in v2.2.0
+
 # 2.2.0
 - Fixed a bug in the API that showed a wrong error message
 - Moved all translation files to xliff format (thanks to Mark Howells-Mead for the help)
