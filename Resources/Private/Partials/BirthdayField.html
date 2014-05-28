@@ -4,7 +4,7 @@
         <f:then>
             <label for="{field.id}_month">
                 <f:translate key="{field.translationKey}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
-                (<f:translate key="{field.translationKey.format}">{field.format}</f:translate>)
+                (<f:translate key="{field.translationKey}_format">{field.format}</f:translate>)
             </label><br>
             <t:form.birthday.month property="{field.name}" id="{field.id}_month" required="{field.isRequired}" /> /
             <t:form.birthday.day property="{field.name}" id="{field.id}_day" required="{field.isRequired}" />
@@ -12,7 +12,7 @@
         <f:else>
             <label for="{field.id}_day">
                 <f:translate key="{field.translationKey}">{field.label}</f:translate><f:if condition="{field.isRequired}"> *</f:if>
-                (<f:translate key="t3chimp: {field.format}">{field.format}</f:translate>)
+                (<f:translate key="{field.translationKey}_format">{field.format}</f:translate>)
             </label><br>
             <t:form.birthday.day property="{field.name}" id="{field.id}_day" required="{field.isRequired}" /> /
             <t:form.birthday.month property="{field.name}" id="{field.id}_month" required="{field.isRequired}" />
