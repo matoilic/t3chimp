@@ -1,3 +1,6 @@
+#2.2.2
+- Fixed detection of IE 11
+
 # 2.2.1
 - Fixed wrong template tags that were introduced during the automatic change of translation keys in v2.2.0
 
@@ -38,6 +41,9 @@
 - Dropped support for TYPO3 versions older than 6.1 (1.x still supports older installations and will get bugfix updates until the EOL of TYPO3 4.7)
 - Removed the "Use secure connection" option, since the new API always uses SSL
 - Added option to allow the users to choose the email format
+
+#1.5.4
+- Fixed detection of IE 11
 
 # 1.5.3
 - Dutch translations by Jeroen Vanheste from tidi.be
