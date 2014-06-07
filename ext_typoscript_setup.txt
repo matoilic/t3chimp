@@ -32,7 +32,7 @@ plugin.tx_t3chimp {
     }
 }
 
-[browser = msie]
+[browser = msie]||[useragent = Trident]
 plugin.tx_t3chimp.ajax.config.additionalHeaders = Content-type:text/plain
 [global]
 
