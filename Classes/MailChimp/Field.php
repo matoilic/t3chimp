@@ -34,6 +34,14 @@ namespace MatoIlic\T3Chimp\MailChimp;
  */
 interface Field {
     /**
+     * Adds a error message to the field and thus marks it as invalid.
+     *
+     * @param string $message
+     * @return void
+     */
+    public function addError($message);
+
+    /**
      * Returns the fields value in the format that is required to pass it
      * to the MailChimp API.
      *

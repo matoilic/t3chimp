@@ -71,6 +71,10 @@ abstract class AbstractField implements Field {
         $this->form = $form;
     }
 
+    public function addError($message) {
+        $this->errors[] = $message;
+    }
+
     public function bindRequest(RequestInterface $request) {
         if($request->hasArgument($this->getName())) {
             $this->setValue($request->getArgument($this->getName()));
