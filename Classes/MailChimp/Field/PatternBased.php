@@ -35,6 +35,8 @@ abstract class PatternBased extends AbstractField {
     abstract public function getHtmlPattern();
 
     /**
+     * Returns the pattern to validate the fields value against.
+     *
      * @return string
      */
     public function getPattern() {

@@ -28,81 +28,150 @@
 
 namespace MatoIlic\T3Chimp\MailChimp;
 
+/**
+ * @api
+ * @package MatoIlic\T3Chimp\MailChimp
+ */
 interface Field {
     /**
-     * @abstract
+     * Returns the fields value in the format that is required to pass it
+     * to the MailChimp API.
+     *
+     * @return mixed
+     */
+    public function getApiValue();
+
+    /**
+     * Returns the default value of the field.
+     *
      * @return mixed
      */
     public function getDefaultValue();
 
     /**
-     * @abstract
+     * Returns all errors that have been found during
+     * validation.
+     *
      * @return array
      */
     public function getErrors();
 
     /**
-     * @abstract
+     * Returns the ID of the field that is used as the ID
+     * of the HTML input field.
+     *
      * @return string
      */
     public function getId();
 
     /**
-     * @abstract
+     * Returns TRUE if this is the action field (subscribe / unsubscribe).
+     *
+     * @return bool
+     */
+    public function getIsActionField();
+
+    /**
+     * Returns TRUE if this is the email format field (HTML / text).
+     *
+     * @return bool
+     */
+    public function getIsEmailFormatField();
+
+    /**
+     * Returns TRUE if no or an empty value has been set for this field.
+     *
+     * @return bool
+     */
+    public function getIsEmpty();
+
+    /**
+     * Returns TRUE if this is a hidden field.
+     *
      * @return bool
      */
     public function getIsHidden();
 
     /**
-     * @abstract
+     * Returns TRUE if this is a interest groupings field. These kind of fields
+     * are treated specially when communicating to the MailChimp API.
+     *
+     * @return bool
+     */
+    public function getIsInterestGroup();
+
+    /**
+     * Returns TRUE if this is a required field.
+     *
      * @return boolean
      */
     public function getIsRequired();
 
     /**
-     * @abstract
+     * Returns TRUE if the field has a valid value.
+     *
      * @return boolean
      */
     public function getIsValid();
 
     /**
-     * @abstract
+     * Returns the fields label as defined in the MailChimp backend.
+     *
      * @return string
      */
     public function getLabel();
 
     /**
-     * @abstract
+     * Returns the name of the field that is used as the name
+     * of the HTML input field.
+     *
      * @return string
      */
     public function getName();
 
     /**
-     * @abstract
+     * Returns the merge tag used by the MailChimp API to
+     * identify the field.
+     *
      * @return string
      */
     public function getTag();
 
     /**
-     * @abstract
+     * Returns the template used to render this field.
+     *
      * @return string
      */
     public function getTemplate();
 
     /**
-     * @abstract
+     * Returns the translation key used to translate the fields
+     * label.
+     *
      * @return string
      */
     public function getTranslationKey();
 
     /**
-     * @abstract
+     * Returns the fields value.
+     *
      * @return mixed
      */
     public function getValue();
 
     /**
-     * @abstract
+     * This is a special setter for the value to process input values
+     * retrieved from the MailChimp API.
+     *
+     * @param mixed $value
+     * @return void
+     */
+    public function setApiValue($value);
+
+    /**
+     * Sets the fields value. Setting a new value will reset the validation
+     * and clear all error messages.
+     *
      * @param mixed $value
      * @return void
      */

@@ -28,6 +28,11 @@
 
 namespace MatoIlic\T3Chimp\MailChimp\Field;
 
+/**
+ * As of now, MailChimp only supports five digit ZIP codes.
+ *
+ * @package MatoIlic\T3Chimp\MailChimp\Field
+ */
 class Zip extends PatternBased {
     public function getHtmlPattern() {
         return '^\d{5}$';

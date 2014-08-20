@@ -33,6 +33,10 @@ use MatoIlic\T3Chimp\MailChimp\MailChimpException;
 use MatoIlic\T3Chimp\MailChimp\Field\Helper\CountryChoice;
 use MatoIlic\T3Chimp\MailChimp\Form;
 
+/**
+ * @api
+ * @package MatoIlic\T3Chimp\MailChimp\Field
+ */
 class Address extends AbstractField {
     const TYPE_EXPLODED = 'exploded';
     const TYPE_TEXT = 'text';
@@ -107,6 +111,9 @@ class Address extends AbstractField {
 
 
     /**
+     * Returns a list of all countries. Primarly used for creating a country
+     * select field.
+     *
      * @return array
      */
     public function getCountryList() {
@@ -134,6 +141,10 @@ class Address extends AbstractField {
     }
 
     /**
+     * There are two types of address fields, exploded and text. For exploded fields
+     * the parts of the address are saved seperately. For text fields the address is
+     * stored as one piece in a single text field.
+     *
      * @return bool
      */
     public function getIsTextField() {

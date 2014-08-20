@@ -30,6 +30,10 @@ namespace MatoIlic\T3Chimp\MailChimp\Field;
 
 use MatoIlic\T3Chimp\MailChimp\Form;
 
+/**
+ * @api
+ * @package MatoIlic\T3Chimp\MailChimp\Field
+ */
 class Action extends Radio {
     /**
      * @var array

@@ -32,6 +32,10 @@ use MatoIlic\T3Chimp\MailChimp\Field;
 use MatoIlic\T3Chimp\MailChimp\Form;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 
+/**
+ * @api
+ * @package MatoIlic\T3Chimp\MailChimp\Field
+ */
 abstract class AbstractField implements Field {
     /**
      * @var array
@@ -160,6 +164,10 @@ abstract class AbstractField implements Field {
      * @return bool
      */
     public function getIsValid() {
+        if(!$this->isValidated) {
+            $this->validate();
+        }
+
         return count($this->getErrors()) == 0;
     }
 

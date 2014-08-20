@@ -33,6 +33,10 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
+/**
+ * @api
+ * @package MatoIlic\T3Chimp\MailChimp
+ */
 class Form {
     /**
      * @var string
@@ -102,6 +106,8 @@ class Form {
     }
 
     /**
+     * Adds the given Field to the form.
+     *
      * @param Field $field
      */
     public function addField(Field $field) {
@@ -113,6 +119,9 @@ class Form {
     }
 
     /**
+     * Reads the submitted values from the request and assigns them
+     * to the appropriate fields.
+     *
      * @param RequestInterface $request
      */
     public function bindRequest(RequestInterface $request) {
@@ -124,6 +133,9 @@ class Form {
     }
 
     /**
+     * Returns the forms fields. By default hidden field are not returned, only
+     * when $includeHidden is set to true.
+     *
      * @param bool $includeHidden whether or not to return hidden fields too
      * @return array
      */
@@ -136,6 +148,9 @@ class Form {
     }
 
     /**
+     * Returns the field with the given name. Returns NULL if no field with
+     * the given name could be found.
+     *
      * @param string $name
      * @return Field|NULL
      */
@@ -150,6 +165,8 @@ class Form {
     }
 
     /**
+     * Returns the ID of the subscriber list the form represents.
+     *
      * @return string
      */
     public function getListId() {
@@ -200,6 +217,8 @@ class Form {
     }
 
     /**
+     * Returns TRUE if the for was bound to a request, FALSE otherwise.
+     *
      * @return bool
      */
     public function getIsBound() {
@@ -207,8 +226,11 @@ class Form {
     }
 
     /**
+     * Returns TRUE if all fields of the form are valid, FALSE otherwise.
+     *
      * @return bool
-     * @throws \MatoIlic\T3Chimp\MailChimp\MailChimpException
+     * @throws \MatoIlic\T3Chimp\MailChimp\MailChimpException if the form was not
+     * previously bound to a request.
      */
     public function isValid() {
         if(!$this->isBound) {
@@ -229,6 +251,8 @@ class Form {
     }
 
     /**
+     * Creates and adds a field for an interest grouping.
+     *
      * @param array $groupings
      */
     public function setInterestGroupings(array $groupings) {

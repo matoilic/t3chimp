@@ -28,6 +28,10 @@
 
 namespace MatoIlic\T3Chimp\MailChimp;
 
+/**
+ * @ignore
+ * @package MatoIlic\T3Chimp\MailChimp
+ */
 class MailChimpException extends \Exception {
 
 }
