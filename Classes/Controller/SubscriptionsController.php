@@ -35,6 +35,7 @@ use MatoIlic\T3Chimp\Provider\Settings;
 use MatoIlic\T3Chimp\Service\MailChimp;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class SubscriptionsController extends ActionController {
@@ -55,12 +56,16 @@ class SubscriptionsController extends ActionController {
             echo '-->';
         }
 
+        $form = $this->mailChimpService->getForm();
+
         $this->view->assign('language', $GLOBALS['TSFE']->sys_language_uid);
         $this->view->assign('languageIso', strtolower($GLOBALS['TSFE']->sys_language_isocode));
         $this->view->assign('pageId', $GLOBALS['TSFE']->id);
         $this->view->assign('contentId', $this->configurationManager->getContentObject()->data['uid']);
         $this->view->assign('form', $this->mailChimpService->getForm());
         $this->view->assign('pageType', $this->getPageType());
+
+        $this->signalSlotDispatcher->dispatch(__CLASS__, 'beforeRenderView', array($form, $this->view, $this));
     }
 
     protected function initializeAction() {
@@ -81,8 +86,11 @@ class SubscriptionsController extends ActionController {
         $this->view->assign('language', $GLOBALS['TSFE']->sys_language_uid);
         $this->view->assign('languageIso', strtolower($GLOBALS['TSFE']->sys_language_isocode));
         $this->view->assign('pageId', $GLOBALS['TSFE']->id);
+        $this->view->assign('contentId', $this->configurationManager->getContentObject()->data['uid']);
         $this->view->assign('form', $form);
         $this->view->assign('pageType', $this->getPageType());
+
+        $this->signalSlotDispatcher->dispatch(__CLASS__, 'beforeRenderView', array($form, $this->view, $this));
     }
 
     protected function getPageType() {
@@ -121,6 +129,8 @@ class SubscriptionsController extends ActionController {
             $this->request->hasArgument('email_type')
         );
         $form->bindRequest($this->request);
+
+        $this->signalSlotDispatcher->dispatch(__CLASS__, 'onValidateForm', array($form, $this->view, $this));
 
         if($form->isValid()) {
             $success = FALSE;
