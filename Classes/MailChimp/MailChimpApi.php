@@ -386,7 +386,9 @@ class MailChimpApi {
         $params = json_encode($params);
         $ch = $this->ch;
 
-        curl_setopt($ch, CURLOPT_URL, $this->root . $url . '.json');
+        $url = $this->root . $url . '.json';
+
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
@@ -397,37 +399,42 @@ class MailChimpApi {
 
         $start = microtime(TRUE);
         $redirectsLeft = self::CURL_MAX_REDIRECTS;
-        $this->log('Call to ' . $this->root . $url . '.json: ' . $params);
+        $this->log('Call to ' . $url . ': ' . $params);
         if($this->debug) {
             $curl_buffer = fopen('php://memory', 'w+');
             curl_setopt($ch, CURLOPT_STDERR, $curl_buffer);
         }
 
         if(ini_get('open_basedir') == '' && (!ini_get('safe_mode') || ini_get('safe_mode') == 'Off')) {
-            $response_body = curl_exec($ch);
+            $responseBody = curl_exec($ch);
         } else {
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-
-            $finalUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-            $ch2 = curl_copy_handle($ch);
-            curl_setopt($ch2, CURLOPT_HEADER, true);
-            curl_setopt($ch2, CURLOPT_NOBODY, true);
-            curl_setopt($ch2, CURLOPT_FORBID_REUSE, false);
-            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_FORBID_REUSE, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
             do {
-                curl_setopt($ch2, CURLOPT_URL, $finalUrl);
-                $header = curl_exec($ch2);
-                if ($errorCode = curl_errno($ch2)) {
+                curl_setopt($ch, CURLOPT_URL, $url);
+                $response = curl_exec($ch);
+
+                if ($errorCode = curl_errno($ch)) {
                     $error = self::$curlCodes[$errorCode];
                     trigger_error('A cURL error occurred when trying to call the MailChimp API: ' . $error, E_USER_ERROR);
                 } else {
-                    $code = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-                    if ($code >= 300 && $code <= 399) {
+                    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+                    $header = substr($response, 0, $headerSize);
+                    $responseBody = substr($response, $headerSize);
+
+                    if($code == 200) {
+                        break;
+                    } else if ($code >= 300 && $code <= 399) {
                         preg_match('/Location:(.*?)\n/', $header, $matches);
-                        $finalUrl = trim(array_pop($matches));
+                        $url = trim(array_pop($matches));
                     } else if($code >= 400 && $code <= 599) {
-                        trigger_error('A network error occurred. Could not reach the MailChimp API endpoint.', E_USER_ERROR);
+                        trigger_error('A network error occurred (' . $code . '). Could not reach the MailChimp API endpoint.', E_USER_ERROR);
+
+                        return;
                     } else {
                         $code = 0;
                     }
@@ -435,12 +442,11 @@ class MailChimpApi {
                 $redirectsLeft--;
             } while ($code != 0 && $redirectsLeft > 0);
 
-            curl_setopt($ch, CURLOPT_URL, $finalUrl);
-            $response_body = curl_exec($ch);
-        }
+            if($redirectsLeft <= 0) {
+                trigger_error('Too many redirects when trying to call the MailChimp API.', E_USER_ERROR);
 
-        if($redirectsLeft <= 0) {
-            trigger_error('Too many redirects when trying to call the MailChimp API.', E_USER_ERROR);
+                return;
+            }
         }
 
         $info = curl_getinfo($ch);
@@ -451,12 +457,12 @@ class MailChimpApi {
             fclose($curl_buffer);
         }
         $this->log('Completed in ' . number_format($time * 1000, 2) . 'ms');
-        $this->log('Got response: ' . $response_body);
+        $this->log('Got response: ' . $responseBody);
 
         if(curl_error($ch)) {
             throw new HttpError("API call to $url failed: " . curl_error($ch));
         }
-        $result = json_decode($response_body, TRUE);
+        $result = json_decode($responseBody, TRUE);
 
         if(floor($info['http_code'] / 100) >= 4) {
             throw $this->castError($result);
