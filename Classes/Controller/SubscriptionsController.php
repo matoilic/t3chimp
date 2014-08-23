@@ -56,16 +56,18 @@ class SubscriptionsController extends ActionController {
             echo '-->';
         }
 
-        $form = $this->mailChimpService->getForm();
+        if($this->settings['subscriptionList']) {
+            $form = $this->mailChimpService->getForm();
 
-        $this->view->assign('language', $GLOBALS['TSFE']->sys_language_uid);
-        $this->view->assign('languageIso', strtolower($GLOBALS['TSFE']->sys_language_isocode));
-        $this->view->assign('pageId', $GLOBALS['TSFE']->id);
-        $this->view->assign('contentId', $this->configurationManager->getContentObject()->data['uid']);
-        $this->view->assign('form', $this->mailChimpService->getForm());
-        $this->view->assign('pageType', $this->getPageType());
+            $this->view->assign('language', $GLOBALS['TSFE']->sys_language_uid);
+            $this->view->assign('languageIso', strtolower($GLOBALS['TSFE']->sys_language_isocode));
+            $this->view->assign('pageId', $GLOBALS['TSFE']->id);
+            $this->view->assign('contentId', $this->configurationManager->getContentObject()->data['uid']);
+            $this->view->assign('form', $this->mailChimpService->getForm());
+            $this->view->assign('pageType', $this->getPageType());
 
-        $this->signalSlotDispatcher->dispatch(__CLASS__, 'beforeRenderView', array($form, $this->view, $this));
+            $this->signalSlotDispatcher->dispatch(__CLASS__, 'beforeRenderView', array($form, $this->view, $this));
+        }
     }
 
     protected function initializeAction() {

@@ -1,15 +1,22 @@
 {namespace t = MatoIlic\T3Chimp\ViewHelpers}
 
-<t:form action="process" controller="Subscriptions" class="t3chimp-form" object="{form}" pageType="{pageType}" arguments="{list: form.listId}" additionalParams="{L: language, LISO: languageIso, id: pageId, cid: contentId}">
-    <t:form.formField property="FORM_ACTION"/>
+<f:if condition="{form}">
+    <f:then>
+        <t:form action="process" controller="Subscriptions" class="t3chimp-form" object="{form}" pageType="{pageType}" arguments="{list: form.listId}" additionalParams="{L: language, LISO: languageIso, id: pageId, cid: contentId}">
+            <t:form.formField property="FORM_ACTION"/>
 
-    <t:form.remainingFields />
+            <t:form.remainingFields />
 
-    <p class="t3chimp-always t3chimp-submit">
-        <f:form.submit value="{f:translate(key: 'form_submit')}" />
-    </p>
+            <p class="t3chimp-always t3chimp-submit">
+                <f:form.submit value="{f:translate(key: 'form_submit')}" />
+            </p>
 
-    <p class="t3chimp-always">
-        * <f:translate key="form_requiredFields">Required fields</f:translate>
-    </p>
-</t:form>
+            <p class="t3chimp-always">
+                * <f:translate key="form_requiredFields">Required fields</f:translate>
+            </p>
+        </t:form>
+    </f:then>
+    <f:else>
+        <f:translate key="error_noForm">T3Chimp not properly configured</f:translate>
+    </f:else>
+</f:if>

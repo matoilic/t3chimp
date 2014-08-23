@@ -63,6 +63,9 @@
 			<trans-unit id="error_invalidBirthDate" xml:space="preserve">
 				<source>Please enter a valid birthday</source>
 			</trans-unit>
+            <trans-unit id="error_noForm" xml:space="preserve" approved="yes">
+				<source>T3Chimp not properly configured</source>
+			</trans-unit>
 			<trans-unit id="form_submit" xml:space="preserve">
 				<source>Submit</source>
 			</trans-unit>

@@ -83,6 +83,10 @@
 				<source>Please enter a valid birthday</source>
 				<target>Bitte gebe Sie einen gültigen Geburtstag ein</target>
 			</trans-unit>
+            <trans-unit id="error_noForm" xml:space="preserve" approved="yes">
+				<source>T3Chimp not properly configured</source>
+				<target>T3Chimp wurde nicht korrekt konfiguriert</target>
+			</trans-unit>
 			<trans-unit id="form_submit" xml:space="preserve" approved="yes">
 				<source>Submit</source>
 				<target>Abschicken</target>

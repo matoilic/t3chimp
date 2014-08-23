@@ -1,3 +1,6 @@
+#2.3.1
+- Optimized cURL calls for more restrictive server setups
+
 #2.3.0
 - Added the possibility to [customize T3Chimp through the Signal / Slot API](https://github.com/matoilic/t3chimp/wiki/Integrating-with-T3Chimp)
 
