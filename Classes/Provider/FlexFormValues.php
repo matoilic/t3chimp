@@ -40,13 +40,8 @@ class FlexFormValues {
     private $api;
 
     protected function initialize($extKey) {
-        /** @var BackendConfigurationManager $config */
-        //$config = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\BackendConfigurationManager');
-        //$setup = $config->getTypoScriptSetup();
-        
-        // The code above doesn't respect our setup in BE mode (TYPO3 6.1.10).
         $setup = $this->getTypoScriptSetup();
-        
+
         $setup = $setup['plugin.']['tx_' . $extKey . '.'];
         $tsConfig = BackendUtility::getPagesTSconfig($this->getCurrentPageId());
         $tsConfig = $tsConfig['plugin.']['tx_' . $extKey . '.'];
@@ -62,19 +57,17 @@ class FlexFormValues {
 
         $this->api = new MailChimpApi($apiKey);
     }
-    
+
     /**
-     * RHA
-     *
-     * Gets the typoscript setup of the current page.
-     * This code is taken from the extbase core and slightly modified (TYPO3 6.1.10). 
+     * Gets the TypoScript setup of the current page.
+     * This code is taken from the extbase core and slightly modified (TYPO3 6.1.10).
      *
      * @see http://api.typo3.org/typo3cms/61/html/class_t_y_p_o3_1_1_c_m_s_1_1_extbase_1_1_configuration_1_1_abstract_configuration_manager.html#a53db9b74f2a65ef2ddbddbc782937fca
-     * @return array $setup
+     * @return array
      */
-    protected function getTypoScriptSetup (){
+    protected function getTypoScriptSetup() {
 		$pageId = $this->getCurrentPageId();
-		
+
 		$template = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TypoScript\\TemplateService');
 		// do not log time-performance information
 		$template->tt_track = 0;
@@ -82,16 +75,16 @@ class FlexFormValues {
 		$template->setProcessExtensionStatics(TRUE);
 		$template->init();
 		// Get the root line
-		$rootline = array();
+		$rootLine = array();
 		if ($pageId > 0) {
 			$sysPage = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
 			// Get the rootline for the current page
-			$rootline = $sysPage->getRootLine($pageId, '', TRUE);
+			$rootLine = $sysPage->getRootLine($pageId, '', TRUE);
 		}
 		// This generates the constants/config + hierarchy info for the template.
-		$template->runThroughTemplates($rootline, 0);
+		$template->runThroughTemplates($rootLine, 0);
 		$template->generateConfig();
-		
+
 		return $template->setup;
     }
 
@@ -100,9 +93,8 @@ class FlexFormValues {
         if ($pageId > 0) {
             return $pageId;
         }
-        
-        // RHA
-        // Get current page id when editing an content element in the backend.
+
+        // Get current page id when editing a content element in the backend.
         // &edit[tt_content][1486,]=edit
         $edit = GeneralUtility::_GP('edit');
         if (is_array($edit) && isset($edit['tt_content'])){
@@ -126,7 +118,6 @@ class FlexFormValues {
             return $rootTemplates[0]['pid'];
         }
 
-        // fallback
         return 0;
     }
 
