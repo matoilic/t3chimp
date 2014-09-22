@@ -50,7 +50,7 @@ class Session implements SingletonInterface {
 
     public function __construct() {
         $this->feUser = $GLOBALS['TSFE']->fe_user;
-        $data = (is_object($this->feUser)) ? $this->feUser->getKey('ses', 't3chimp') : array();
+        $data = (is_object($this->feUser)) ? $this->feUser->getKey('ses', self::KEY) : array();
 
         if($data != NULL) {
             $this->sessionData = unserialize($data);
