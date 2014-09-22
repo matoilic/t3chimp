@@ -1,3 +1,7 @@
+#2.4.0
+- Adds a JavaScript based CAPTCHA function (no user interaction required)
+- Fixes the plugin configuration in multi-page setups (submitted by [Remo Häusler](https://github.com/r3h6))
+
 #2.3.1
 - Optimized cURL calls for more restrictive server setups
 

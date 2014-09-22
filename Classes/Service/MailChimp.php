@@ -121,7 +121,7 @@ class MailChimp implements SingletonInterface {
     public function getForm($email = NULL) {
         $form = $this->getFormFor($this->settingsProvider->get('subscriptionList'));
         $form->setDisableCaptcha($this->settingsProvider->get('disableCaptcha'));
-        
+
         if($email != NULL) {
             $data = $this->getSubscriptionInfo($email);
 
