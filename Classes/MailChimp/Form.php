@@ -29,6 +29,7 @@
 namespace MatoIlic\T3Chimp\MailChimp;
 
 use MatoIlic\T3Chimp\MailChimp\Field;
+use MatoIlic\T3Chimp\Provider\Session;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
@@ -38,6 +39,19 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  * @package MatoIlic\T3Chimp\MailChimp
  */
 class Form {
+    const MIN_SUBMISSION_TIME = 4000;
+
+    protected $controlFields = array(
+        'cc' => '',
+        'ccts' => '',
+        'cchp' => ''
+    );
+
+    /**
+     * @var bool
+     */
+    protected $disableCaptcha = false;
+
     /**
      * @var string
      */
@@ -77,6 +91,11 @@ class Form {
      * @var array
      */
     protected $publicFields = array();
+
+    /**
+     * @var Session
+     */
+    private $session;
 
     /**
      * @var array
@@ -125,11 +144,26 @@ class Form {
      * @param RequestInterface $request
      */
     public function bindRequest(RequestInterface $request) {
+        foreach($this->controlFields as $key => $value) {
+            $this->controlFields[$key] = $request->getArgument($key);
+        }
+
         foreach($this->getFields() as $field) {
             $field->bindRequest($request);
         }
 
         $this->isBound = TRUE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCaptchaCode() {
+        return $this->session->cc;
+    }
+
+    public function getDisableCaptcha() {
+        return $this->disableCaptcha;
     }
 
     /**
@@ -178,6 +212,12 @@ class Form {
         $this->publicFields[] = new $class(array(), $this);
     }
 
+    private function initializeCaptcha() {
+        if(!isset($this->session->cc)) {
+            $this->session->cc = md5(rand());
+        }
+    }
+
     /**
      * @param array $fieldDefinition
      */
@@ -202,6 +242,7 @@ class Form {
      */
     protected function initializeFields(array $fieldDefinitions) {
         $this->initializeActionField();
+        $this->initializeCaptcha();
 
         foreach($fieldDefinitions as $fieldDefinition) {
             $this->initializeField($fieldDefinition);
@@ -213,6 +254,7 @@ class Form {
      */
     public function injectObjectManager(ObjectManager $objectManager) {
         $this->objectManager = $objectManager;
+        $this->session = $objectManager->get('MatoIlic\\T3Chimp\\Provider\\Session');
         $this->initializeFields($this->fieldDefinitions);
     }
 
@@ -237,6 +279,16 @@ class Form {
             throw new MailChimpException('Can not validate an unbound form');
         }
 
+        if(!$this->getDisableCaptcha()) {
+            $timePassed = (integer)$this->controlFields['ccts'];
+            $captchaField = $this->controlFields['cc'];
+            $honeypotField = $this->controlFields['cchp'];
+
+            if (strlen($honeypotField) > 0 || $captchaField != $this->getCaptchaCode() || $timePassed < self::MIN_SUBMISSION_TIME) {
+                return FALSE;
+            }
+        }
+
         if($this->getField('FORM_ACTION')->getValue() == 'subscribe') {
             foreach($this->getFields(TRUE) as $field) {
                 if(!$field->getIsValid()) {
@@ -248,6 +300,15 @@ class Form {
         }
 
         return $this->getField('EMAIL')->getIsValid();
+    }
+
+    /**
+     * Disables the validation of the hidden CAPTCHA.
+     *
+     * @param $disable
+     */
+    public function setDisableCaptcha($disable) {
+        $this->disableCaptcha = $disable;
     }
 
     /**

@@ -73,6 +73,10 @@
 				<source>Double Opt-in</source>
 				<target>Double opt-in aktivieren</target>
 			</trans-unit>
+            <trans-unit id="flexForm_disableCaptcha" xml:space="preserve">
+				<source>Disable CAPTCHA</source>
+                <target>CAPTCHA deaktivieren</target>
+			</trans-unit>
         </body>
     </file>
 </xliff>

@@ -1,10 +1,15 @@
 ;(function($) {
-    var $doc = $(document);
+    var $doc = $(document), timeStart;
 
     function onFormSubmit(event) {
         event.preventDefault();
-        var $form = $(this);
 
+        var $form = $(this),
+            now = new Date(),
+            timePassed = now.getTime() - timeStart.getTime();
+
+        $form.find('input[data-special="ccts"]').val(timePassed);
+        $form.find('input[data-special="cc"]').val($form.data('cc'));
         $form.addClass('t3chimp-loading');
 
         $form.ajaxSubmit({
@@ -40,6 +45,8 @@
     $doc.on('submit', '.t3chimp-form', onFormSubmit);
 
     $(function() {
+        timeStart = new Date();
+
         $('.t3chimp-form').each(function() {
             if($(this).find('.t3chimp-field-FORM_ACTION input[value="unsubscribe"]').attr('checked')) {
                 setStateUnsubscribe(this);

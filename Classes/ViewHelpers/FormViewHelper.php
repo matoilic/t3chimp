@@ -65,6 +65,18 @@ class FormViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\FormViewHelper {
 
         $this->tag->addAttribute('id', 't3chimp-form-' . $object->getListId());
 
-        return parent::render($action, $arguments, $controller, $extensionName, $pluginName, $pageUid, $object, $this->arguments['pageType'], $noCache, $noCacheHash, $section, $format, $additionalParams, $absolute, $addQueryString, $argumentsToBeExcludedFromQueryString, $fieldNamePrefix, $actionUri, $objectName);
+        parent::render($action, $arguments, $controller, $extensionName, $pluginName, $pageUid, $object, $this->arguments['pageType'], $noCache, $noCacheHash, $section, $format, $additionalParams, $absolute, $addQueryString, $argumentsToBeExcludedFromQueryString, $fieldNamePrefix, $actionUri, $objectName);
+
+        if(!$object->getDisableCaptcha()) {
+            $prefix = $this->getFieldNamePrefix();
+            $content = $this->tag->getContent();
+            $content .= '<input type="hidden" name="' . $prefix . '[cc]" data-special="cc" value="0">';
+            $content .= '<input type="hidden" name="' . $prefix . '[ccts]" data-special="ccts" value="0">';
+            $content .= '<div style="display: none;"><input type="text" name="' . $prefix . '[cchp]" data-special="cchp"></div>';
+            $this->tag->setContent($content);
+            $this->tag->addAttribute('data-cc', $object->getCaptchaCode());
+        }
+
+        return $this->tag->render();
     }
 }

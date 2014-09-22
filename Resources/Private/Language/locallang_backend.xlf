@@ -50,6 +50,9 @@
 			<trans-unit id="flexForm_showEmailFormat" xml:space="preserve">
 				<source>Let subscribers pick email format</source>
 			</trans-unit>
+            <trans-unit id="flexForm_disableCaptcha" xml:space="preserve">
+				<source>Disable CAPTCHA</source>
+			</trans-unit>
         </body>
     </file>
 </xliff>

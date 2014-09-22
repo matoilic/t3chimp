@@ -31,6 +31,7 @@ namespace MatoIlic\T3Chimp\Controller;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Error;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\InvalidEmail;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\ListNotSubscribed;
+use MatoIlic\T3Chimp\Provider\Session;
 use MatoIlic\T3Chimp\Provider\Settings;
 use MatoIlic\T3Chimp\Service\MailChimp;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
@@ -112,6 +113,10 @@ class SubscriptionsController extends ActionController {
      */
     public function injectMailChimpService(MailChimp $service) {
         $this->mailChimpService = $service;
+    }
+
+    public function injectSessionProvider(Session $session) {
+        $session->setContext($this->extensionName);
     }
 
     /**

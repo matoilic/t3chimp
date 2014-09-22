@@ -46,6 +46,14 @@
                             </config>
                         </TCEforms>
                     </settings.showEmailFormat>
+                    <settings.disableCaptcha>
+                        <TCEforms>
+                            <label>LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xlf:flexForm_disableCaptcha</label>
+                            <config>
+                                <type>check</type>
+                            </config>
+                        </TCEforms>
+                    </settings.disableCaptcha>
                 </el>
             </ROOT>
         </main>
