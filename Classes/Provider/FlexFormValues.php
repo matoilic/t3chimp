@@ -107,6 +107,9 @@ class FlexFormValues {
         $edit = GeneralUtility::_GP('edit');
         if (is_array($edit) && isset($edit['tt_content'])){
         	$contentElementUids = array_shift(array_keys($edit['tt_content']));
+			if ($edit['tt_content'][$contentElementUids] === 'new'){
+				return $contentElementUids;
+			}
 	        $contentElementUidsList = \TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(',', $contentElementUids, TRUE);
 	        $pageRecords = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('pid', 'tt_content', 'uid IN(' . implode(',', $contentElementUidsList) . ')', '', '', '1');
 	        if (count($pageRecords)){
