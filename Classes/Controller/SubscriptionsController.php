@@ -139,9 +139,11 @@ class SubscriptionsController extends ActionController {
 
         $this->signalSlotDispatcher->dispatch(__CLASS__, 'onValidateForm', array($form, $this->view, $this));
 
-        if($form->isValid()) {
-            $success = FALSE;
+        $success = FALSE;
+        $showForm = TRUE;
+        $message = '';
 
+        if($form->isValid()) {
             try {
                 $performedAction = $this->mailChimpService->saveForm($form);
 
@@ -166,12 +168,16 @@ class SubscriptionsController extends ActionController {
                 $message = $ex->getMessage();
             }
 
-            return json_encode(array('html' => $message, 'success' => $success), JSON_HEX_TAG | JSON_HEX_QUOT);
+            $showForm = FALSE;
         }
 
         $this->view->assign('form', $form);
+        $this->view->assign('message', $message);
+        $this->view->assign('showForm', $showForm);
+        $this->view->assign('success', $success);
+        $this->view->assign('status', $success ? 'success' : 'error');
 
-        return json_encode(array('html' => $this->view->render(), 'success' => FALSE), JSON_HEX_TAG | JSON_HEX_QUOT);
+        return json_encode(array('html' => $this->view->render(), 'success' => $success), JSON_HEX_TAG | JSON_HEX_QUOT);
     }
 
     /**

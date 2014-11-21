@@ -1,2 +1,11 @@
 {namespace t = MatoIlic\T3Chimp\ViewHelpers}
-<t:renderPartial name="Form" arguments="{form: form}" />
+<f:if condition="{showForm}">
+    <f:then>
+        <t:renderPartial name="Form" arguments="{form: form}" />
+    </f:then>
+    <f:else>
+        <div class="t3chimp-{status}" id="t3chimp-{form.listid}">
+            {message}
+        </div>
+    </f:else>
+</f:if>

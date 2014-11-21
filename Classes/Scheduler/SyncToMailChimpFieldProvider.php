@@ -188,16 +188,20 @@ class SyncToMailChimpFieldProvider implements AdditionalFieldProviderInterface {
         $fields = array();
         $listId = ($task != NULL) ? $task->getListId() : NULL;
 
+        if(strlen($taskInfo['listId']) > 0) {
+            $listId = $taskInfo['listId'];
+        }
+
         $fields['listId'] = array(
             'code' => $this->createListSelection($listId),
             'label' => 'LLL:EXT:t3chimp/Resources/Private/Language/locallang_backend.xml:syncToMailChimpTask_label_listId'
         );
 
-        if($task != NULL && strlen($task->getListId()) > 0) {
+        if($listId != NULL) {
             $code = '';
 
-            $fieldDefinitions = $this->mailChimp->getFieldsFor($task->getListId());
-            $existingMappings = $task->getMappings();
+            $fieldDefinitions = $this->mailChimp->getFieldsFor($listId);
+            $existingMappings = ($task != NULL) ? $task->getMappings() : array();
 
             foreach($fieldDefinitions as $fieldDefinition) {
                 if($fieldDefinition['field_type'] != 'address') {
@@ -209,7 +213,7 @@ class SyncToMailChimpFieldProvider implements AdditionalFieldProviderInterface {
                 $code .= '<br />';
             }
 
-            $groupings = $this->mailChimp->getInterestGroupingsFor($task->getListId());
+            $groupings = $this->mailChimp->getInterestGroupingsFor($listId);
             foreach($groupings as $grouping) {
                 $code .= $this->createGroupingField($grouping, $existingMappings[$grouping['name']]);
                 $code .= '<br />';
