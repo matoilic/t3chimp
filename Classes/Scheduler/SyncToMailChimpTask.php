@@ -53,6 +53,7 @@ class SyncToMailChimpTask extends Base {
         /** @var Form $form */
         $form = $this->objectManager->get('MatoIlic\\T3Chimp\\MailChimp\\Form', $fieldDefinitions, $this->listId);
         $form->setInterestGroupings($interestGroupings);
+        $form->setDisableCaptcha(TRUE);
 
         $groupingFields = array();
         foreach($interestGroupings as $grouping) {
