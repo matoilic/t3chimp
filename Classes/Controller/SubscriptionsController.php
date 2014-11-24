@@ -39,6 +39,12 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
+/**
+ * TODO try to integrate HMAC verification
+ *
+ * Class SubscriptionsController
+ * @package MatoIlic\T3Chimp\Controller
+ */
 class SubscriptionsController extends ActionController {
     /**
      * @var MailChimp
@@ -46,6 +52,8 @@ class SubscriptionsController extends ActionController {
     private $mailChimpService;
 
     /**
+     * @dontverifyrequesthash
+     *
      * @return void
      */
     public function indexAction() {
@@ -76,7 +84,13 @@ class SubscriptionsController extends ActionController {
         parent::initializeAction();
     }
 
-
+    /**
+     * @dontverifyrequesthash
+     *
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
+     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     */
     public function editAction() {
         if($this->settings['debug']) {
             echo '<!--';
@@ -128,6 +142,8 @@ class SubscriptionsController extends ActionController {
     }
 
     /*
+     * @dontverifyrequesthash
+     *
      * @return void
      */
     public function processAction() {
