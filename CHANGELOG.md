@@ -1,3 +1,9 @@
+#2.4.1
+- Fixes a TypoScript configuration issue under PHP 5.3.x which causes AJAX requests to have no parameters
+- Adds a better possibility to style error and success messages
+- Prevents form validation to check for captcha in CLI mode (submitted by [Ingo Renner](https://github.com/irnnr))
+- Fixes compatibility issues with tt_content (submitted by [Remo Häusler](https://github.com/r3h6))
+
 #2.4.0
 - Adds a JavaScript based CAPTCHA function (no user interaction required)
 - Fixes the plugin configuration in multi-page setups (submitted by [Remo Häusler](https://github.com/r3h6))
