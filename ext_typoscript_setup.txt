@@ -46,10 +46,10 @@ tx_t3chimp_subscriptions_ajax_page {
         vendorName = MatoIlic
         extensionName = T3chimp
         pluginName = subscription
-        settings =< plugin.tx_t3chimp.settings
-        persistence =< plugin.tx_t3chimp.persistence
-        view =< plugin.tx_t3chimp.view
-        update =< plugin.tx_t3chimp.update
+        settings < plugin.tx_t3chimp.settings
+        persistence < plugin.tx_t3chimp.persistence
+        view < plugin.tx_t3chimp.view
+        update < plugin.tx_t3chimp.update
 
         switchableControllerActions {
           Subscriptions {
