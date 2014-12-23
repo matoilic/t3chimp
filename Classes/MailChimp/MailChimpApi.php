@@ -2,6 +2,13 @@
 
 namespace MatoIlic\T3Chimp\MailChimp;
 
+require_once(__DIR__ . '/../../guzzle.phar');
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Ring\Client\StreamHandler;
+use GuzzleHttp\Stream\Stream;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Campaigns;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Ecomm;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Error;
@@ -210,10 +217,10 @@ class MailChimpApi {
     public $apiKey;
 
     /**
-     * curl resource
-     * @var resource
+     * HTTP client
+     * @var Client
      */
-    public $ch;
+    public $client;
 
     /**
      * api endpoint
@@ -352,16 +359,8 @@ class MailChimpApi {
             $this->sslCaInfo = $opts['sslCaInfo'];
         }
 
-
-        $this->ch = curl_init();
-        curl_setopt($this->ch, CURLOPT_USERAGENT, 'MailChimp-PHP/2.0.4');
-        curl_setopt($this->ch, CURLOPT_POST, TRUE);
-        @curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, TRUE);
-        curl_setopt($this->ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($this->ch, CURLOPT_TIMEOUT, $opts['timeout']);
-
+        $handler = new StreamHandler();
+        $this->client = new Client(array('handler' => $handler));
 
         $this->folders = new Folders($this);
         $this->templates = new Templates($this);
@@ -377,98 +376,34 @@ class MailChimpApi {
         $this->gallery = new Gallery($this);
     }
 
-    public function __destruct() {
-        curl_close($this->ch);
-    }
-
     public function call($url, $params) {
         $params['apikey'] = $this->apiKey;
         $params = json_encode($params);
-        $ch = $this->ch;
 
-        $url = $this->root . $url . '.json';
+        $request = $this->client->createRequest('POST', $this->root . $url . '.json');
+        $request->setBody(Stream::factory($params));
+        $request->setHeader('Content-Type', 'application/json');
+        $request->setHeader('User-Agent', 'TYPO3-T3Chimp/2.4');
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
-        // SSL Options
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->sslVerifyPeer);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->sslVerifyHost);
-        if ($this->sslCaInfo) curl_setopt($ch, CURLOPT_CAINFO, $this->sslCaInfo);
-
-        $start = microtime(TRUE);
-        $redirectsLeft = self::CURL_MAX_REDIRECTS;
-        $this->log('Call to ' . $url . ': ' . $params);
-        if($this->debug) {
-            $curl_buffer = fopen('php://memory', 'w+');
-            curl_setopt($ch, CURLOPT_STDERR, $curl_buffer);
+        try {
+            $response = $this->client->send($request);
+        } catch(RequestException $ex) {
+            $response = $ex->getResponse();
         }
 
-        if(ini_get('open_basedir') == '' && (!ini_get('safe_mode') || ini_get('safe_mode') == 'Off')) {
-            $responseBody = curl_exec($ch);
-        } else {
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-            curl_setopt($ch, CURLOPT_HEADER, true);
-            curl_setopt($ch, CURLOPT_FORBID_REUSE, false);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responseCode = $response->getStatusCode();
 
-            do {
-                curl_setopt($ch, CURLOPT_URL, $url);
-                $response = curl_exec($ch);
+        if($responseCode === 200 || $responseCode >= 400) {
+            $result = json_decode($response->getBody(), TRUE);
 
-                if ($errorCode = curl_errno($ch)) {
-                    $error = self::$curlCodes[$errorCode];
-                    trigger_error('A cURL error occurred when trying to call the MailChimp API: ' . $error, E_USER_ERROR);
-                } else {
-                    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                    $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-                    $header = substr($response, 0, $headerSize);
-                    $responseBody = substr($response, $headerSize);
-
-                    if($code == 200) {
-                        break;
-                    } else if ($code >= 300 && $code <= 399) {
-                        preg_match('/Location:(.*?)\n/', $header, $matches);
-                        $url = trim(array_pop($matches));
-                    } else if($code >= 400 && $code <= 599) {
-                        trigger_error('A network error occurred (' . $code . '). Could not reach the MailChimp API endpoint.', E_USER_ERROR);
-
-                        return;
-                    } else {
-                        $code = 0;
-                    }
-                }
-                $redirectsLeft--;
-            } while ($code != 0 && $redirectsLeft > 0);
-
-            if($redirectsLeft <= 0) {
-                trigger_error('Too many redirects when trying to call the MailChimp API.', E_USER_ERROR);
-
-                return;
+            if($responseCode === 200) {
+                return $result;
             }
-        }
 
-        $info = curl_getinfo($ch);
-        $time = microtime(TRUE) - $start;
-        if($this->debug) {
-            rewind($curl_buffer);
-            $this->log(stream_get_contents($curl_buffer));
-            fclose($curl_buffer);
+            $this->castError($result);
+        } else {
+            trigger_error('A network error occurred (' . $responseCode . '). Could not reach the MailChimp API endpoint.', E_USER_ERROR);
         }
-        $this->log('Completed in ' . number_format($time * 1000, 2) . 'ms');
-        $this->log('Got response: ' . $responseBody);
-
-        if(curl_error($ch)) {
-            throw new HttpError("API call to $url failed: " . curl_error($ch));
-        }
-        $result = json_decode($responseBody, TRUE);
-
-        if(floor($info['http_code'] / 100) >= 4) {
-            throw $this->castError($result);
-        }
-
-        return $result;
     }
 
     public function readConfigs() {
