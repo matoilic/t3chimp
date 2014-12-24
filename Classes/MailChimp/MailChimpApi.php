@@ -6,7 +6,7 @@ require_once(__DIR__ . '/../../guzzle.phar');
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Ring\Client\ClientUtils;
 use GuzzleHttp\Ring\Client\StreamHandler;
 use GuzzleHttp\Stream\Stream;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Campaigns;
@@ -15,7 +15,6 @@ use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Error;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Folders;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Gallery;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Helper;
-use MatoIlic\T3Chimp\MailChimp\MailChimpApi\HttpError;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Lists;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Mobile;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Neapolitan;
@@ -25,89 +24,6 @@ use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Users;
 use MatoIlic\T3Chimp\MailChimp\MailChimpApi\Vip;
 
 class MailChimpApi {
-    const CURL_MAX_REDIRECTS = 10;
-
-    private static $curlCodes = array(
-        'CURL_OK',
-        'CURLE_UNSUPPORTED_PROTOCOL',
-        'CURLE_FAILED_INIT',
-        'CURLE_URL_MALFORMAT',
-        'CURLE_URL_MALFORMAT_USER',
-        'CURLE_COULDNT_RESOLVE_PROXY',
-        'CURLE_COULDNT_RESOLVE_HOST',
-        'CURLE_COULDNT_CONNECT',
-        'CURLE_FTP_WEIRD_SERVER_REPLY',
-        'CURLE_REMOTE_ACCESS_DENIED',
-        'CURLE_FTP_WEIRD_PASS_REPLY',
-        'CURLE_FTP_WEIRD_PASV_REPLY',
-        'CURLE_FTP_WEIRD_227_FORMAT',
-        'CURLE_FTP_CANT_GET_HOST',
-        'CURLE_FTP_COULDNT_SET_TYPE',
-        'CURLE_PARTIAL_FILE',
-        'CURLE_FTP_COULDNT_RETR_FILE',
-        'CURLE_QUOTE_ERROR',
-        'CURLE_HTTP_RETURNED_ERROR',
-        'CURLE_WRITE_ERROR',
-        'CURLE_UPLOAD_FAILED',
-        'CURLE_READ_ERROR',
-        'CURLE_OUT_OF_MEMORY',
-        'CURLE_OPERATION_TIMEDOUT',
-        'CURLE_FTP_PORT_FAILED',
-        'CURLE_FTP_COULDNT_USE_REST',
-        'CURLE_RANGE_ERROR',
-        'CURLE_HTTP_POST_ERROR',
-        'CURLE_SSL_CONNECT_ERROR',
-        'CURLE_BAD_DOWNLOAD_RESUME',
-        'CURLE_FILE_COULDNT_READ_FILE',
-        'CURLE_LDAP_CANNOT_BIND',
-        'CURLE_LDAP_SEARCH_FAILED',
-        'CURLE_FUNCTION_NOT_FOUND',
-        'CURLE_ABORTED_BY_CALLBACK',
-        'CURLE_BAD_FUNCTION_ARGUMENT',
-        'CURLE_INTERFACE_FAILED',
-        'CURLE_TOO_MANY_REDIRECTS',
-        'CURLE_UNKNOWN_TELNET_OPTION',
-        'CURLE_TELNET_OPTION_SYNTAX',
-        'CURLE_PEER_FAILED_VERIFICATION',
-        'CURLE_GOT_NOTHING',
-        'CURLE_SSL_ENGINE_NOTFOUND',
-        'CURLE_SSL_ENGINE_SETFAILED',
-        'CURLE_SEND_ERROR',
-        'CURLE_RECV_ERROR',
-        'CURLE_SSL_CERTPROBLEM',
-        'CURLE_SSL_CIPHER',
-        'CURLE_SSL_CACERT',
-        'CURLE_BAD_CONTENT_ENCODING',
-        'CURLE_LDAP_INVALID_URL',
-        'CURLE_FILESIZE_EXCEEDED',
-        'CURLE_USE_SSL_FAILED',
-        'CURLE_SEND_FAIL_REWIND',
-        'CURLE_SSL_ENGINE_INITFAILED',
-        'CURLE_LOGIN_DENIED',
-        'CURLE_TFTP_NOTFOUND',
-        'CURLE_TFTP_PERM',
-        'CURLE_REMOTE_DISK_FULL',
-        'CURLE_TFTP_ILLEGAL',
-        'CURLE_TFTP_UNKNOWNID',
-        'CURLE_REMOTE_FILE_EXISTS',
-        'CURLE_TFTP_NOSUCHUSER',
-        'CURLE_CONV_FAILED',
-        'CURLE_CONV_REQD',
-        'CURLE_SSL_CACERT_BADFILE',
-        'CURLE_REMOTE_FILE_NOT_FOUND',
-        'CURLE_SSH',
-        'CURLE_SSL_SHUTDOWN_FAILED',
-        'CURLE_AGAIN',
-        'CURLE_SSL_CRL_BADFILE',
-        'CURLE_SSL_ISSUER_ERROR',
-        'CURLE_FTP_PRET_FAILED',
-        'CURLE_FTP_PRET_FAILED',
-        'CURLE_RTSP_CSEQ_ERROR',
-        'CURLE_RTSP_SESSION_ERROR',
-        'CURLE_FTP_BAD_FILE_LIST',
-        'CURLE_CHUNK_FAILED'
-    );
-
     /**
      * Placeholder attribute for Folders class
      *
@@ -191,24 +107,6 @@ class MailChimpApi {
      * @var Gallery
      */
     public $gallery;
-
-    /**
-     * CURLOPT_SSL_VERIFYPEER setting
-     * @var  bool
-     */
-    public $sslVerifyPeer = TRUE;
-
-    /**
-     * CURLOPT_SSL_VERIFYHOST setting
-     * @var  bool
-     */
-    public $sslVerifyHost = 2;
-
-    /**
-     * CURLOPT_CAINFO
-     * @var  string
-     */
-    public $sslCaInfo = NULL;
 
     /**
      * the api key in use
@@ -331,36 +229,37 @@ class MailChimpApi {
 
         $this->apiKey = $apiKey;
         $dc = "us1";
+
         if (strstr($this->apiKey, "-")){
-            list($key, $dc) = explode("-", $this->apiKey,2);
+            list($key, $dc) = explode("-", $this->apiKey, 2);
             if (!$dc) $dc = "us1";
         }
 
         $this->root = str_replace('https://api', 'https://' . $dc . '.api', $this->root);
         $this->root = rtrim($this->root, '/') . '/';
 
-        if (!isset($opts['timeout']) || !is_int($opts['timeout'])){
-            $opts['timeout']=600;
-        }
-
         if (isset($opts['debug'])){
             $this->debug = TRUE;
         }
 
-        if (isset($opts['sslVerifyPeer'])){
-            $this->sslVerifyPeer = $opts['sslVerifyPeer'];
-        }
-
-        if (isset($opts['sslVerifyHost'])){
-            $this->sslVerifyHost = $opts['sslVerifyHost'];
-        }
-
-        if (isset($opts['sslCaInfo'])){
-            $this->sslCaInfo = $opts['sslCaInfo'];
-        }
-
         $handler = new StreamHandler();
         $this->client = new Client(array('handler' => $handler));
+        $this->client->setDefaultOption('connect_timeout', 6);
+        $this->client->setDefaultOption('timeout', 6);
+        $this->client->setDefaultOption('exceptions', false);
+
+        try {
+            $ca = ClientUtils::getDefaultCaBundle();
+
+            if(strlen($ca) === 0) {
+                $this->client->setDefaultOption('verify', false);
+                trigger_error(ClientUtils::CA_ERR, E_USER_WARNING);
+            }
+        } catch(\RuntimeException $ex) {
+            $this->client->setDefaultOption('verify', false);
+            trigger_error(ClientUtils::CA_ERR, E_USER_WARNING);
+        }
+
 
         $this->folders = new Folders($this);
         $this->templates = new Templates($this);
