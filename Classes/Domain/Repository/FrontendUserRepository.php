@@ -38,11 +38,18 @@ class FrontendUserRepository extends Repository {
     public function findSubscribedUsers() {
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(FALSE);
-        $query->getQuerySettings()->setReturnRawQueryResult(TRUE);
+
+        if(TYPO3_version < '7.1.0') {
+            $query->getQuerySettings()->setReturnRawQueryResult(TRUE);
+        }
 
         $query->matching($query->equals('subscribedToNewsletter', 1));
 
-        return $query->execute();
+        if(TYPO3_version < '7.1.0') {
+            return $query->execute();
+        }
+
+        return $query->execute(TRUE);
     }
 
     /**

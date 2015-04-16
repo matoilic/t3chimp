@@ -103,7 +103,13 @@ abstract class Base extends AbstractTask {
 
         /** @var ReflectionService $reflectionService */
         $reflectionService = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Reflection\\ReflectionService');
-        $reflectionService->setDataCache($GLOBALS['typo3CacheManager']->getCache('extbase_reflection'));
+
+        if(TYPO3_version < '7.1.0') {
+            $reflectionService->setDataCache($GLOBALS['typo3CacheManager']->getCache('extbase_reflection'));
+        } else {
+            $cacheManager = $this->objectManager->get('TYPO3\\CMS\\Core\\Cache\\CacheManager');
+            $reflectionService->setDataCache($cacheManager->getCache('extbase_reflection'));
+        }
 
         if (!$reflectionService->isInitialized()) {
             $reflectionService->initialize();

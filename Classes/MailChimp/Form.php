@@ -55,7 +55,7 @@ class Form {
     /**
      * @var string
      */
-    protected static $fieldNamespace = '\\MatoIlic\\T3Chimp\\MailChimp\\Field\\';
+    protected static $fieldNamespace = 'MatoIlic\\T3Chimp\\MailChimp\\Field\\';
 
     /**
      * @var array
@@ -209,6 +209,11 @@ class Form {
 
     protected function initializeActionField() {
         $class = self::$fieldNamespace . 'Action';
+
+        if(TYPO3_version < '7.1.0') {
+            $class = '\\' . $class;
+        }
+
         $this->publicFields[] = new $class(array(), $this);
     }
 

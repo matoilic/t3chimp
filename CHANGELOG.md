@@ -1,3 +1,9 @@
+#2.5.0
+- T3Chimp uses now PHP streams instead of cURL to enable a less error prone network communication
+- Tested compatibility with TYPO3 7.0
+- T3Chimp now requires at least PHP 5.4.0
+- If you've installed Suhosin [make sure that it allows the usage of PHAR archives](https://github.com/matoilic/t3chimp/wiki/Installation#suhosin)
+
 #2.4.1
 - Fixes a TypoScript configuration issue under PHP 5.3.x which causes AJAX requests to have no parameters
 - Adds a better possibility to style error and success messages
