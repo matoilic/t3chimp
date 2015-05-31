@@ -1,6 +1,6 @@
 #2.5.0
 - T3Chimp uses now PHP streams instead of cURL to enable a less error prone network communication
-- Tested compatibility with TYPO3 7.0
+- Improved compatibility with TYPO3 7.x (with support of @echavaillaz) 
 - T3Chimp now requires at least PHP 5.4.0
 - If you've installed Suhosin [make sure that it allows the usage of PHAR archives](https://github.com/matoilic/t3chimp/wiki/Installation#suhosin)
 
