@@ -1,3 +1,6 @@
+#2.5.1
+- Fixed PHAR loading issues with enabled opcache in PHP 5.5 (submitted by @fgerards)
+
 #2.5.0
 - T3Chimp uses now PHP streams instead of cURL to enable a less error prone network communication
 - Improved compatibility with TYPO3 7.x (with support of @echavaillaz) 

@@ -5,7 +5,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'Integrates MailChimp newsletter system into TYPO3.',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '2.5.0',
+	'version' => '2.5.1',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
@@ -25,7 +25,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'php' => '5.4.0-5.7.99',
-			'typo3' => '6.2.0-7.2.99',
+			'typo3' => '6.2.0-7.5.99',
 		),
 		'conflicts' => array(
 		),
