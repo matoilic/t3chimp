@@ -2,7 +2,7 @@
 
 namespace MatoIlic\T3Chimp\MailChimp;
 
-require_once(__DIR__ . '/../../guzzle.phar');
+require(__DIR__ . '/../../guzzle.phar');
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
