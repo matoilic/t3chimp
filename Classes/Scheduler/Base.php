@@ -146,6 +146,19 @@ abstract class Base extends AbstractTask {
     }
 
     /**
+     * @param string $listId
+     * @return array
+     */
+    protected function retrieveUnsubscribers($listId) {
+        $unsubscribers = array();
+        foreach($this->mailChimp->getUnsubscribersFor($listId) as $unsubscriber) {
+            $unsubscribers[$unsubscriber['email']] = $unsubscriber;
+        }
+
+        return $unsubscribers;
+    }
+
+    /**
      * @param $key the key for the label
      * @param NULL|array $arguments
      * @param string $default
