@@ -49,6 +49,13 @@ class SyncBackFromMailChimpTask extends Base {
             foreach($subscribers as $subscriber) {
                 $this->userRepo->updateNewsletterFlag($this->emailField, $subscriber['email'], 1);
             }
+
+            $unsubscribers = $this->retrieveUnsubscribers($this->listId);
+
+            foreach($unsubscribers as $unsubscriber) {
+                $this->userRepo->updateNewsletterFlag($this->emailField, $unsubscriber['email'], 0);
+            }
+
         } catch (Exception $e) {
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getMessage());
             $GLOBALS['BE_USER']->writeLog(4, 0, 1, 0, '[t3chimp]: ' . $e->getTraceAsString());

@@ -228,6 +228,28 @@ class MailChimp implements SingletonInterface {
         return $subscribers;
     }
 
+    /**
+     * @param string $listId
+     * @return array
+     */
+    public function getUnsubscribersFor($listId) {
+        $unsubscribers = array();
+
+        $page = 0;
+        $limit = 100;
+        do {
+            $response = $this->api->lists->members($listId, 'unsubscribed', array(
+                'start' => $page * $limit,
+                'limit' => $limit
+            ));
+            $page++;
+            $unsubscribers = array_merge($unsubscribers, $response['data']);
+        } while(count($unsubscribers) < $response['total']);
+
+        return $unsubscribers;
+    }
+
+
     public function getSubscriptionInfo($email) {
         $info = $this->api->lists->memberInfo(
             $this->settingsProvider->get('subscriptionList'),
