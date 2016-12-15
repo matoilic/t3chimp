@@ -235,7 +235,7 @@ class SyncToMailChimpFieldProvider implements AdditionalFieldProviderInterface {
      * @param AbstractTask $task Reference to the scheduler backend module
      * @return void
      */
-    public function saveAdditionalFields(array $submittedData, AbstractTask $task) {
+    public function saveAdditionalFields(array $submittedData, \TYPO3\CMS\Scheduler\Task\AbstractTask $task) {
         /** @var SyncToMailChimpTask $task */
         $task->setListId($submittedData['listId']);
         GeneralUtility::devLog('T3Chimp List ID ' . $submittedData['listId'], 't3chimp');
